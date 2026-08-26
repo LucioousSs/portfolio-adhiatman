@@ -18,22 +18,47 @@ try {
     throw new Exception('Title and description are required');
   }
 
-  $stmt = $pdo->prepare('SELECT id FROM projects WHERE id = :id');
+  $stmt = $pdo->prepare('SELECT id, collage_data FROM projects WHERE id = :id');
   $stmt->execute([':id' => $id]);
-  if (!$stmt->fetch()) {
+  $existing = $stmt->fetch();
+
+  if (!$existing) {
     http_response_code(404);
     throw new Exception('Project not found');
   }
 
   $thumbnailData = $_POST['thumbnail_data'] ?? '';
-  $collageData = null;
 
-  if (!empty($_POST['collage_data'])) {
-    $collageArr = json_decode($_POST['collage_data'], true);
-    if (is_array($collageArr)) {
-      $collageData = json_encode($collageArr);
+  $collageArr = [];
+  if (!empty($existing['collage_data'])) {
+    $decoded = json_decode($existing['collage_data'], true);
+    if (is_array($decoded)) {
+      $collageArr = $decoded;
     }
   }
+
+  if (!empty($_POST['remove_collage']) && $_POST['remove_collage'] !== '') {
+    $removeIds = array_filter(
+      array_map('trim', explode(',', $_POST['remove_collage'])),
+      fn($v) => $v !== ''
+    );
+    foreach ($removeIds as $rid) {
+      $idx = (int) $rid;
+      if (isset($collageArr[$idx])) {
+        unset($collageArr[$idx]);
+      }
+    }
+    $collageArr = array_values($collageArr);
+  }
+
+  if (!empty($_POST['collage_data'])) {
+    $newCollage = json_decode($_POST['collage_data'], true);
+    if (is_array($newCollage)) {
+      $collageArr = array_merge($collageArr, $newCollage);
+    }
+  }
+
+  $collageData = !empty($collageArr) ? json_encode($collageArr) : null;
 
   $params = [
     ':id'             => (int) $id,

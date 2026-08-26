@@ -6,14 +6,6 @@ $rows = $stmt->fetchAll();
 
 $results = [];
 foreach ($rows as $row) {
-  $collage = null;
-  if (!empty($row['collage_data'])) {
-    $decoded = json_decode($row['collage_data'], true);
-    if (is_array($decoded)) {
-      $collage = implode(',', $decoded);
-    }
-  }
-
   $results[] = [
     'id'             => $row['id'],
     'title'          => $row['title'],
@@ -22,7 +14,7 @@ foreach ($rows as $row) {
     'demo_url'       => $row['demo_url'],
     'github_url'     => $row['github_url'],
     'thumbnail_url'  => $row['thumbnail_data'],
-    'collage_images' => $collage,
+    'collage_images' => $row['collage_data'],
     'created_at'     => $row['created_at'],
   ];
 }

@@ -110,9 +110,13 @@ function renderTable() {
         ).join('')
       : '';
 
-    const collageCount = p.collage_images
-      ? p.collage_images.split(',').filter((s) => s.trim()).length
-      : 0;
+    const collageCount = (() => {
+      if (!p.collage_images) return 0;
+      try {
+        const arr = JSON.parse(p.collage_images);
+        return Array.isArray(arr) ? arr.length : 0;
+      } catch { return 0; }
+    })();
     const imageInfo = collageCount > 0
       ? '<span class="text-zinc-600 text-xs ml-1">+' + collageCount + ' imgs</span>'
       : '';
@@ -219,9 +223,13 @@ function openEditModal(project) {
     existingGrid.appendChild(wrapper);
   }
 
-  const collageImages = project.collage_images
-    ? project.collage_images.split(',').filter((s) => s.trim())
-    : [];
+  let collageImages = [];
+  if (project.collage_images) {
+    try {
+      const parsed = JSON.parse(project.collage_images);
+      collageImages = Array.isArray(parsed) ? parsed : [];
+    } catch { collageImages = []; }
+  }
 
   collageImages.forEach((src, i) => {
     const trimmed = src.trim();
