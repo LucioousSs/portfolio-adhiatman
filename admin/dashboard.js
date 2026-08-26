@@ -122,7 +122,7 @@ function renderTable() {
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg overflow-hidden bg-zinc-800 shrink-0">
-              <img src="../${p.thumbnail_url}" alt="" class="w-full h-full object-cover" onerror="this.style.display='none'" />
+              <img src="${p.thumbnail_url}" alt="" class="w-full h-full object-cover" onerror="this.style.display='none'" />
             </div>
             <div class="min-w-0">
               <p class="text-white font-semibold text-sm truncate">${p.title}${imageInfo}</p>
@@ -213,7 +213,7 @@ function openEditModal(project) {
     const wrapper = document.createElement('div');
     wrapper.className = 'relative group/img rounded-lg overflow-hidden bg-zinc-800 aspect-video';
     wrapper.innerHTML = `
-      <img src="../${thumbnailUrl}" alt="Thumbnail" class="w-full h-full object-cover" />
+      <img src="${thumbnailUrl}" alt="Thumbnail" class="w-full h-full object-cover" />
       <span class="absolute top-1 left-1 bg-zinc-900/80 text-zinc-300 text-[10px] px-1.5 py-0.5 rounded-full">thumb</span>
     `;
     existingGrid.appendChild(wrapper);
@@ -230,7 +230,7 @@ function openEditModal(project) {
     wrapper.dataset.collageIndex = i;
     wrapper.dataset.collagePath = trimmed;
     wrapper.innerHTML = `
-      <img src="../${trimmed}" alt="Collage ${i + 1}" class="w-full h-full object-cover" />
+      <img src="${trimmed}" alt="Collage ${i + 1}" class="w-full h-full object-cover" />
       <button type="button" data-remove="${i}"
         class="absolute top-1 right-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-600/80 hover:bg-red-500 text-white text-xs opacity-0 group-hover/img:opacity-100 transition-opacity">
         &times;
@@ -317,7 +317,6 @@ deleteConfirm.addEventListener('click', async () => {
 
 projectForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const fd  = new FormData(projectForm);
   const btn = submitBtn.textContent;
   const isEdit = editingId !== null;
 
@@ -327,6 +326,37 @@ projectForm.addEventListener('submit', async (e) => {
   const url = isEdit ? UPDATE_URL : UPLOAD_URL;
 
   try {
+    const fd = new FormData();
+    fd.append('title', projectForm.elements['title'].value);
+    fd.append('description', projectForm.elements['description'].value);
+    fd.append('tags', projectForm.elements['tags'].value);
+    fd.append('demo_url', projectForm.elements['demo_url'].value);
+    fd.append('github_url', projectForm.elements['github_url'].value);
+
+    if (isEdit) {
+      fd.append('project_id', editingId);
+      if (removeCollageIds.length > 0) {
+        fd.append('remove_collage', removeCollageIds.join(','));
+      }
+    }
+
+    const thumbFile = projectForm.elements['thumbnail'].files[0];
+    if (thumbFile) {
+      const b64 = await fileToBase64(thumbFile);
+      fd.append('thumbnail_data', b64);
+    } else if (!isEdit) {
+      throw new Exception('Thumbnail image is required');
+    }
+
+    const collageFiles = projectForm.elements['collage_images'].files;
+    if (collageFiles.length > 0) {
+      const arr = [];
+      for (const f of collageFiles) {
+        arr.push(await fileToBase64(f));
+      }
+      fd.append('collage_data', JSON.stringify(arr));
+    }
+
     const res  = await fetch(url, { method: 'POST', body: fd });
     const data = await res.json();
 
@@ -338,12 +368,21 @@ projectForm.addEventListener('submit', async (e) => {
       showNotif(data.error || 'Operation failed.', false);
     }
   } catch (err) {
-    showNotif('Network error: ' + err.message, false);
+    showNotif(err.message || 'Network error', false);
   } finally {
     submitBtn.disabled    = false;
     submitBtn.textContent = btn;
   }
 });
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 // ─── TABS ───
 const btnAddProject = document.getElementById('btn-add-project');

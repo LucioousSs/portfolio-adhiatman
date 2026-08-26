@@ -16,31 +16,12 @@ if (!$id || !is_numeric($id)) {
 }
 
 try {
-  $stmt = $pdo->prepare('SELECT thumbnail_url, collage_images FROM projects WHERE id = :id');
+  $stmt = $pdo->prepare('SELECT id FROM projects WHERE id = :id');
   $stmt->execute([':id' => $id]);
-  $project = $stmt->fetch();
-
-  if (!$project) {
+  if (!$stmt->fetch()) {
     http_response_code(404);
     echo json_encode(['error' => 'Project not found']);
     exit;
-  }
-
-  $deleteFiles = [];
-  if ($project['thumbnail_url']) {
-    $deleteFiles[] = __DIR__ . '/../' . $project['thumbnail_url'];
-  }
-  if ($project['collage_images']) {
-    $images = explode(',', $project['collage_images']);
-    foreach ($images as $img) {
-      $deleteFiles[] = __DIR__ . '/../' . trim($img);
-    }
-  }
-
-  foreach ($deleteFiles as $file) {
-    if (file_exists($file)) {
-      unlink($file);
-    }
   }
 
   $stmt = $pdo->prepare('DELETE FROM projects WHERE id = :id');

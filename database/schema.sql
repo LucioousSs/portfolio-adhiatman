@@ -4,6 +4,7 @@ CREATE DATABASE IF NOT EXISTS portfolio_db
 
 USE portfolio_db;
 
+-- New installations: create tables with base64 image storage
 CREATE TABLE IF NOT EXISTS projects (
   id             INT AUTO_INCREMENT PRIMARY KEY,
   title          VARCHAR(255) NOT NULL,
@@ -11,10 +12,16 @@ CREATE TABLE IF NOT EXISTS projects (
   tags           VARCHAR(255) NOT NULL DEFAULT '',
   demo_url       VARCHAR(255) DEFAULT NULL,
   github_url     VARCHAR(255) DEFAULT NULL,
-  thumbnail_url  VARCHAR(255) NOT NULL,
-  collage_images TEXT DEFAULT NULL,
+  thumbnail_data MEDIUMTEXT DEFAULT NULL,
+  collage_data   MEDIUMTEXT DEFAULT NULL,
   created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
+-- Migration: if upgrading from file-based to base64, run this:
+-- ALTER TABLE projects DROP COLUMN thumbnail_url;
+-- ALTER TABLE projects DROP COLUMN collage_images;
+-- ALTER TABLE projects ADD COLUMN thumbnail_data MEDIUMTEXT DEFAULT NULL AFTER github_url;
+-- ALTER TABLE projects ADD COLUMN collage_data MEDIUMTEXT DEFAULT NULL AFTER thumbnail_data;
 
 CREATE TABLE IF NOT EXISTS experiences (
   id          INT AUTO_INCREMENT PRIMARY KEY,

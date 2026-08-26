@@ -11,16 +11,46 @@ function showNotif(message, success = true) {
   notif.classList.remove('hidden');
 }
 
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const fd  = new FormData(form);
   const btn = submitBtn.textContent;
-
   submitBtn.disabled    = true;
   submitBtn.textContent = 'Uploading...';
 
   try {
+    const fd = new FormData();
+    fd.append('title', form.elements['title'].value);
+    fd.append('description', form.elements['description'].value);
+    fd.append('tags', form.elements['tags'].value);
+    fd.append('demo_url', form.elements['demo_url'].value);
+    fd.append('github_url', form.elements['github_url'].value);
+
+    const thumbFile = form.elements['thumbnail'].files[0];
+    if (thumbFile) {
+      fd.append('thumbnail_data', await fileToBase64(thumbFile));
+    } else {
+      throw new Error('Thumbnail image is required');
+    }
+
+    const collageFiles = form.elements['collage_images'].files;
+    if (collageFiles.length > 0) {
+      const arr = [];
+      for (const f of collageFiles) {
+        arr.push(await fileToBase64(f));
+      }
+      fd.append('collage_data', JSON.stringify(arr));
+    }
+
     const res  = await fetch(API_URL, { method: 'POST', body: fd });
     const data = await res.json();
 
@@ -31,7 +61,7 @@ form.addEventListener('submit', async (e) => {
       showNotif(data.error || 'Upload failed', false);
     }
   } catch (err) {
-    showNotif('Network error: ' + err.message, false);
+    showNotif(err.message || 'Network error', false);
   } finally {
     submitBtn.disabled    = false;
     submitBtn.textContent = btn;
