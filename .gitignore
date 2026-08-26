@@ -20,6 +20,9 @@ desktop.ini
 # PHP config (sensitive)
 api/config.php
 
+# Uploads (local files, images now in DB)
+uploads/
+
 # All .md files EXCEPT README.md
 *.md
 !README.md
