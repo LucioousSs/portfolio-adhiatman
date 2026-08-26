@@ -1,4 +1,4 @@
-# Portfolio — Putu Adhi
+# Portfolio — Adhiatman
 
 Personal portfolio website with admin dashboard for managing projects and experiences.
 
@@ -134,3 +134,22 @@ Requires ES Modules support (no IE11).
 
 ## License
 MIT
+
+## User View
+<img width="1920" height="954" alt="image" src="https://github.com/user-attachments/assets/0414d968-8ca6-4ae9-b62e-8b2d73f8fa79" />
+
+<img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/c85c152e-0b58-435a-9f89-02ae1a930632" />
+
+<img width="1917" height="894" alt="image" src="https://github.com/user-attachments/assets/7a3ffd07-8834-4fc2-b2c5-40c16a6383b4" />
+
+<img width="1920" height="883" alt="image" src="https://github.com/user-attachments/assets/b1dc98d1-db5d-49b8-b989-eef5c7afdc78" />
+
+<img width="1920" height="883" alt="image" src="https://github.com/user-attachments/assets/09bd390f-3255-40b8-8209-8b953a83ce4b" />
+
+## Admin View
+<img width="1919" height="953" alt="image" src="https://github.com/user-attachments/assets/1f7ae226-6d71-4e1d-bf08-6b94a1e070b7" />
+
+<img width="1920" height="949" alt="image" src="https://github.com/user-attachments/assets/ba0c94a7-572b-4952-b1dc-e97ce3cc007f" />
+
+
+
