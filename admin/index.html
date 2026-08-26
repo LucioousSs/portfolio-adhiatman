@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div class="max-w-2xl mx-auto px-6 py-16">
+    <h1 class="text-3xl font-black uppercase tracking-tight mb-2">Upload Project</h1>
+    <p class="text-zinc-400 mb-8">Tambah proyek baru ke portofolio.</p>
+
+    <div id="notification" class="hidden mb-6 p-4 rounded-lg text-sm font-semibold"></div>
+
+    <form id="project-form" class="space-y-5" enctype="multipart/form-data">
+
+      <div>
+        <label class="block text-sm text-zinc-400 mb-2">Title</label>
+        <input name="title" required
+          class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition" />
+      </div>
+
+      <div>
+        <label class="block text-sm text-zinc-400 mb-2">Description</label>
+        <textarea name="description" rows="4" required
+          class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white placeholder-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm text-zinc-400 mb-2">Tags (comma separated)</label>
+        <input name="tags" placeholder="HTML5, Tailwind, JavaScript"
+          class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition" />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-zinc-400 mb-2">Demo URL</label>
+          <input name="demo_url" type="url" placeholder="https://..."
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition" />
+        </div>
+        <div>
+          <label class="block text-sm text-zinc-400 mb-2">GitHub URL</label>
+          <input name="github_url" type="url" placeholder="https://..."
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm text-zinc-400 mb-2">Thumbnail (jpg / png / webp)</label>
+        <input name="thumbnail" type="file" accept=".jpg,.jpeg,.png,.webp" required
+          class="w-full text-zinc-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-zinc-800 file:text-zinc-300 hover:file:bg-zinc-700 file:cursor-pointer" />
+      </div>
+
+      <div>
+        <label class="block text-sm text-zinc-400 mb-2">Collage Images (multiple, optional)</label>
+        <input name="collage_images" type="file" accept=".jpg,.jpeg,.png,.webp" multiple
+          class="w-full text-zinc-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-zinc-800 file:text-zinc-300 hover:file:bg-zinc-700 file:cursor-pointer" />
+      </div>
+
+      <button type="submit" id="submit-btn"
+        class="w-full px-6 py-3 bg-white text-black font-semibold rounded-full hover:bg-zinc-200 transition-colors shadow-lg">
+        Upload Project
+      </button>
+    </form>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

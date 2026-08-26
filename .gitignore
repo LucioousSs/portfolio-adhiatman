@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHP config (sensitive)
+api/config.php
+
+# Uploads (user content)
+uploads/
+
+# All .md files EXCEPT README.md
+*.md
+!README.md
+
+# Logs
+*.log
