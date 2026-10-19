@@ -80,13 +80,18 @@ Nama berkas harus persis itu, atau ubah nilai `cv` di `src/data/profile.js` meny
 
 ### K6. Nama repositori dan `base` Vite
 
-`vite.config.js` sekarang memakai `base: '/'`, yang benar hanya kalau repositori GitHub-nya bernama `<username>.github.io` (user site). Kalau repositori tetap bernama `portfolio-adhiatman`, situsnya menjadi project site dan aset akan 404 kecuali `base` diubah:
+Remote repo sekarang: `https://github.com/LucioousSs/portfolio-adhiatman.git`. Namanya bukan `<username>.github.io`, jadi kalau repo ini yang kamu push ke GitHub Pages, situsnya menjadi **project site** dan `base: '/'` di `vite.config.js` membuat semua aset 404. Ada dua jalan keluar:
 
-```js
-base: '/portfolio-adhiatman/',
-```
+1. **Biarkan repo seperti sekarang**, lalu ubah `vite.config.js`:
 
-Kalau berubah, sebutkan nama repositori finalnya, dan `README.md` bagian Deploy ikut diperbarui.
+   ```js
+   base: '/portfolio-adhiatman/',
+   ```
+
+   Efek samping yang perlu ikut diubah: `npm run preview` melayani situs di `http://localhost:4173/portfolio-adhiatman/`, bukan di akar, jadi `SMOKE_URL` dan petunjuk di `README.md` perlu menyesuaikan.
+2. **Buat repo baru bernama `lucioousss.github.io`** (atau rename repo ini kalau memang mau dipakai sebagai situs utama akun). Dengan begitu `base: '/'` sudah benar dan tidak ada yang perlu diubah.
+
+Sebutkan pilihanmu, karena saya yang akan menyesuaikan `vite.config.js`, `README.md`, dan perintah verifikasinya sekaligus.
 
 ### K7. Konfirmasi bio, tagline, dan entri Perjalanan
 
