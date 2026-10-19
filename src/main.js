@@ -1,70 +1,63 @@
+import './styles/main.css';
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/archivo/wdth.css';
+
+import { applyDocumentMeta, onLangChange } from './lib/i18n.js';
+import { resetMotion, refreshMotion } from './lib/motion.js';
+import { projectModal } from './components/ProjectModal.js';
 import { Navbar } from './components/Navbar.js';
-import { HeroSection } from './components/HeroSection.js';
-import { TechStackSection } from './components/TechStackSection.js';
-import { AboutSection } from './components/AboutSection.js';
-import { ProjectsSection } from './components/ProjectsSection.js';
-import { ProjectModal } from './components/ProjectModal.js';
-import { ContactSection } from './components/ContactSection.js';
+import { Hero } from './components/Hero.js';
+import { Work } from './components/Work.js';
+import { About } from './components/About.js';
+import { Journey } from './components/Journey.js';
+import { TechStack } from './components/TechStack.js';
+import { Contact } from './components/Contact.js';
 import { Footer } from './components/Footer.js';
+
+const sections = [
+  new Navbar(),
+  new Hero(),
+  new Work(),
+  new About(),
+  new Journey(),
+  new TechStack(),
+  new Contact(),
+  new Footer(),
+];
 
 class App {
   constructor() {
-    this.app = document.getElementById('app');
-    const modal = new ProjectModal();
-    this.components = [
-      new Navbar(),
-      new HeroSection(),
-      new AboutSection(),
-      new TechStackSection(),
-      new ProjectsSection(modal),
-      new ContactSection(),
-      new Footer(),
-    ];
+    this.root = document.getElementById('app');
   }
 
-  async render() {
-    this.app.innerHTML = this.components
-      .map((component) => component.render())
-      .join('');
-
-    for (const component of this.components) {
-      if (typeof component.init === 'function') {
-        await component.init();
-      }
-    }
-  }
-
-  init() {
-    this.render().then(() => {
-      this.initRevealObserver();
-    });
-  }
-
-  initRevealObserver() {
-    const elements = this.app.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window) || elements.length === 0) {
-      elements.forEach((el) => el.classList.add('show'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-          } else {
-            entry.target.classList.remove('show');
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
+  mount() {
+    this.root.innerHTML = sections.map((section) => section.render()).join('');
+    sections.forEach((section) => section.init?.());
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function start() {
   const app = new App();
-  app.init();
-});
+
+  projectModal.mount();
+  applyDocumentMeta();
+  app.mount();
+
+  onLangChange(() => {
+    // Full re-render keeps the content model simple: every string is read once,
+    // from the active dictionary. Motion is reset first so triggers do not stack.
+    const scrollY = window.scrollY;
+    projectModal.close();
+    resetMotion();
+    applyDocumentMeta();
+    app.mount();
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    refreshMotion();
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', start);
+} else {
+  start();
+}

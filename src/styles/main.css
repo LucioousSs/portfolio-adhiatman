@@ -1,0 +1,419 @@
+@import "tailwindcss";
+
+/*
+  Design tokens.
+  Reason: the site keeps its established monochrome brutalist identity (near-black
+  ground, white ink) rather than defaulting to dark "because it looks tech". The
+  fixed dark theme is the brand, so no light/dark toggle is shipped.
+*/
+@theme {
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Archivo Variable', 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #09090b;
+  --color-panel: #121215;
+  --color-line: #27272a;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: #fafafa;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: #fafafa;
+    color: #09090b;
+  }
+
+  :focus-visible {
+    outline: 2px solid #fafafa;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* Display type: wide, tight, poster-like. This is the identity motif. */
+.type-display {
+  font-family: var(--font-display);
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  font-weight: 800;
+}
+
+/* Small caps labels. Tracking kept moderate so it reads as editorial, not template. */
+.label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+/* Marquee: tech stack (content, pauses on hover) and the hero backdrop (texture, always running). */
+.marquee {
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+.marquee-track.is-reverse {
+  animation-direction: reverse;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Sparkles: slow drift, used in the hero only. Twinkle is the point, so it fades
+   in and out across the loop instead of holding a constant opacity. */
+@keyframes floatDiagonal {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(120px, -80px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatVertical {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-80px, 150px) rotate(-90deg);
+    opacity: 0;
+  }
+}
+
+.animate-float-diagonal {
+  animation: floatDiagonal 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-float-vertical {
+  animation: floatVertical 15s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Hero poster composition.
+   The photo rises over the name, and the head lands at the name's cap line so the
+   type passes behind the portrait. Geometry comes from the file itself: it is
+   408x612 with the top 22.2% transparent, so height = 1.5 x width and the head
+   starts 0.3333 x width below the top edge. Subtracting that headroom and the
+   overlap keeps the head exactly on the name at every size.
+   The vh values are the safety valve: on short viewports the photo shrinks instead
+   of pushing the CTA past the fold. */
+.hero-photo {
+  --hero-photo-w: min(300px, 42vh);
+  --hero-photo-overlap: clamp(2.25rem, 11vw, 10.5rem);
+  width: var(--hero-photo-w);
+  margin-top: calc(-0.3333 * var(--hero-photo-w) - var(--hero-photo-overlap));
+}
+
+@media (min-width: 640px) {
+  .hero-photo {
+    --hero-photo-w: min(420px, 48vh);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-photo {
+    --hero-photo-w: min(540px, 50vh);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-photo {
+    --hero-photo-w: min(580px, 52vh);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-photo {
+    --hero-photo-w: min(640px, 55vh);
+  }
+}
+
+/* Hard offset shadow, scaled with the font so it holds up at every size.
+   The width axis is tightened on small screens and opened up on large ones, which
+   is what keeps a nine-letter name on one line from 320px to wide desktop. */
+.hero-title {
+  font-size: clamp(2.25rem, 11vw, 10.5rem);
+  font-stretch: 100%;
+  text-shadow: 0.03em 0.035em 0 rgba(63, 63, 70, 0.85);
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-stretch: 112%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-title {
+    font-stretch: 125%;
+  }
+}
+
+/* Grain: subtle film texture. Reason: supports the brutalist print-poster identity. */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.035;
+  z-index: 1;
+}
+
+/* Work rows */
+.work-row {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.work-row.is-dim {
+  opacity: 0.32;
+}
+
+.work-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Soft-skill badges: settle back to rest when the pointer leaves. */
+.magnetic-badge {
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  color: #d4d4d8;
+  user-select: none;
+  will-change: transform;
+}
+
+/* Compact navbar once the page is scrolled: keeps the reading area clear. */
+#site-nav.is-compact {
+  background-color: rgba(9, 9, 11, 0.94);
+}
+
+#site-nav.is-compact nav {
+  height: 3.5rem;
+}
+
+/* Project modal gallery */
+.gallery-slide {
+  transition: opacity 0.4s ease;
+}
+
+/* Journey: one chronological column. The year is the chapter anchor, the spine is
+   the through-line, and each row lights up as the drawn line reaches it. */
+.journey-year {
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.journey-node {
+  /* Lit by default, so reduced motion and a failed script still read as a timeline. */
+  background: #ffffff;
+}
+
+.journey-chip {
+  display: inline-block;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+/* Ongoing entries get an open-ended line. No pulse, no glow. */
+.journey-present {
+  color: #ffffff;
+}
+
+.journey-ongoing {
+  display: inline-block;
+  width: 1.75rem;
+  height: 1px;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  background: linear-gradient(to right, #ffffff, transparent);
+}
+
+.journey-index-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.2rem 0;
+  color: #a1a1aa;
+  transition: color 0.25s ease;
+}
+
+.journey-index-link:hover {
+  color: #e4e4e7;
+}
+
+.journey-index-mark {
+  display: block;
+  width: 1.25rem;
+  height: 1px;
+  background: #3f3f46;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.journey-index-link[data-active='true'] {
+  color: #ffffff;
+}
+
+.journey-index-link[data-active='true'] .journey-index-mark {
+  width: 2.5rem;
+  background: #ffffff;
+}
+
+.journey-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  margin-top: 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d4d4d8;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.journey-toggle:hover {
+  border-color: #52525b;
+  color: #ffffff;
+}
+
+.journey-toggle-icon {
+  position: relative;
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.journey-toggle-icon::before,
+.journey-toggle-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: currentColor;
+}
+
+.journey-toggle-icon::before {
+  width: 0.75rem;
+  height: 1px;
+}
+
+.journey-toggle-icon::after {
+  width: 1px;
+  height: 0.75rem;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.journey-toggle[aria-expanded='true'] .journey-toggle-icon::after {
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* The height is animated by script, so the panel must clip while it grows. */
+.journey-detail {
+  overflow: hidden;
+  margin-top: 0.9rem;
+  border-left: 1px solid var(--color-line);
+  padding-left: 1rem;
+}
+
+/* Scrollbar */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Reduced motion: no loops, no transforms, content stays visible. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  .marquee-track.is-reverse {
+    animation: none;
+  }
+
+  .animate-float-diagonal,
+  .animate-float-vertical {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .work-row,
+  .gallery-slide {
+    transition: none;
+  }
+
+  .journey-index-link,
+  .journey-index-mark,
+  .journey-toggle-icon::after {
+    transition: none;
+  }
+}

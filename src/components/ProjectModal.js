@@ -1,285 +1,253 @@
-export class ProjectModal {
+import { t, text } from '../lib/i18n.js';
+import { icons } from '../lib/icons.js';
+import { projectMedia } from '../lib/media.js';
+import { gsap, reducedMotion } from '../lib/motion.js';
+
+/**
+ * Single project dialog, mounted once outside the re-rendered app tree.
+ * Closable with Escape, focus is trapped while open, and the previously
+ * focused row regains focus on close.
+ */
+class ProjectModal {
   constructor() {
-    this._isOpen = false;
-    this._isAnimating = false;
-    this._activeIndex = 0;
-    this._images = [];
-    this._boundKeyHandler = this._onKeydown.bind(this);
-    this._renderShell();
-    this._cacheDOM();
-    this._bindEvents();
+    this.root = null;
+    this.panel = null;
+    this.project = null;
+    this.index = 0;
+    this.images = [];
+    this.lastFocus = null;
+    this.handleKeydown = this.handleKeydown.bind(this);
   }
 
-  _renderShell() {
-    const shell = document.createElement('div');
-    shell.id = 'project-modal';
-    shell.className = 'fixed inset-0 z-50 pointer-events-none';
-    shell.innerHTML = `
-      <div id="modal-backdrop-close"
-        class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300 ease-out"></div>
-      <div class="relative flex items-start justify-center min-h-screen p-4 pt-10 sm:pt-16 overflow-y-auto">
-        <div id="modal-box"
-          class="relative bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-3xl mb-10 opacity-0 scale-95 translate-y-8 transition-all duration-300 ease-out">
+  mount() {
+    const host = document.getElementById('modal-root');
+    if (!host || this.root) return;
 
-          <button id="modal-close-btn"
-            class="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 hover:bg-black/80 text-white text-xl transition-colors">
-            &times;
-          </button>
+    host.innerHTML = `
+      <div id="project-modal" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" data-modal-close></div>
 
-          <div id="modal-slider-section" class="relative">
-            <div id="modal-main-slider" class="relative w-full aspect-video bg-zinc-950 overflow-hidden rounded-t-2xl">
-              <div id="modal-slides-container" class="relative w-full h-full"></div>
-
-              <button id="modal-prev-btn"
-                class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white rounded-full p-2 transition-colors z-10 hidden"
-                aria-label="Previous image">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button id="modal-next-btn"
-                class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white rounded-full p-2 transition-colors z-10 hidden"
-                aria-label="Next image">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-
-              <div id="modal-slide-counter" class="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2.5 py-1 rounded-full hidden"></div>
+        <div class="relative z-10 flex min-h-full items-start justify-center px-4 py-8 sm:py-12">
+          <div id="pm-panel" class="w-full max-w-3xl overflow-hidden rounded-2xl border border-zinc-800 bg-ink">
+            <div class="flex items-start justify-between gap-4 border-b border-zinc-800 p-5 sm:p-6">
+              <div class="min-w-0">
+                <p class="label" data-pm-summary></p>
+                <h2 id="pm-title" class="type-display mt-1 text-2xl uppercase sm:text-3xl"></h2>
+              </div>
+              <button
+                type="button"
+                data-modal-close
+                class="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-zinc-800 text-zinc-300 transition-colors hover:border-zinc-500 hover:text-white"
+                aria-label="${t('work.close')}"
+              ><span class="block h-5 w-5">${icons.close}</span></button>
             </div>
 
-            <div id="modal-dots" class="flex justify-center gap-2 py-3 hidden"></div>
+            <div class="max-h-[62vh] overflow-y-auto p-5 sm:p-6">
+              <div class="mb-6" data-pm-media></div>
 
-            <div id="modal-thumbnails" class="flex gap-2 px-4 pb-4 overflow-x-auto scrollbar-none hidden"></div>
-          </div>
+              <dl class="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+                <div>
+                  <dt class="label mb-1">${t('work.year')}</dt>
+                  <dd class="text-sm text-zinc-200" data-pm-year></dd>
+                </div>
+                <div>
+                  <dt class="label mb-1">${t('work.role')}</dt>
+                  <dd class="text-sm text-zinc-200" data-pm-role></dd>
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                  <dt class="label mb-1">${t('work.stack')}</dt>
+                  <dd class="text-sm text-zinc-200" data-pm-stack></dd>
+                </div>
+              </dl>
 
-          <div class="p-6">
-            <h3 id="modal-title" class="text-2xl font-bold text-white mb-2"></h3>
-            <div id="modal-tags" class="flex flex-wrap gap-2 mb-4"></div>
-            <p id="modal-description" class="text-zinc-400 text-sm leading-relaxed mb-6"></p>
-            <div class="flex items-center gap-3">
-              <a id="modal-demo" href="#" target="_blank" rel="noopener"
-                class="flex-1 text-center px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-zinc-200 transition-colors">
-                Live Demo
-              </a>
-              <a id="modal-code" href="#" target="_blank" rel="noopener"
-                class="flex-1 text-center px-5 py-2.5 border border-zinc-700 text-zinc-300 text-sm font-semibold rounded-full hover:border-zinc-500 hover:text-white transition-colors">
-                Code
-              </a>
+              <p class="leading-relaxed text-zinc-300" data-pm-desc></p>
             </div>
+
+            <div class="flex flex-wrap gap-3 border-t border-zinc-800 p-5 sm:p-6" data-pm-links></div>
           </div>
         </div>
-      </div>
-    `;
-    document.body.appendChild(shell);
+      </div>`;
+
+    this.root = document.getElementById('project-modal');
+    this.panel = document.getElementById('pm-panel');
+
+    this.root.querySelectorAll('[data-modal-close]').forEach((el) => {
+      el.addEventListener('click', () => this.close());
+    });
   }
 
-  _cacheDOM() {
-    this._el = document.getElementById('project-modal');
-    this._backdrop = document.getElementById('modal-backdrop-close');
-    this._box = document.getElementById('modal-box');
-    this._closeBtn = document.getElementById('modal-close-btn');
-    this._slidesContainer = document.getElementById('modal-slides-container');
-    this._prevBtn = document.getElementById('modal-prev-btn');
-    this._nextBtn = document.getElementById('modal-next-btn');
-    this._dots = document.getElementById('modal-dots');
-    this._thumbnails = document.getElementById('modal-thumbnails');
-    this._counter = document.getElementById('modal-slide-counter');
-    this._title = document.getElementById('modal-title');
-    this._tags = document.getElementById('modal-tags');
-    this._description = document.getElementById('modal-description');
-    this._demoLink = document.getElementById('modal-demo');
-    this._codeLink = document.getElementById('modal-code');
+  open(project, triggerEl) {
+    if (!this.root || !project) return;
+
+    this.project = project;
+    this.index = 0;
+    this.lastFocus = triggerEl || document.activeElement;
+    this.images = [project.image, ...(project.gallery || [])].filter(Boolean);
+
+    this.fill();
+    this.root.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', this.handleKeydown);
+    gsap.set(this.panel, { clearProps: 'opacity,transform' });
+
+    const closeBtn = this.root.querySelector('[data-modal-close]');
+    closeBtn?.focus();
+
+    if (!reducedMotion() && triggerEl) {
+      const trig = triggerEl.getBoundingClientRect();
+      const pan = this.panel.getBoundingClientRect();
+      gsap.fromTo(
+        this.panel,
+        {
+          x: trig.left - pan.left,
+          y: trig.top - pan.top,
+          scaleX: Math.max(0.25, trig.width / pan.width),
+          scaleY: 0.35,
+          transformOrigin: 'top left',
+          opacity: 0.35,
+        },
+        { x: 0, y: 0, scaleX: 1, scaleY: 1, opacity: 1, duration: 0.5, clearProps: 'transform,opacity' }
+      );
+    }
   }
 
-  _bindEvents() {
-    this._closeBtn.addEventListener('click', () => this.close());
-    this._backdrop.addEventListener('click', () => this.close());
-    this._prevBtn.addEventListener('click', () => this.prev());
-    this._nextBtn.addEventListener('click', () => this.next());
-  }
+  fill() {
+    const project = this.project;
+    const root = this.root;
 
-  open(projectData) {
-    if (this._isOpen || this._isAnimating) return;
+    root.querySelector('[data-pm-summary]').textContent = text(project.summary);
+    root.querySelector('#pm-title').textContent = project.title;
+    root.querySelector('[data-pm-year]').textContent = project.year;
+    root.querySelector('[data-pm-role]').textContent = text(project.role);
+    root.querySelector('[data-pm-stack]').textContent = project.stack.join(', ');
+    root.querySelector('[data-pm-desc]').textContent = text(project.description);
 
-    this._images = projectData.allImages || [];
-    this._activeIndex = 0;
+    this.renderMedia();
 
-    this._title.textContent = projectData.title;
-    this._description.textContent = projectData.description;
-    this._tags.innerHTML = projectData.tags
-      .map((t) => `<span class="px-2.5 py-1 text-xs bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-full">${t}</span>`)
-      .join('');
-    this._demoLink.href = projectData.demo;
-    this._codeLink.href = projectData.repo;
-
-    const hasMultiple = this._images.length > 1;
-
-    if (hasMultiple) {
-      this._renderSlides();
-      this._renderDots();
-      this._renderThumbnails();
-      this._prevBtn.classList.remove('hidden');
-      this._nextBtn.classList.remove('hidden');
-      this._dots.classList.remove('hidden');
-      this._thumbnails.classList.remove('hidden');
-      this._counter.classList.remove('hidden');
-    } else {
-      this._slidesContainer.innerHTML = this._images.length === 1
-        ? `<img src="${this._images[0]}" alt="${projectData.title}" class="w-full h-full object-cover" />`
-        : '';
-      this._prevBtn.classList.add('hidden');
-      this._nextBtn.classList.add('hidden');
-      this._dots.classList.add('hidden');
-      this._thumbnails.classList.add('hidden');
-      this._counter.classList.add('hidden');
+    const links = [];
+    if (project.demo) {
+      links.push(`
+        <a href="${project.demo}" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-zinc-200">
+          ${t('work.demo')}<span class="block h-4 w-4">${icons.arrowUpRight}</span>
+        </a>`);
+    }
+    if (project.repo) {
+      links.push(`
+        <a href="${project.repo}" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 rounded-full border border-zinc-700 px-5 py-2.5 text-sm font-bold text-zinc-200 transition-colors hover:border-zinc-500 hover:text-white">
+          <span class="block h-4 w-4">${icons.github}</span>${t('work.repo')}
+        </a>`);
     }
 
-    this._isOpen = true;
-    document.body.style.overflow = 'hidden';
-    this._el.style.pointerEvents = 'auto';
-    document.addEventListener('keydown', this._boundKeyHandler);
+    const linksBar = root.querySelector('[data-pm-links]');
+    linksBar.innerHTML = links.join('');
+    linksBar.classList.toggle('hidden', links.length === 0);
+  }
 
-    this._isAnimating = true;
-    requestAnimationFrame(() => {
-      this._backdrop.classList.remove('opacity-0');
-      this._backdrop.classList.add('opacity-100');
-      this._box.classList.remove('opacity-0', 'scale-95', 'translate-y-8');
-      this._box.classList.add('opacity-100', 'scale-100', 'translate-y-0');
+  renderMedia() {
+    const media = this.root.querySelector('[data-pm-media]');
+
+    if (this.images.length === 0) {
+      media.innerHTML = projectMedia(this.project, {
+        className: 'h-52 w-full rounded-xl border border-zinc-800 sm:h-72',
+        pendingLabel: t('work.shotPending'),
+      });
+      return;
+    }
+
+    const slides = this.images
+      .map(
+        (src, i) => `<img src="${src}" alt="" loading="lazy"
+          class="gallery-slide h-52 w-full flex-none snap-center object-cover sm:h-72 ${i === 0 ? 'opacity-100' : 'opacity-0'}"
+          data-pm-slide="${i}" />`
+      )
+      .join('');
+
+    const controls =
+      this.images.length > 1
+        ? `<div class="absolute inset-x-2 top-1/2 flex -translate-y-1/2 justify-between">
+             <button type="button" data-pm-prev aria-label="${t('work.prev')}"
+               class="flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black">
+               <span class="block h-4 w-4">${icons.arrowLeft}</span>
+             </button>
+             <button type="button" data-pm-next aria-label="${t('work.next')}"
+               class="flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black">
+               <span class="block h-4 w-4">${icons.arrowRight}</span>
+             </button>
+           </div>`
+        : '';
+
+    media.innerHTML = `
+      <div class="relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900" data-pm-gallery>
+        <div class="flex snap-x snap-mandatory overflow-x-auto scrollbar-none" data-pm-track>${slides}</div>
+        ${controls}
+      </div>`;
+
+    media.querySelector('[data-pm-prev]')?.addEventListener('click', () => this.goto(this.index - 1));
+    media.querySelector('[data-pm-next]')?.addEventListener('click', () => this.goto(this.index + 1));
+  }
+
+  goto(next) {
+    if (this.images.length < 2) return;
+    this.index = (next + this.images.length) % this.images.length;
+
+    const track = this.root.querySelector('[data-pm-track]');
+    const slides = this.root.querySelectorAll('[data-pm-slide]');
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('opacity-100', i === this.index);
+      slide.classList.toggle('opacity-0', i !== this.index);
     });
+    track?.children[this.index]?.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+  }
 
-    const onOpenEnd = () => {
-      this._isAnimating = false;
-      this._box.removeEventListener('transitionend', onOpenEnd);
-    };
-    this._box.addEventListener('transitionend', onOpenEnd, { once: true });
+  handleKeydown(event) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.close();
+      return;
+    }
+    if (event.key === 'ArrowRight') this.goto(this.index + 1);
+    if (event.key === 'ArrowLeft') this.goto(this.index - 1);
+    if (event.key === 'Tab') this.trapTab(event);
+  }
+
+  trapTab(event) {
+    const focusable = this.panel.querySelectorAll(
+      'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 
   close() {
-    if (!this._isOpen || this._isAnimating) return;
+    if (!this.root || this.root.classList.contains('hidden')) return;
 
-    this._isAnimating = true;
-
-    this._backdrop.classList.remove('opacity-100');
-    this._backdrop.classList.add('opacity-0');
-    this._box.classList.remove('opacity-100', 'scale-100', 'translate-y-0');
-    this._box.classList.add('opacity-0', 'scale-95', 'translate-y-8');
-
-    const onCloseEnd = () => {
-      this._el.classList.add('hidden');
-      this._el.style.pointerEvents = 'none';
+    const finish = () => {
+      this.root.classList.add('hidden');
       document.body.style.overflow = '';
-      this._isOpen = false;
-      this._isAnimating = false;
-      this._box.removeEventListener('transitionend', onCloseEnd);
-      document.removeEventListener('keydown', this._boundKeyHandler);
+      document.removeEventListener('keydown', this.handleKeydown);
+      this.lastFocus?.focus?.();
+      this.lastFocus = null;
     };
 
-    this._box.addEventListener('transitionend', onCloseEnd, { once: true });
-
-    setTimeout(() => {
-      if (this._isAnimating) {
-        onCloseEnd();
-      }
-    }, 350);
-  }
-
-  _renderSlides() {
-    this._slidesContainer.innerHTML = this._images
-      .map((src, i) =>
-        `<img src="${src}" alt="Project image ${i + 1}"
-              class="modal-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${i === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}"
-              data-index="${i}" loading="lazy" />`
-      )
-      .join('');
-    this._counter.textContent = `1 / ${this._images.length}`;
-  }
-
-  _renderDots() {
-    this._dots.innerHTML = this._images
-      .map((_, i) =>
-        `<button data-dot="${i}"
-          class="modal-dot w-2 h-2 rounded-full transition-all ${i === 0 ? 'bg-white w-4' : 'bg-white/40 hover:bg-white/60'}"
-          aria-label="Go to image ${i + 1}"></button>`
-      )
-      .join('');
-
-    this._dots.querySelectorAll('.modal-dot').forEach((dot) => {
-      dot.addEventListener('click', () => {
-        this.goTo(parseInt(dot.dataset.dot, 10));
-      });
-    });
-  }
-
-  _renderThumbnails() {
-    this._thumbnails.innerHTML = this._images
-      .map((src, i) =>
-        `<button data-thumb="${i}"
-          class="flex-none w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${i === 0 ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'}">
-          <img src="${src}" alt="" class="w-full h-full object-cover" loading="lazy" />
-        </button>`
-      )
-      .join('');
-
-    this._thumbnails.querySelectorAll('[data-thumb]').forEach((thumb) => {
-      thumb.addEventListener('click', () => {
-        this.goTo(parseInt(thumb.dataset.thumb, 10));
-      });
-    });
-  }
-
-  goTo(index) {
-    if (!this._images.length) return;
-    const len = this._images.length;
-    const i = ((index % len) + len) % len;
-    if (i === this._activeIndex) return;
-
-    const slides = this._slidesContainer.querySelectorAll('.modal-slide');
-    const oldSlide = slides[this._activeIndex];
-    const newSlide = slides[i];
-
-    if (oldSlide) {
-      oldSlide.classList.remove('opacity-100', 'z-10');
-      oldSlide.classList.add('opacity-0', 'z-0');
-    }
-    if (newSlide) {
-      newSlide.classList.remove('opacity-0', 'z-0');
-      newSlide.classList.add('opacity-100', 'z-10');
+    if (reducedMotion()) {
+      finish();
+      return;
     }
 
-    this._activeIndex = i;
-    this._counter.textContent = `${i + 1} / ${len}`;
-
-    this._dots.querySelectorAll('.modal-dot').forEach((dot, di) => {
-      dot.className = di === i
-        ? 'modal-dot w-2 h-2 rounded-full transition-all bg-white w-4'
-        : 'modal-dot w-2 h-2 rounded-full transition-all bg-white/40 hover:bg-white/60';
-    });
-
-    this._thumbnails.querySelectorAll('[data-thumb]').forEach((thumb, ti) => {
-      thumb.className = ti === i
-        ? 'flex-none w-16 h-16 rounded-lg overflow-hidden border-2 transition-all border-white'
-        : 'flex-none w-16 h-16 rounded-lg overflow-hidden border-2 transition-all border-transparent opacity-60 hover:opacity-100';
-    });
-
-    const activeThumb = this._thumbnails.querySelector(`[data-thumb="${i}"]`);
-    if (activeThumb) {
-      activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-  }
-
-  next() {
-    this.goTo(this._activeIndex + 1);
-  }
-
-  prev() {
-    this.goTo(this._activeIndex - 1);
-  }
-
-  _onKeydown(e) {
-    if (!this._isOpen) return;
-    if (e.key === 'Escape') this.close();
-    if (e.key === 'ArrowRight') this.next();
-    if (e.key === 'ArrowLeft') this.prev();
+    gsap.to(this.panel, { opacity: 0, y: 12, duration: 0.2, onComplete: finish });
   }
 }
+
+export const projectModal = new ProjectModal();

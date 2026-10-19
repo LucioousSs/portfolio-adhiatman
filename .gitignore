@@ -2,6 +2,9 @@
 node_modules/
 vendor/
 
+# Build output
+dist/
+
 # Environment
 .env
 .env.local
@@ -17,15 +20,10 @@ vendor/
 Thumbs.db
 desktop.ini
 
-# PHP config (sensitive)
-api/config.php
-
-# Uploads (local files, images now in DB)
-uploads/
-
-# All .md files EXCEPT README.md
+# Markdown: keep README and docs
 *.md
 !README.md
+!docs/*.md
 
 # Logs
 *.log

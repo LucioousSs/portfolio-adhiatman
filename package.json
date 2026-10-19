@@ -1,0 +1,25 @@
+{
+  "name": "portfolio-adhiatman",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Static personal branding landing page for I Putu Adhiatman. No backend.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "smoke": "node scripts/smoke.mjs",
+    "shots": "node scripts/shots.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "puppeteer-core": "^25.14.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "gsap": "^3.15.0"
+  }
+}
