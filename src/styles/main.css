@@ -216,13 +216,20 @@
   visibility: hidden;
 }
 
-/* About: the section is one statement, so the type carries it alone. It starts on
-   the same axis as the work rows instead of floating in the middle of the page. */
-.about-block {
+/* About: the label sits on the work axis at the top of the section, while the
+   statement keeps the centred, poster-like placement it had before. Both share
+   one grid cell, so the statement centres on the section, not on the space left
+   over under the label. */
+.about-head {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.5rem;
+  gap: 1.25rem;
+}
+
+.about-block {
+  display: flex;
+  justify-content: center;
 }
 
 .about-rule {
@@ -235,6 +242,7 @@
    a matching negative margin, so the glyph ink stays clear of both edges: no
    descender is shaved at rest, and no sliver shows while the block is down. */
 .about-mask {
+  width: 100%;
   overflow: hidden;
 }
 
@@ -242,9 +250,10 @@
   max-width: 56rem;
   padding-block: 0.08em;
   margin-block: -0.08em;
+  margin-inline: auto;
   font-size: clamp(1.25rem, 3.1vw, 2.35rem);
   line-height: 1.18;
-  text-align: left;
+  text-align: center;
   text-wrap: balance;
   color: #ffffff;
 }

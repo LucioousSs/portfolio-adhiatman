@@ -181,21 +181,32 @@ pass(
   about.height >= about.viewport * 0.65 &&
     about.height <= about.viewport * 0.95 &&
     about.text > 60 &&
-    about.align === 'left' &&
+    about.align === 'center' &&
     about.images === 0 &&
     about.controls === 0,
   `${about.height}/${about.viewport}px, ${about.text} chars, align=${about.align}, images=${about.images}, controls=${about.controls}`
 );
 
 const axes = await page.evaluate(() => {
-  const about = document.querySelector('#about [data-about-text]').getBoundingClientRect();
+  const label = document.querySelector('#about h2').getBoundingClientRect();
   const work = document.querySelector('#work h2').getBoundingClientRect();
-  return { about: Math.round(about.left), work: Math.round(work.left) };
+  const mask = document.querySelector('#about .about-mask').getBoundingClientRect();
+  const section = document.getElementById('about').getBoundingClientRect();
+  return {
+    label: Math.round(label.left),
+    work: Math.round(work.left),
+    textCenter: Math.round(mask.left + mask.width / 2),
+    viewportCenter: Math.round(window.innerWidth / 2),
+    textMiddle: Math.round(mask.top + mask.height / 2),
+    sectionMiddle: Math.round(section.top + section.height / 2),
+  };
 });
 pass(
-  'About starts on the same axis as the work rows',
-  Math.abs(axes.about - axes.work) <= 1,
-  `about=${axes.about} work=${axes.work}`
+  'About label sits on the work axis while the statement stays centred',
+  Math.abs(axes.label - axes.work) <= 1 &&
+    Math.abs(axes.textCenter - axes.viewportCenter) <= 1 &&
+    Math.abs(axes.textMiddle - axes.sectionMiddle) <= 2,
+  `label=${axes.label} work=${axes.work} text=${axes.textCenter}/${axes.viewportCenter} middle=${axes.textMiddle}/${axes.sectionMiddle}`
 );
 
 // 4. Language toggle switches every string and persists.
