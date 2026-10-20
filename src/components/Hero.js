@@ -49,7 +49,7 @@ export class Hero {
     return `
       <section
         id="home"
-        class="relative flex min-h-[calc(100vh_-_4rem)] flex-col justify-center overflow-hidden px-6 py-10"
+        class="relative flex min-h-svh flex-col justify-center overflow-hidden px-6 py-10"
       >
         ${sparkles}
 

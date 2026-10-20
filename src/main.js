@@ -17,8 +17,8 @@ import { Footer } from './components/Footer.js';
 const sections = [
   new Navbar(),
   new Hero(),
-  new Work(),
   new About(),
+  new Work(),
   new Journey(),
   new TechStack(),
   new Contact(),

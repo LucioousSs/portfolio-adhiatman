@@ -3,13 +3,13 @@ import { icons } from '../lib/icons.js';
 import { ScrollTrigger, gsap } from '../lib/motion.js';
 
 const LINKS = [
-  { id: 'work', href: '#work', key: 'nav.work' },
   { id: 'about', href: '#about', key: 'nav.about' },
+  { id: 'work', href: '#work', key: 'nav.work' },
   { id: 'journey', href: '#journey', key: 'nav.journey' },
   { id: 'contact', href: '#contact', key: 'nav.contact' },
 ];
 
-const SECTION_IDS = ['home', 'work', 'about', 'journey', 'contact'];
+const SECTION_IDS = ['home', 'about', 'work', 'journey', 'contact'];
 
 export class Navbar {
   render() {
@@ -42,49 +42,51 @@ export class Navbar {
     ).join('');
 
     return `
-      <header id="site-nav" class="sticky top-0 z-50 border-b border-zinc-800 bg-ink/80 backdrop-blur">
-        <div
-          id="scroll-progress"
-          class="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-zinc-100"
-          style="transform: scaleX(0)"
-          role="progressbar"
-          aria-label="${t('a11y.progress')}"
-        ></div>
+      <header id="site-nav" class="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
+        <div class="nav-rail relative mx-auto max-w-6xl overflow-hidden rounded-xl border border-zinc-800 bg-ink/85 backdrop-blur">
+          <div
+            id="scroll-progress"
+            class="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-zinc-100"
+            style="transform: scaleX(0)"
+            role="progressbar"
+            aria-label="${t('a11y.progress')}"
+          ></div>
 
-        <nav class="mx-auto flex h-16 items-center justify-between px-4 transition-[height] duration-300 sm:px-6 lg:px-8">
-          <a href="#home" class="type-display flex items-center py-2 text-lg tracking-tight">
-            Adhiatman<span class="text-zinc-500">.</span>
-          </a>
+          <nav class="flex h-16 items-center justify-between px-4 transition-[height] duration-300 sm:px-5">
+            <a href="#home" class="type-display flex items-center py-2 text-lg tracking-tight">
+              Adhiatman<span class="text-zinc-500">.</span>
+            </a>
 
-          <ul class="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
-            ${links}
-          </ul>
+            <ul class="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
+              ${links}
+            </ul>
 
-          <div class="flex items-center gap-2 sm:gap-3">
-            <div
-              class="flex items-center gap-1 rounded-full border border-zinc-800 p-1"
-              role="group"
-              aria-label="${t('nav.lang')}"
-            >
-              ${langButton('id')}
-              ${langButton('en')}
+            <div class="flex items-center gap-2 sm:gap-3">
+              <div
+                class="flex items-center gap-1 rounded-full border border-zinc-800 p-1"
+                role="group"
+                aria-label="${t('nav.lang')}"
+              >
+                ${langButton('id')}
+                ${langButton('en')}
+              </div>
+
+              <button
+                type="button"
+                id="nav-toggle"
+                class="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-800 text-zinc-200 md:hidden"
+                aria-expanded="false"
+                aria-controls="nav-menu"
+                aria-label="${t('nav.menu')}"
+              >
+                <span class="block h-5 w-5" data-nav-icon>${icons.menu}</span>
+              </button>
             </div>
+          </nav>
 
-            <button
-              type="button"
-              id="nav-toggle"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-800 text-zinc-200 md:hidden"
-              aria-expanded="false"
-              aria-controls="nav-menu"
-              aria-label="${t('nav.menu')}"
-            >
-              <span class="block h-5 w-5" data-nav-icon>${icons.menu}</span>
-            </button>
+          <div id="nav-menu" class="hidden border-t border-zinc-800 bg-ink md:hidden">
+            <ul class="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-5">${mobileLinks}</ul>
           </div>
-        </nav>
-
-        <div id="nav-menu" class="hidden border-t border-zinc-800 bg-ink md:hidden">
-          <ul class="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6">${mobileLinks}</ul>
         </div>
       </header>`;
   }

@@ -247,7 +247,7 @@
 }
 
 /* Compact navbar once the page is scrolled: keeps the reading area clear. */
-#site-nav.is-compact {
+#site-nav.is-compact .nav-rail {
   background-color: rgba(9, 9, 11, 0.94);
 }
 

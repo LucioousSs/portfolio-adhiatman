@@ -16,7 +16,7 @@ PRD ini mengubah portfolio menjadi **satu landing page statis tanpa backend**. S
 
 | # | Tujuan | Kriteria terukur |
 |---|--------|------------------|
-| G1 | Pengunjung paham siapa pemiliknya dalam sekali layar | Hero memuat nama, foto, dan satu CTA; peran terbaca di bio Tentang |
+| G1 | Pengunjung paham siapa pemiliknya dalam sekali layar | Hero memuat nama, foto, dan satu CTA; peran terbaca di pernyataan Tentang |
 | G2 | Karya bisa dilihat tanpa hambatan teknis | Tidak ada request ke API, halaman tetap utuh tanpa server |
 | G3 | Pengunjung bisa menghubungi dalam maksimal dua klik | Email dan WhatsApp tersedia di section kontak dan footer navigasi |
 | G4 | Situs terasa cepat dan rapi di semua ukuran layar | Skor Lighthouse mobile Performance >= 90, tidak ada overflow horizontal 320px sampai 1440px |
@@ -53,25 +53,28 @@ Prinsip yang mengikat semua keputusan:
 
 | Urutan | Section | Anchors |
 |--------|---------|---------|
-| 1 | Navbar (tautan, toggle bahasa, progress bar) | `#home` |
+| 1 | Rel navigasi (tautan, toggle bahasa, progress bar) | - |
 | 2 | Hero (nama, foto, CTA) | `#home` |
-| 3 | Karya pilihan (daftar project) | `#work` |
-| 4 | Tentang (satu pernyataan) | `#about` |
+| 3 | Tentang (satu pernyataan) | `#about` |
+| 4 | Karya pilihan (daftar kode dan rancangan desain) | `#work` |
 | 5 | Perjalanan (kronologi per tahun: pendidikan, organisasi, acara) | `#journey` |
 | 6 | Teknologi dan alat | `#tech` |
 | 7 | Kontak | `#contact` |
 | 8 | Footer | - |
 
-Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Contact. Tidak ada tautan ke halaman yang belum dibangun.
+Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan, Kontak. Tidak ada tautan ke halaman yang belum dibangun.
 
 ## 7. Spesifikasi per section
 
 ### 7.1 Navbar
-- Tautan section dengan penanda section aktif (`aria-current`).
+- Rel mengambang: header `fixed` dengan jarak 16px dari atas, selebar grid konten (`max-w-6xl`), border 1px, radius 12px, latar ink 85 persen dengan blur tipis.
+- Karena berada di luar alur, hero memakai tinggi layar penuh dan nama besar berjalan di bawah rel tanpa terdorong.
+- Tautan section dengan penanda section aktif (`aria-current`), urutannya mengikuti urutan baca: Tentang, Karya, Perjalanan, Kontak.
 - Toggle bahasa ID dan EN, memakai `aria-pressed`.
-- Progress bar tipis di dasar navbar sebagai penanda posisi baca.
-- Navbar memadat saat halaman digulir.
-- Menu mobile dengan `aria-expanded`, ikon berganti antara menu dan close.
+- Progress bar tipis di dasar rel sebagai penanda posisi baca.
+- Rel memadat saat halaman digulir (64px ke 56px). Karena `fixed`, perubahan itu tidak menggeser konten.
+- Menu mobile dengan `aria-expanded`, ikon berganti antara menu dan close. Panelnya turun di dalam rel, jadi sudut dan bordernya tetap satu benda.
+- `scroll-padding-top` 5.5rem menjaga judul section tidak tertutup rel saat anchor diklik.
 
 ### 7.2 Hero
 - Satu layar penuh dengan komposisi poster: nama, foto, satu CTA.
@@ -79,7 +82,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 - Foto profil menjadi lapisan depan: badannya menimpa nama sehingga tipografi lewat di belakang potret. Timpaan ditentukan oleh geometri berkasnya sendiri (408x612, 22,2 persen atas transparan), jadi kepala selalu mendarat di garis kapital nama pada setiap ukuran layar. Kepala yang lebih lebar hanya mungkin kalau nama juga lebih besar, jadi lebar foto dan kedalaman timpaan dinaikkan bersama.
 - Lebar foto punya batas `vh` sebagai pengaman: di jendela pendek foto mengecil, bukan mendorong CTA ke bawah lipatan.
 - Glow tipis, mask yang memudar di dasar, parallax scroll, dan respons pointer (desktop saja).
-- Tidak ada baris peran di bawah foto. Peran tetap muncul sebagai tekstur marquee dan diuraikan di bio Tentang, jadi informasinya tidak hilang, hanya tidak diulang di hero.
+- Tidak ada baris peran di bawah foto. Peran tetap muncul sebagai tekstur marquee dan di pernyataan Tentang, jadi informasinya tidak hilang, hanya tidak diulang di hero.
 - Marquee latar berisi peran sebagai tekstur, opacity rendah dan `aria-hidden`. Berjalan terus dan berhenti saat reduced motion.
 - Sparkle mengambang sebagai tekstur latar, `aria-hidden`, mati saat reduced motion.
 - Satu CTA "Lihat karya" menuju `#work`: tengah di mobile, kanan di desktop.
@@ -102,7 +105,8 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 
 ### 7.4 Tentang
 - Satu blok pernyataan, bukan bio dua paragraf lalu potongan-potongan terpisah. Tagline dan satu kalimat bio digabung, karena dipisah keduanya terbaca sebagai dua suara yang berbeda.
-- Rata tengah dan setinggi satu layar penuh (`min-h-svh`), tanpa foto, tanpa chip, tanpa kolom data, tanpa tautan keluar. Section ini hanya teks, jadi tipografinya yang menjadi isi.
+- Ditaruh langsung setelah hero: satu kalimat ini menerangkan nama di atas sebelum karya masuk. Di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka.
+- Rata tengah dan setinggi 70 persen layar (`min-h-[70svh]`), tanpa foto, tanpa chip, tanpa kolom data, tanpa tautan keluar. Section ini hanya teks, jadi tipografinya yang menjadi isi. Tingginya sengaja tidak penuh: dua layar penuh berurutan membuat karya pertama dua kali geser jauhnya.
 - Label "Tentang" kecil dengan tracking lebar di atas blok; pernyataannya sendiri yang berperan sebagai headline visual. Labelnya tetap `h2` supaya struktur dokumen tidak berubah.
 - Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Rata tengah tidak dibiarkan melewati batas itu.
 - Garis rambut 64px di atas blok menjadi sisi tempat blok naik, bukan hiasan tambahan.
@@ -194,7 +198,7 @@ src/
   lib/{i18n,motion,icons,media}.js
   i18n/{id,en}.js
   data/{profile,projects,skills,journey}.js   konten, termasuk entri desain
-  components/{Navbar,Hero,Work,ProjectModal,About,Journey,TechStack,Contact,Footer}.js
+  components/{Navbar,Hero,About,Work,ProjectModal,Journey,TechStack,Contact,Footer}.js
 scripts/{smoke,shots}.mjs
 .github/workflows/deploy.yml
 docs/PRD.md
@@ -219,6 +223,7 @@ docs/CONTENT-TODO.md
 ## 12. Non-fungsional
 
 - **Responsive:** diuji tanpa overflow horizontal pada 360px. Rentang target 320px sampai 1440px.
+- **Navigasi mengambang:** rel `fixed` dengan `scroll-padding-top` 5.5rem, jadi judul section tidak tertutup saat anchor diklik, dan hero tetap setinggi satu layar. Rel selebar grid konten dan menyisakan 12 sampai 16px di kiri-kanan, jadi tidak pernah menempel ke tepi.
 - **Aksesibilitas:** focus indicator terlihat, skip link, dialog dengan Escape dan focus trap, toggle memakai `aria-pressed`, detail Perjalanan memakai `aria-expanded` dan `aria-controls`, indeks tahun punya `aria-label`, status bahasa diumumkan lewat atribut `lang`, reduced motion dihormati, dan kontras teks diperiksa otomatis terhadap ambang WCAG AA.
 - **Target sentuh:** semua tautan dan tombol minimal 24px, aksi utama lebih besar.
 - **Aset gambar:** potret hero punya `alt` yang menyebut namanya. Section Tentang tidak memuat gambar sama sekali.
@@ -252,7 +257,9 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Blok rancangan desain tampil di bawah tautan GitHub dengan tiga sampul berwarna | PASS |
 | Kartu desain membuka modal tanpa tautan atau tahun karangan | PASS |
 | Menutup kartu desain mengembalikan fokus ke kartu pemicu | PASS |
-| Tentang mengisi satu viewport dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
+| Tentang mengisi jeda ringkas (65 sampai 95 persen viewport) dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
+| Urutan section dan urutan tautan navbar sama: Tentang lebih dulu, lalu Karya | PASS |
+| Navbar mengambang sebagai rel di luar alur, dan hero tetap setinggi satu layar | PASS |
 | Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
 | Klik baris karya membuka modal dengan project yang benar | PASS |
 | Escape menutup modal dan fokus kembali ke baris pemicu | PASS |
@@ -274,7 +281,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
 | Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform | PASS |
 
-Ringkasan: 34 dari 34 pemeriksaan lolos.
+Ringkasan: 36 dari 36 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -299,7 +306,7 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Tanpa kartu statistik atau testimoni | Tidak ada data nyata untuk ditampilkan |
 | Loop hanya pada marquee teknologi dan tekstur hero | Marquee teknologi membawa konten; marquee latar dan sparkle hero adalah tekstur poster yang dimatikan saat reduced motion; blob pulse dan blob float tetap dibuang |
 | Foto sebagai lapisan depan nama | Tipografi lewat di belakang potret, komposisi poster yang khas, bukan sekadar foto di samping teks |
-| Baris peran di bawah foto dihapus | Pemilik ingin hero lebih bersih; peran tetap terbaca sebagai marquee dan di bio Tentang, jadi tidak ada informasi yang hilang |
+| Baris peran di bawah foto dihapus | Pemilik ingin hero lebih bersih; peran tetap terbaca sebagai marquee dan di pernyataan Tentang, jadi tidak ada informasi yang hilang |
 | Panah pada baris karya | Satu isyarat arah untuk "membuka detail", bukan hiasan di setiap tombol |
 | Placeholder "Tangkapan layar menyusul" | Jujur menandai aset yang belum ada, bukan menyamarkan sebagai screenshot |
 | Perjalanan satu kolom kronologis, bukan grid kartu | Grid kartu lama menetapkan tinggi tetap sementara kedua sisinya `absolute`, jadi deskripsi terpanjang meluber sekitar 50px; panel sebaris yang tumbuh mengikuti isi menghilangkan masalah itu secara struktural |
@@ -309,9 +316,12 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
 | Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |
 | Tentang satu blok pernyataan, bukan bio lalu chip dan plat | Potongan-potongan itu terbaca sebagai tiga section yang ditempel, padahal isinya hanya satu kalimat. Satu blok utuh lebih jujur pada isinya |
-| Tentang rata tengah dan setinggi satu layar | Section ini hanya punya satu objek, jadi menaruhnya di tengah memberi jarak dari section lain dan membuatnya terbaca sebagai pernyataan, bukan paragraf yang perlu dipindai |
 | Batas tiga sampai lima baris untuk teks rata tengah | Rata tengah memaksa mata mencari awal tiap baris; lebih dari lima baris membuatnya sulit dibaca, jadi teksnya dipendekkan dan ukurannya dibatasi |
 | Tidak ada foto di Tentang | Frame penuh sudah jadi pembuka di hero; mengulang potret di bawah melemahkan hero, dan foto kedua hanya mengisi ruang yang seharusnya dibiarkan kosong |
+| Tentang ditaruh setelah hero | Satu kalimat itu menerangkan nama di hero; di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka |
+| Tentang 70svh, bukan satu layar penuh | Dua layar penuh berurutan membuat karya pertama dua kali geser jauhnya; 70 persen masih memberi jeda yang terasa |
+| Navbar berupa rel mengambang, bukan pil kaca | Halaman ini bahasa editorial: garis rambut, radius kecil, Archivo besar. Kapsul blur akan terbaca sebagai widget dan bersaing dengan kartu desain |
+| Rel di luar alur (`fixed`), bukan `sticky` | Hero bisa memakai layar penuh dengan nama berjalan di bawah rel, dan memadatnya rel tidak lagi menggeser konten sekitar 8px |
 | Sampul rancangan desain berwarna, satu-satunya warna di halaman | Yang berwarna adalah hasil desainnya; membuatnya hitam putih akan menyembunyikan bagian yang paling ingin ditunjukkan |
 | Rancangan desain di blok sendiri, bukan baris keempat sampai keenam | Baris kode menjanjikan repo dan tangkapan layar. Rancangan tidak punya keduanya, dan mencampurnya membuat daftar karya berbohong soal apa yang bisa diklik |
 | Entri desain tanpa URL prototipe tidak diberi tombol | Tombol mati lebih buruk daripada tidak ada tombol; lebih baik ruangnya kosong sampai URL publiknya ada |

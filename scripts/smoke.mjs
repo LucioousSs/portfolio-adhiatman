@@ -46,6 +46,42 @@ const lang = await page.$eval('html', (el) => el.lang);
 pass('Default language is Indonesian', lang === 'id', lang);
 pass('Indonesian CTA present', (await page.$eval('#home', (el) => el.textContent)).includes('Lihat karya'));
 
+// 1b. Reading order: the statement follows the hero, then the work. The navbar
+// order has to travel with it, and the bar itself now floats out of the flow.
+const order = await page.evaluate(() => {
+  const header = document.getElementById('site-nav');
+  const rail = header?.querySelector('.nav-rail');
+  const hero = document.getElementById('home');
+  return {
+    sections: [...document.querySelectorAll('#app > *')]
+      .map((el) => el.id || el.tagName.toLowerCase())
+      .join(','),
+    links: [...document.querySelectorAll('#site-nav nav > ul [data-nav-link]')]
+      .map((a) => a.dataset.navLink)
+      .join(','),
+    position: header ? getComputedStyle(header).position : 'missing',
+    railTop: rail ? Math.round(rail.getBoundingClientRect().top) : -1,
+    railWidth: rail ? Math.round(rail.getBoundingClientRect().width) : 0,
+    viewport: window.innerWidth,
+    heroHeight: hero ? Math.round(hero.getBoundingClientRect().height) : 0,
+    vh: window.innerHeight,
+  };
+});
+pass(
+  'About follows the hero and the navbar follows the sections',
+  order.sections === 'site-nav,home,about,work,journey,tech,contact,footer' &&
+    order.links === 'about,work,journey,contact',
+  `${order.sections} | ${order.links}`
+);
+pass(
+  'Navbar floats as an inset rail over a full-height hero',
+  order.position === 'fixed' &&
+    order.railTop >= 8 &&
+    order.railWidth < order.viewport &&
+    Math.abs(order.heroHeight - order.vh) <= 1,
+  `position=${order.position} top=${order.railTop} rail=${order.railWidth}/${order.viewport} hero=${order.heroHeight}/${order.vh}`
+);
+
 // 2. Work shows the three featured projects, links to the rest on GitHub, and
 // opens the modal with the right project.
 const work = await page.evaluate(() => ({
@@ -141,8 +177,9 @@ const about = await page.evaluate(() => {
   };
 });
 pass(
-  'About fills one viewport with one centred statement',
-  about.height >= about.viewport * 0.9 &&
+  'About holds a compact pause of about one screen',
+  about.height >= about.viewport * 0.65 &&
+    about.height <= about.viewport * 0.95 &&
     about.text > 60 &&
     about.align === 'center' &&
     about.images === 0 &&
