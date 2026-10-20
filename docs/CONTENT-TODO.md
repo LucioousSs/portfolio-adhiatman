@@ -82,7 +82,7 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 - **K8, daftar teknologi dan alat:** kamu bilang aman, jadi `src/data/skills.js` tidak diubah.
 - **K9, ikon dari CDN:** kamu pilih tetap seperti sekarang, jadi ikon masih diunduh dari `cdn.jsdelivr.net` dan `cdn.simpleicons.org`. Satu-satunya konsekuensi: tanpa koneksi, ikonnya kosong sementara namanya tetap terbaca.
 - **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero dan di pernyataan section Tentang, jadi identitasnya tidak hilang.
-- **Section Tentang:** satu blok pernyataan rata tengah, setinggi 70 persen layar, langsung setelah hero, tanpa foto, chip, atau tautan keluar. Tagline dan kalimat bio digabung karena dipisah keduanya terbaca sebagai dua suara. Blok itu naik dari balik garis rambutnya sekali saat masuk viewport, dan tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
+- **Section Tentang:** satu blok pernyataan rata kiri, sejajar sumbu Karya, setinggi 70 persen layar, langsung setelah hero, tanpa foto, chip, atau tautan keluar. Tagline dan kalimat bio digabung karena dipisah keduanya terbaca sebagai dua suara. Blok itu naik dari balik garis rambutnya sekali saat masuk viewport, dan tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
 - **Navbar:** sekarang rel mengambang di atas konten, bukan bar penuh selebar layar. Urutan tautannya mengikuti urutan baca: Tentang, Karya, Perjalanan, Kontak. Karena relnya di luar alur, hero memakai layar penuh dan nama besar berjalan di bawahnya; memadatnya rel juga tidak lagi menggeser halaman.
 - **Blok rancangan desain:** tiga kartu di bawah tautan GitHub, membuka modal yang sama dengan baris kode. Sampulnya berwarna dan menjadi satu-satunya warna di halaman. Tidak ada baris keempat sampai keenam, karena baris kode menjanjikan repo dan tangkapan layar yang tidak dimiliki rancangan.
 
@@ -91,7 +91,7 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 ```bash
 npm run build
 npm run preview    # http://localhost:4173/portfolio-adhiatman/
-npm run smoke      # 36 dari 36 harus lolos
+npm run smoke      # 37 dari 37 harus lolos
 ```
 
 `npm run shots` menyimpan tangkapan layar hero, Karya, Kontak, Tentang, dan Perjalanan ke folder sementara. Saya bisa bantu memperbarui `README.md` dan `docs/PRD.md` kalau ada yang berubah.

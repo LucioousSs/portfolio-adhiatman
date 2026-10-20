@@ -106,9 +106,9 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 ### 7.4 Tentang
 - Satu blok pernyataan, bukan bio dua paragraf lalu potongan-potongan terpisah. Tagline dan satu kalimat bio digabung, karena dipisah keduanya terbaca sebagai dua suara yang berbeda.
 - Ditaruh langsung setelah hero: satu kalimat ini menerangkan nama di atas sebelum karya masuk. Di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka.
-- Rata tengah dan setinggi 70 persen layar (`min-h-[70svh]`), tanpa foto, tanpa chip, tanpa kolom data, tanpa tautan keluar. Section ini hanya teks, jadi tipografinya yang menjadi isi. Tingginya sengaja tidak penuh: dua layar penuh berurutan membuat karya pertama dua kali geser jauhnya.
+- Rata kiri, sejajar sumbu Karya, dan setinggi 70 persen layar (`min-h-[70svh]`), tanpa foto, tanpa chip, tanpa kolom data, tanpa tautan keluar. Section ini hanya teks, jadi tipografinya yang menjadi isi. Tingginya sengaja tidak penuh: dua layar penuh berurutan membuat karya pertama dua kali geser jauhnya. Rata kiri dipilih karena semua section lain mulai di x yang sama; blok rata tengah jadi satu-satunya objek yang melayang di luar grid, dan lima baris di HP lebih mudah dibaca kalau titik mulanya tetap.
 - Label "Tentang" kecil dengan tracking lebar di atas blok; pernyataannya sendiri yang berperan sebagai headline visual. Labelnya tetap `h2` supaya struktur dokumen tidak berubah.
-- Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Rata tengah tidak dibiarkan melewati batas itu.
+- Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Batas itu tidak dilanggar.
 - Garis rambut 64px di atas blok menjadi sisi tempat blok naik, bukan hiasan tambahan.
 - Grain halus tetap dipakai sebagai tekstur identitas poster.
 - Motion: blok naik 100 persen dari balik wadah `overflow: hidden`, sekali, saat section masuk viewport. Nilai awal hanya dipasang oleh GSAP dan tidak pernah di CSS, jadi tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
@@ -257,7 +257,8 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Blok rancangan desain tampil di bawah tautan GitHub dengan tiga sampul berwarna | PASS |
 | Kartu desain membuka modal tanpa tautan atau tahun karangan | PASS |
 | Menutup kartu desain mengembalikan fokus ke kartu pemicu | PASS |
-| Tentang mengisi jeda ringkas (65 sampai 95 persen viewport) dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
+| Tentang mengisi jeda ringkas (65 sampai 95 persen viewport) dengan satu pernyataan rata kiri, tanpa gambar atau kontrol | PASS |
+| Pernyataan Tentang mulai di sumbu yang sama dengan judul Karya | PASS |
 | Urutan section dan urutan tautan navbar sama: Tentang lebih dulu, lalu Karya | PASS |
 | Navbar mengambang sebagai rel di luar alur, dan hero tetap setinggi satu layar | PASS |
 | Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
@@ -281,7 +282,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
 | Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform | PASS |
 
-Ringkasan: 36 dari 36 pemeriksaan lolos.
+Ringkasan: 37 dari 37 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -316,7 +317,8 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
 | Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |
 | Tentang satu blok pernyataan, bukan bio lalu chip dan plat | Potongan-potongan itu terbaca sebagai tiga section yang ditempel, padahal isinya hanya satu kalimat. Satu blok utuh lebih jujur pada isinya |
-| Batas tiga sampai lima baris untuk teks rata tengah | Rata tengah memaksa mata mencari awal tiap baris; lebih dari lima baris membuatnya sulit dibaca, jadi teksnya dipendekkan dan ukurannya dibatasi |
+| Tentang rata kiri, sejajar sumbu Karya | Semua section lain mulai di x yang sama; blok rata tengah jadi satu-satunya objek yang melayang di luar grid. Rata kiri juga memberi titik mula tetap saat pernyataannya jadi lima baris di HP |
+| Batas tiga sampai lima baris untuk pernyataan | Lebih dari lima baris sudah jadi paragraf yang harus dipindai, bukan satu tarikan mata. Batas itu menjaga section tetap terbaca sekali lihat |
 | Tidak ada foto di Tentang | Frame penuh sudah jadi pembuka di hero; mengulang potret di bawah melemahkan hero, dan foto kedua hanya mengisi ruang yang seharusnya dibiarkan kosong |
 | Tentang ditaruh setelah hero | Satu kalimat itu menerangkan nama di hero; di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka |
 | Tentang 70svh, bukan satu layar penuh | Dua layar penuh berurutan membuat karya pertama dua kali geser jauhnya; 70 persen masih memberi jeda yang terasa |

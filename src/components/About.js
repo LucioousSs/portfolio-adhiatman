@@ -16,7 +16,7 @@ export class About {
     const statement = STATEMENT[document.documentElement.lang] ?? STATEMENT.id;
 
     return `
-      <section id="about" class="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-4 py-24 sm:px-6">
+      <section id="about" class="relative flex min-h-[70svh] items-center overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
         <svg class="grain-overlay" aria-hidden="true">
           <filter id="grain-filter">
             <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
@@ -25,7 +25,7 @@ export class About {
           <rect width="100%" height="100%" filter="url(#grain-filter)" />
         </svg>
 
-        <div class="relative z-10 w-full max-w-4xl text-center">
+        <div class="relative z-10 mx-auto w-full max-w-6xl">
           <h2 class="label mb-8">${t('about.title')}</h2>
 
           <div class="about-block">

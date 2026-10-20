@@ -163,7 +163,7 @@ await new Promise((r) => setTimeout(r, 500));
 const designFocus = await page.evaluate(() => document.activeElement?.getAttribute('data-design-index'));
 pass('Closing a design card returns focus to it', designFocus === '0', String(designFocus));
 
-// 3b. About is one centred statement: no image, no controls, no side content.
+// 3b. About is one statement on the work axis: no image, no controls, no side content.
 const about = await page.evaluate(() => {
   const section = document.getElementById('about');
   const statement = section?.querySelector('[data-about-text]');
@@ -181,10 +181,21 @@ pass(
   about.height >= about.viewport * 0.65 &&
     about.height <= about.viewport * 0.95 &&
     about.text > 60 &&
-    about.align === 'center' &&
+    about.align === 'left' &&
     about.images === 0 &&
     about.controls === 0,
   `${about.height}/${about.viewport}px, ${about.text} chars, align=${about.align}, images=${about.images}, controls=${about.controls}`
+);
+
+const axes = await page.evaluate(() => {
+  const about = document.querySelector('#about [data-about-text]').getBoundingClientRect();
+  const work = document.querySelector('#work h2').getBoundingClientRect();
+  return { about: Math.round(about.left), work: Math.round(work.left) };
+});
+pass(
+  'About starts on the same axis as the work rows',
+  Math.abs(axes.about - axes.work) <= 1,
+  `about=${axes.about} work=${axes.work}`
 );
 
 // 4. Language toggle switches every string and persists.

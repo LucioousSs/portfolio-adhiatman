@@ -216,11 +216,12 @@
   visibility: hidden;
 }
 
-/* About: the section is one statement, so the type carries it alone. */
+/* About: the section is one statement, so the type carries it alone. It starts on
+   the same axis as the work rows instead of floating in the middle of the page. */
 .about-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2.5rem;
 }
 
@@ -238,10 +239,12 @@
 }
 
 .about-text {
+  max-width: 56rem;
   padding-block: 0.08em;
   margin-block: -0.08em;
   font-size: clamp(1.25rem, 3.1vw, 2.35rem);
   line-height: 1.18;
+  text-align: left;
   text-wrap: balance;
   color: #ffffff;
 }
