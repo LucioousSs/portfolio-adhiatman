@@ -188,25 +188,27 @@ pass(
 );
 
 const axes = await page.evaluate(() => {
-  const label = document.querySelector('#about h2').getBoundingClientRect();
+  const section = document.getElementById('about');
+  const sectionRect = section.getBoundingClientRect();
+  const heading = section.querySelector('h2').getBoundingClientRect();
+  const mask = section.querySelector('.about-mask').getBoundingClientRect();
   const work = document.querySelector('#work h2').getBoundingClientRect();
-  const mask = document.querySelector('#about .about-mask').getBoundingClientRect();
-  const section = document.getElementById('about').getBoundingClientRect();
+  const padBottom = parseFloat(getComputedStyle(section).paddingBottom);
   return {
-    label: Math.round(label.left),
+    heading: Math.round(heading.left),
     work: Math.round(work.left),
     textCenter: Math.round(mask.left + mask.width / 2),
     viewportCenter: Math.round(window.innerWidth / 2),
     textMiddle: Math.round(mask.top + mask.height / 2),
-    sectionMiddle: Math.round(section.top + section.height / 2),
+    bodyMiddle: Math.round((heading.bottom + (sectionRect.bottom - padBottom)) / 2),
   };
 });
 pass(
-  'About label sits on the work axis while the statement stays centred',
-  Math.abs(axes.label - axes.work) <= 1 &&
+  'About heading sits on the work axis while the statement stays centred',
+  Math.abs(axes.heading - axes.work) <= 1 &&
     Math.abs(axes.textCenter - axes.viewportCenter) <= 1 &&
-    Math.abs(axes.textMiddle - axes.sectionMiddle) <= 2,
-  `label=${axes.label} work=${axes.work} text=${axes.textCenter}/${axes.viewportCenter} middle=${axes.textMiddle}/${axes.sectionMiddle}`
+    Math.abs(axes.textMiddle - axes.bodyMiddle) <= 2,
+  `heading=${axes.heading} work=${axes.work} text=${axes.textCenter}/${axes.viewportCenter} middle=${axes.textMiddle}/${axes.bodyMiddle}`
 );
 
 // 4. Language toggle switches every string and persists.

@@ -216,26 +216,11 @@
   visibility: hidden;
 }
 
-/* About: the label sits on the work axis at the top of the section, while the
-   statement keeps the centred, poster-like placement it had before. Both share
-   one grid cell, so the statement centres on the section, not on the space left
-   over under the label. */
-.about-head {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.25rem;
-}
-
+/* About: the heading is the same display type as the other sections and sits on
+   their axis. The statement keeps the centred, poster-like placement below it. */
 .about-block {
   display: flex;
   justify-content: center;
-}
-
-.about-rule {
-  width: 4rem;
-  height: 1px;
-  background-color: #52525b;
 }
 
 /* The clip edge the block rises from. The padding sits on the text itself, with

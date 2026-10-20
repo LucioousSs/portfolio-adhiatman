@@ -107,10 +107,9 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Satu blok pernyataan, bukan bio dua paragraf lalu potongan-potongan terpisah. Tagline dan satu kalimat bio digabung, karena dipisah keduanya terbaca sebagai dua suara yang berbeda.
 - Ditaruh langsung setelah hero: satu kalimat ini menerangkan nama di atas sebelum karya masuk. Di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka.
 - Setinggi 70 persen layar (`min-h-[70svh]`), tanpa foto, tanpa chip, tanpa kolom data, tanpa tautan keluar. Section ini hanya teks, jadi tipografinya yang menjadi isi. Tingginya sengaja tidak penuh: dua layar penuh berurutan membuat karya pertama dua kali geser jauhnya.
-- Dua poros, disengaja. Label "Tentang" dan garis rambutnya di kiri atas, di sumbu yang sama dengan judul Karya, jadi section ini terbaca sebagai section dan bukan sisipan. Pernyataannya rata tengah dan tepat di tengah section, jadi kalimatnya tetap satu objek simetris, bukan paragraf yang perlu dipindai.
-- Label "Tentang" kecil dengan tracking lebar; pernyataannya sendiri yang berperan sebagai headline visual. Labelnya tetap `h2` supaya struktur dokumen tidak berubah.
+- Dua poros, disengaja. Judul "Tentang" memakai `type-display` dengan ukuran yang sama seperti judul section lain (`text-4xl uppercase sm:text-5xl`) dan duduk di kiri, di sumbu yang sama dengan judul Karya. Pernyataannya rata tengah dan di tengah ruang di bawah judul, jadi kalimatnya tetap satu objek simetris, bukan paragraf yang perlu dipindai.
+- Judulnya tetap `h2` supaya struktur dokumen tidak berubah.
 - Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Batas itu tidak dilanggar.
-- Garis rambut 64px di bawah label menjadi penanda section, tidak ikut bergerak. Blok pernyataannya naik dari balik wadahnya sendiri (`overflow: hidden`).
 - Grain halus tetap dipakai sebagai tekstur identitas poster.
 - Motion: blok naik 100 persen dari balik wadah `overflow: hidden`, sekali, saat section masuk viewport. Nilai awal hanya dipasang oleh GSAP dan tidak pernah di CSS, jadi tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
 - Reduced motion: tanpa transform sama sekali.
@@ -259,7 +258,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Kartu desain membuka modal tanpa tautan atau tahun karangan | PASS |
 | Menutup kartu desain mengembalikan fokus ke kartu pemicu | PASS |
 | Tentang mengisi jeda ringkas (65 sampai 95 persen viewport) dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
-| Label Tentang duduk di sumbu judul Karya, pernyataannya tetap di tengah section | PASS |
+| Judul Tentang memakai tipografi yang sama dengan section lain dan duduk di sumbu judul Karya, pernyataannya tetap di tengah | PASS |
 | Urutan section dan urutan tautan navbar sama: Tentang lebih dulu, lalu Karya | PASS |
 | Navbar mengambang sebagai rel di luar alur, dan hero tetap setinggi satu layar | PASS |
 | Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
@@ -318,7 +317,7 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
 | Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |
 | Tentang satu blok pernyataan, bukan bio lalu chip dan plat | Potongan-potongan itu terbaca sebagai tiga section yang ditempel, padahal isinya hanya satu kalimat. Satu blok utuh lebih jujur pada isinya |
-| Label Tentang di sumbu Karya, pernyataan tetap di tengah | Semua section lain mulai di x yang sama, jadi label pada sumbu itu membuat Tentang terbaca sebagai section, bukan sisipan. Kalimatnya dibiarkan di tengah supaya tetap terasa sebagai satu pernyataan, bukan paragraf yang perlu dipindai |
+| Judul Tentang memakai tipografi judul yang sama dengan section lain, pernyataan tetap di tengah | Judul adalah penanda section, jadi ia harus terbaca dengan bobot yang sama seperti "Karya" dan "Kontak"; pernyataannya dibiarkan di tengah supaya tetap terasa sebagai satu objek, bukan paragraf. Garis rambut kecil di bawahnya dihapus karena tidak ada section lain yang memakainya |
 | Batas tiga sampai lima baris untuk pernyataan | Lebih dari lima baris sudah jadi paragraf yang harus dipindai, bukan satu tarikan mata. Batas itu menjaga section tetap terbaca sekali lihat |
 | Tidak ada foto di Tentang | Frame penuh sudah jadi pembuka di hero; mengulang potret di bawah melemahkan hero, dan foto kedua hanya mengisi ruang yang seharusnya dibiarkan kosong |
 | Tentang ditaruh setelah hero | Satu kalimat itu menerangkan nama di hero; di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka |

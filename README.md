@@ -16,7 +16,7 @@ Landing page statis untuk personal branding I Putu Adhiatman, UI/UX Designer dan
 
 - Rel navigasi mengambang di atas konten: tautan section dengan penanda aktif, toggle bahasa, dan progress bar. Memadat saat scroll tanpa menggeser halaman.
 - Hero satu layar penuh: nama raksasa satu baris dengan reveal per huruf, foto yang menimpa nama sebagai lapisan depan, marquee latar sebagai tekstur, dan parallax foto.
-- Tentang berupa satu pernyataan rata tengah setinggi 70 persen layar, dengan label di kiri pada sumbu judul Karya, langsung setelah hero: tagline dan satu kalimat bio dalam satu blok, tanpa foto, chip, atau tautan keluar.
+- Tentang berupa satu pernyataan rata tengah setinggi 70 persen layar, langsung setelah hero, dengan judul bergaya sama seperti section lain di kiri: tagline dan satu kalimat bio dalam satu blok, tanpa foto, chip, atau tautan keluar.
 - Karya pilihan berupa daftar baris (tiga project kode): hover menampilkan preview yang mengikuti kursor, klik membuka modal detail dengan galeri dan tautan, plus satu tautan ke sisa repo di GitHub.
 - Rancangan desain di blok sendiri di bawah daftar kode: tiga kartu bersampul berwarna yang membuka modal yang sama, tanpa baris tambahan dan tanpa tombol untuk tautan yang belum ada.
 - Perjalanan satu kolom kronologis: babak tahun dengan indeks lengket, garis yang tergambar saat scroll, baris yang menyala saat dilewati, dan detail acara yang dibuka sebaris.
@@ -109,7 +109,7 @@ Workflow di `.github/workflows/deploy.yml` membangun dan mengunggah `dist/` seti
 - Tidak ada angka, testimoni, atau klaim tanpa bukti. Aset yang belum ada ditandai apa adanya.
 - Aset dari luar tidak dipakai untuk dekorasi. Foto yang tampil adalah milik pemilik; foto stok yang menggambarkan orang atau ruang kerja orang lain tidak dipakai, karena itu akan terbaca sebagai cerita pemilik yang sebenarnya tidak terjadi.
 - Section Tentang sengaja hanya berisi teks: satu pernyataan rata tengah, setinggi 70 persen layar, tanpa foto dan tanpa tautan keluar.
-- Label Tentang ikut sumbu kiri Karya, tapi pernyataannya tetap di tengah: label berperan sebagai penanda section, kalimatnya sebagai satu objek.
+- Judul Tentang memakai tipografi judul yang sama dengan Karya dan Kontak, tapi pernyataannya tetap di tengah: judul berperan sebagai penanda section, kalimatnya sebagai satu objek.
 - Rancangan desain ditampilkan berwarna. Itu satu-satunya warna di halaman, dan disengaja: yang berwarna adalah hasil desainnya, bukan bingkainya.
 - Tentang ditaruh setelah hero, bukan di antara Karya dan Perjalanan: satu kalimat itu menerangkan nama di atas, lalu karya jadi buktinya.
 - Navbar berupa rel mengambang dengan radius kecil dan border rambut, bukan pil kaca. Relnya di luar alur, jadi hero memakai layar penuh dan memadatnya navbar tidak menggeser konten.

@@ -25,13 +25,12 @@ export class About {
           <rect width="100%" height="100%" filter="url(#grain-filter)" />
         </svg>
 
-        <div class="relative z-10 mx-auto grid w-full max-w-6xl grid-rows-1">
-          <div class="about-head col-start-1 row-start-1 self-start">
-            <h2 class="label">${t('about.title')}</h2>
-            <span class="about-rule" aria-hidden="true"></span>
-          </div>
+        <div class="relative z-10 mx-auto grid w-full max-w-6xl grid-rows-[auto_1fr]">
+          <h2 class="type-display col-start-1 row-start-1 text-4xl uppercase sm:text-5xl">
+            ${t('about.title')}
+          </h2>
 
-          <div class="about-block col-start-1 row-start-1 self-center">
+          <div class="about-block col-start-1 row-start-2 self-center">
             <div class="about-mask">
               <p class="type-display about-text" data-about-text>${statement}</p>
             </div>
