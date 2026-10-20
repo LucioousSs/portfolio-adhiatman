@@ -69,22 +69,27 @@ pass('Escape closes the modal', modalClosed);
 const focused = await page.evaluate(() => document.activeElement?.getAttribute('data-work-index'));
 pass('Focus returns to the triggering row', focused === '0', String(focused));
 
-const aboutPlates = await page.evaluate(() => {
-  const panels = [...document.querySelectorAll('#about [data-about-panel]')];
+// 3b. About is one centred statement: no image, no controls, no side content.
+const about = await page.evaluate(() => {
+  const section = document.getElementById('about');
+  const statement = section?.querySelector('[data-about-text]');
   return {
-    count: panels.length,
-    described: panels.every((panel) => {
-      const img = panel.querySelector('img');
-      // The type plate has no image; it carries real text instead.
-      if (!img) return panel.textContent.trim().length > 0;
-      return Boolean(img.getAttribute('alt')?.trim()) || img.getAttribute('aria-hidden') === 'true';
-    }),
+    height: section ? Math.round(section.getBoundingClientRect().height) : 0,
+    viewport: window.innerHeight,
+    text: statement?.textContent.trim().length ?? 0,
+    align: statement ? getComputedStyle(statement).textAlign : 'missing',
+    images: section ? section.querySelectorAll('img').length : -1,
+    controls: section ? section.querySelectorAll('a, button').length : -1,
   };
 });
 pass(
-  'About shows three plates, each described or decorative',
-  aboutPlates.count === 3 && aboutPlates.described,
-  `${aboutPlates.count} plates`
+  'About fills one viewport with one centred statement',
+  about.height >= about.viewport * 0.9 &&
+    about.text > 60 &&
+    about.align === 'center' &&
+    about.images === 0 &&
+    about.controls === 0,
+  `${about.height}/${about.viewport}px, ${about.text} chars, align=${about.align}, images=${about.images}, controls=${about.controls}`
 );
 
 // 4. Language toggle switches every string and persists.
@@ -282,20 +287,20 @@ await new Promise((r) => setTimeout(r, 200));
 const menuClosed = await page.$eval('#nav-menu', (el) => el.classList.contains('hidden'));
 pass('Mobile menu opens and closes', menuHiddenStart && menuOpen && menuClosed);
 
-// 9b. The type plate has no wrap point, so its longest word must fit at 360px.
-const typeFit = await page.evaluate(() => {
-  const lines = [...document.querySelectorAll('.about-type-lines span')];
-  const panel = document.querySelector('.about-panel--type');
+// 9b. The statement keeps a readable measure at 360px: at most five lines.
+const statementMobile = await page.evaluate(() => {
+  const statement = document.querySelector('[data-about-text]');
+  if (!statement) return { lines: 0, width: 0 };
+  const style = getComputedStyle(statement);
   return {
-    lines: lines.length,
-    overflow: lines.length ? Math.max(...lines.map((line) => line.scrollWidth - line.clientWidth)) : -1,
-    panelWidth: panel ? panel.clientWidth : 0,
+    lines: Math.round(statement.getBoundingClientRect().height / parseFloat(style.lineHeight)),
+    width: Math.round(statement.getBoundingClientRect().width),
   };
 });
 pass(
-  'Type plate fits its words at 360px',
-  typeFit.lines === 4 && typeFit.overflow <= 1,
-  `${typeFit.lines} lines, overflow=${typeFit.overflow}px in ${typeFit.panelWidth}px plate`
+  'Statement stays within five lines at 360px',
+  statementMobile.lines > 0 && statementMobile.lines <= 5,
+  `${statementMobile.lines} lines in ${statementMobile.width}px`
 );
 
 pass('No uncaught page errors', pageErrors.length === 0, pageErrors.join(' | '));
@@ -358,19 +363,21 @@ pass(
   `rows=${journeyStatic.rows} opacities=${journeyStatic.bodyOpacity}/${journeyStatic.nodeOpacity}/${journeyStatic.yearOpacity} years=${journeyStatic.years.join(',')}`
 );
 
-// 12. Reduced motion keeps the about plates in place, fully visible.
+// 12. Reduced motion leaves the statement at rest and readable.
 const aboutStatic = await page.evaluate(() => {
-  const panels = [...document.querySelectorAll('[data-about-panel]')];
+  const statement = document.querySelector('[data-about-text]');
+  if (!statement) return { text: 0, opacity: 'missing', transform: 'missing' };
+  const style = getComputedStyle(statement);
   return {
-    count: panels.length,
-    visible: panels.every((panel) => getComputedStyle(panel).opacity === '1'),
-    transforms: panels.map((panel) => getComputedStyle(panel).transform),
+    text: statement.textContent.trim().length,
+    opacity: style.opacity,
+    transform: style.transform,
   };
 });
 pass(
-  'Reduced motion keeps the about plates visible',
-  aboutStatic.count === 3 && aboutStatic.visible,
-  `${aboutStatic.count} plates, transform=${aboutStatic.transforms[0]}`
+  'Reduced motion leaves the statement visible and untransformed',
+  aboutStatic.text > 60 && aboutStatic.opacity === '1' && aboutStatic.transform === 'none',
+  `${aboutStatic.text} chars, opacity=${aboutStatic.opacity}, transform=${aboutStatic.transform}`
 );
 
 await browser.close();

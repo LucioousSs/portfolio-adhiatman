@@ -216,141 +216,34 @@
   visibility: hidden;
 }
 
-/* Soft-skill badges: static on purpose, so the section's motion budget goes to
-   the plates below. */
-.about-badge {
-  display: inline-block;
-  padding: 0.55rem 1.1rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  border-radius: 9999px;
-  background: var(--color-panel);
-  border: 1px solid var(--color-line);
-  color: #d4d4d8;
-  user-select: none;
+/* About: the section is one statement, so the type carries it alone. */
+.about-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
 }
 
-/* About plates: one crop of the portrait, one texture, one type plate. They read
-   as prints laid side by side, not as a gallery. */
-.about-strip {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
-  gap: 1rem;
-  margin-top: 4rem;
+.about-rule {
+  width: 4rem;
+  height: 1px;
+  background-color: #52525b;
 }
 
-.about-panel {
-  position: relative;
+/* The clip edge the block rises from. The padding sits on the text itself, with
+   a matching negative margin, so the glyph ink stays clear of both edges: no
+   descender is shaved at rest, and no sliver shows while the block is down. */
+.about-mask {
   overflow: hidden;
-  border: 1px solid var(--color-line);
-  background: var(--color-panel);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
 }
 
-.about-panel img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-}
-
-.about-panel--torso {
-  aspect-ratio: 4 / 5;
-}
-
-/* The plate uses its own 4:5 crop of the portrait, so it fills without a zoom. */
-.about-panel--torso img {
-  object-position: 50% 50%;
-}
-
-.about-panel--type {
-  aspect-ratio: 4 / 5;
-  margin-top: 2.5rem;
-  container-type: inline-size;
-}
-
-.about-type {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding: 1.5rem;
-}
-
-.about-type-lines {
-  display: flex;
-  flex-direction: column;
+.about-text {
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+  font-size: clamp(1.25rem, 3.1vw, 2.35rem);
+  line-height: 1.18;
+  text-wrap: balance;
   color: #ffffff;
-}
-
-/* Sized against the plate, not the viewport: the plate is a third of the grid
-   on desktop and 82 percent of the screen in the mobile carousel, and the
-   longest word ("DEVELOPER") has nowhere to wrap. */
-.about-type-lines span {
-  font-size: clamp(1.1rem, 2.4vw, 2.2rem);
-  font-size: clamp(1rem, 10.2cqw, 2.6rem);
-  text-transform: uppercase;
-}
-
-.about-panel--texture {
-  aspect-ratio: 4 / 5;
-  margin-top: 1rem;
-}
-
-/* Inverted so the plate stays dark next to the cut-out portrait. The location
-   sits on a solid ink bar, which keeps the contrast fixed whatever the texture
-   underneath is doing. */
-.about-panel--texture img {
-  filter: grayscale(1) invert(1) brightness(1.05) contrast(1.15);
-}
-
-.about-panel-caption {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 0.75rem 1rem;
-  border-top: 1px solid var(--color-line);
-  background: var(--color-ink);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #d4d4d8;
-}
-
-@media (hover: hover) {
-  .about-panel:hover {
-    transform: translateY(-6px);
-    border-color: #52525b;
-  }
-}
-
-@media (max-width: 639px) {
-  .about-strip {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 3rem;
-    margin-inline: -1rem;
-    padding-inline: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .about-strip::-webkit-scrollbar {
-    display: none;
-  }
-
-  .about-panel {
-    flex: 0 0 82%;
-    scroll-snap-align: center;
-  }
-
-  .about-panel--type,
-  .about-panel--texture {
-    margin-top: 0;
-  }
 }
 
 /* Compact navbar once the page is scrolled: keeps the reading area clear. */

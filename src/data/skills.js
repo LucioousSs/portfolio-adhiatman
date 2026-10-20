@@ -17,8 +17,4 @@ export const skills = {
     { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
     { name: 'Cisco Packet Tracer', icon: 'https://cdn.simpleicons.org/cisco' },
   ],
-  soft: {
-    id: ['Hubungan masyarakat', 'Komunikasi', 'Kerja sama tim', 'Manajemen acara'],
-    en: ['Public relations', 'Communication', 'Teamwork', 'Event management'],
-  },
 };

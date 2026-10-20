@@ -10,10 +10,6 @@ export const profile = {
     id: 'UI/UX Designer & Frontend Developer',
     en: 'UI/UX Designer & Frontend Developer',
   },
-  tagline: {
-    id: 'Merancang antarmuka yang enak dipakai, lalu membangunnya sendiri.',
-    en: 'I design interfaces that feel good to use, then build them myself.',
-  },
   location: {
     id: 'Denpasar, Bali, Indonesia',
     en: 'Denpasar, Bali, Indonesia',

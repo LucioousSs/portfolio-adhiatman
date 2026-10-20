@@ -56,7 +56,7 @@ Prinsip yang mengikat semua keputusan:
 | 1 | Navbar (tautan, toggle bahasa, progress bar) | `#home` |
 | 2 | Hero (nama, foto, CTA) | `#home` |
 | 3 | Karya pilihan (daftar project) | `#work` |
-| 4 | Tentang (bio dan soft skills) | `#about` |
+| 4 | Tentang (satu pernyataan) | `#about` |
 | 5 | Perjalanan (kronologi per tahun: pendidikan, organisasi, acara) | `#journey` |
 | 6 | Teknologi dan alat | `#tech` |
 | 7 | Kontak | `#contact` |
@@ -95,18 +95,15 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 - Modal bisa ditutup dengan Escape, fokus terkunci di dalamnya, dan fokus kembali ke baris pemicu.
 
 ### 7.4 Tentang
-- Tagline sebagai kalimat pembuka di atas bio.
-- Bio dua paragraf dengan reveal per kata saat masuk viewport.
-- Soft skills sebagai chip statis.
-- Grain halus sebagai tekstur identitas poster.
-- Tiga plat penutup di bawah bio, tinggi dan posisi vertikalnya sengaja tidak rata:
-  1. Potongan potret 4:5 (`public/images/about/portrait-torso.webp`), bukan potret penuh, supaya frame penuh tetap milik hero.
-  2. Plat tekstur beton CC0 terbalik dan hitam putih, dengan lokasi "Denpasar, Bali, Indonesia" sebagai teks HTML di bar ink, bukan dibakar ke gambar.
-  3. Plat tipografi berisi peran, satu kata besar per baris, jadi profesi tetap terbaca setelah baris peran di hero dihapus.
-- Plat potret dan plat tipografi punya padanan teks: `alt` untuk gambar, teks asli untuk plat tipografi. Plat tekstur `alt=""` dan `aria-hidden`, murni dekoratif.
-- Motion: tiap plat naik 28px dan memudar dengan jeda 90ms saat masuk viewport; strip bergeser mendatar paling jauh 28px mengikuti scroll; hover mengangkat plat 6px di perangkat berpointer.
-- Reduced motion: strip tampil statis, tanpa transform dan tanpa hover.
-- Mobile (di bawah 640px): strip menjadi baris yang bisa digeser mendatar dengan snap, lebar plat 82 persen, tanpa JavaScript tambahan.
+- Satu blok pernyataan, bukan bio dua paragraf lalu potongan-potongan terpisah. Tagline dan satu kalimat bio digabung, karena dipisah keduanya terbaca sebagai dua suara yang berbeda.
+- Rata tengah dan setinggi satu layar penuh (`min-h-svh`), tanpa foto, tanpa chip, tanpa kolom data, tanpa tautan keluar. Section ini hanya teks, jadi tipografinya yang menjadi isi.
+- Label "Tentang" kecil dengan tracking lebar di atas blok; pernyataannya sendiri yang berperan sebagai headline visual. Labelnya tetap `h2` supaya struktur dokumen tidak berubah.
+- Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Rata tengah tidak dibiarkan melewati batas itu.
+- Garis rambut 64px di atas blok menjadi sisi tempat blok naik, bukan hiasan tambahan.
+- Grain halus tetap dipakai sebagai tekstur identitas poster.
+- Motion: blok naik 100 persen dari balik wadah `overflow: hidden`, sekali, saat section masuk viewport. Nilai awal hanya dipasang oleh GSAP dan tidak pernah di CSS, jadi tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
+- Reduced motion: tanpa transform sama sekali.
+- Tidak ada potret di section ini. Frame penuh tetap eksklusif di hero.
 
 ### 7.5 Perjalanan
 - Satu kolom kronologis, bukan grid kartu: babak 2024, 2025, dan 2026 berurutan dari yang paling lama.
@@ -140,7 +137,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 | Navbar | Progress bar, navbar memadat, penanda section aktif | Orientasi pada halaman panjang |
 | Hero | Reveal huruf, foto naik, marquee latar, sparkle, parallax, drift mengikuti pointer | Momen pembuka, menegaskan identitas tipografi |
 | Karya | Baris terangkat, preview mengikuti kursor, baris lain meredup, morph ke modal | Interaksi tanda tangan, memberi konteks visual tanpa klik |
-| Tentang | Reveal per kata, tiga plat naik berurutan, strip bergeser mendatar mengikuti scroll, hover mengangkat plat | Ritme baca pada bio, lalu strip menutup section sebagai deretan cetakan; pergeseran mendatar menandakan barisnya lebih lebar dari layar tanpa jadi marquee kedua |
+| Tentang | Satu blok naik dari balik garis rambutnya, sekali | Section ini hanya satu pernyataan; satu gerakan yang sama dengan isinya, bukan tiga gerakan yang bersaing |
 | Perjalanan | Garis progres scrub, baris menyala saat dilewati garis, wipe angka tahun | Menghubungkan posisi baca dengan urutan waktu |
 | Teknologi | Marquee konten | Menunjukkan luas stack |
 | Kontak | Focus ring, transition tombol | Umpan balik aksi |
@@ -184,7 +181,6 @@ public/
   robots.txt
   .nojekyll
   images/profile.png
-  images/about/           (potret 4:5 dan tekstur CC0 untuk section Tentang)
   cv/                     (letakkan PDF CV di sini)
 src/
   main.js
@@ -197,13 +193,12 @@ scripts/{smoke,shots}.mjs
 .github/workflows/deploy.yml
 docs/PRD.md
 docs/CONTENT-TODO.md
-docs/CREDITS.md
 ```
 
 - Tanpa service layer dan tanpa API. Komponen merender HTML, lalu `init()` memasang perilaku.
 - Modal dipasang sekali di luar `#app` supaya tidak ikut ter-render ulang saat ganti bahasa.
-- Aset dekoratif dari luar hanya boleh tekstur, dan asalnya dicatat di `docs/CREDITS.md`. Tidak ada foto stok yang menggambarkan orang, ruang kerja, atau kehidupan pemilik.
-- Bentuk keluaran build: CSS sekitar 10,5 kB gzip, JS sekitar 61,4 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 269 kB woff2 untuk subset Latin, Latin-ext, dan Vietnamese. Dua plat Tentang menambah 15 kB dan 82 kB WebP, dimuat malas.
+- Tidak ada aset dekoratif dari luar. Foto yang dipakai adalah milik pemilik, dan tidak ada foto stok yang menggambarkan orang, ruang kerja, atau kehidupan pemilik.
+- Bentuk keluaran build: CSS sekitar 10,2 kB gzip, JS sekitar 60,4 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 269 kB woff2 untuk subset Latin, Latin-ext, dan Vietnamese.
 
 ## 11. Deployment
 
@@ -220,7 +215,7 @@ docs/CREDITS.md
 - **Responsive:** diuji tanpa overflow horizontal pada 360px. Rentang target 320px sampai 1440px.
 - **Aksesibilitas:** focus indicator terlihat, skip link, dialog dengan Escape dan focus trap, toggle memakai `aria-pressed`, detail Perjalanan memakai `aria-expanded` dan `aria-controls`, indeks tahun punya `aria-label`, status bahasa diumumkan lewat atribut `lang`, reduced motion dihormati, dan kontras teks diperiksa otomatis terhadap ambang WCAG AA.
 - **Target sentuh:** semua tautan dan tombol minimal 24px, aksi utama lebih besar.
-- **Aset gambar:** dua potret punya `alt` yang menyebut namanya, plat tekstur `alt=""` plus `aria-hidden`, dan semua gambar section Tentang dimuat malas.
+- **Aset gambar:** potret hero punya `alt` yang menyebut namanya. Section Tentang tidak memuat gambar sama sekali.
 - **SEO:** title, description, canonical, Open Graph, Twitter card, dan JSON-LD Person.
 - **Kejujuran konten:** tidak ada angka, testimoni, atau klaim yang dibuat-buat. Placeholder ditulis apa adanya sebagai "Tangkapan layar menyusul".
 
@@ -248,7 +243,8 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Build produksi berhasil | PASS |
 | Hero merender nama dan konten Indonesia sebagai default | PASS |
 | Karya menampilkan tiga project dan tautan ke sisanya di GitHub | PASS |
-| Tentang menampilkan tiga plat, masing-masing punya teks atau ditandai dekoratif | PASS |
+| Tentang mengisi satu viewport dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
+| Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
 | Klik baris karya membuka modal dengan project yang benar | PASS |
 | Escape menutup modal dan fokus kembali ke baris pemicu | PASS |
 | Toggle bahasa mengubah seluruh string, tersimpan, dan `lang` ikut berubah | PASS |
@@ -267,8 +263,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion mematikan loop hero | PASS |
 | Reduced motion menyisakan konten hero | PASS |
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
-| Reduced motion menyisakan tiga plat Tentang terlihat tanpa transform | PASS |
-| Plat tipografi Tentang tidak memotong kata terpanjangnya di 360px | PASS |
+| Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform | PASS |
 
 Ringkasan: 31 dari 31 pemeriksaan lolos.
 
@@ -281,9 +276,9 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 | # | Item | Lokasi | Status |
 |---|------|--------|--------|
 | T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` | Ditunda sampai tampilan project diubah |
-| T7 | Konfirmasi bio, tagline, dan entri Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` | Desain Tentang sudah diubah; tinggal konfirmasi teksnya |
+| T7 | Konfirmasi entri Perjalanan | `src/data/journey.js` | Menunggu konfirmasi pemilik |
 
-Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, dan T9 (ikon CDN) diputuskan tetap seperti sekarang. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
+Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, T9 (ikon CDN) diputuskan tetap seperti sekarang, dan teks Tentang dikonfirmasi memakai versi pendek satu blok. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
 
 ## 16. Lampiran: keputusan dan alasan
 
@@ -303,10 +298,7 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Kecepatan marquee diukur, bukan ditetapkan | Dua durasi tetap membuat baris teknologi (sekitar 31 px per detik) dan alat (sekitar 15 px per detik) tampak berlomba; satu konstanta 60 px per detik menyamakan keduanya tanpa perlu disetel ulang saat konten berubah |
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
 | Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |
-| Plat Tentang memakai potret yang sudah dipotong 4:5, bukan potret penuh | Frame penuh sudah jadi pembuka di hero; mengulanginya di bawah melemahkan hero dan mengulang informasi yang sama |
-| Plat kedua berbentuk tekstur, plat ketiga tipografi peran, bukan dua crop potret | Sumber potretnya 408 piksel, jadi crop ketat akan pecah saat diperbesar; tipografi mengembalikan peran yang hilang dari hero tanpa menambah baris kecil. Tipografi ditaruh paling kanan karena di karusel mobile panel berikutnya terlihat separuh, dan potongan tekstur terbaca sebagai tekstur sementara potongan huruf terbaca sebagai rusak |
-| Tekstur beton CC0 dari StockSnap, bukan foto stok orang atau ruang kerja | Tekstur abstrak tidak mengklaim apa pun. Foto stok yang terlihat seperti kehidupan pemilik adalah karangan, dan itu dilarang |
-| Tekstur ditampilkan terbalik dan hitam putih | Section-nya gelap; tekstur aslinya didominasi putih dan akan jadi bidang paling terang di halaman |
-| Lokasi jadi teks HTML di atas bar ink, bukan dibakar ke gambar | Teks tetap bisa dibaca mesin, ikut berganti bahasa, dan kontrasnya tetap aman apa pun isi teksturnya |
-| Chip soft skill tidak lagi magnetik | Motion section dipusatkan pada plat; chip yang bergerak mengikuti kursor bersaing dengan gerak strip dan tidak membawa informasi |
-| Strip Tentang tidak disamakan tingginya | Cetakan yang ditata di meja memang tidak rata; kesamaan tinggi akan membuatnya terbaca sebagai kartu fitur |
+| Tentang satu blok pernyataan, bukan bio lalu chip dan plat | Potongan-potongan itu terbaca sebagai tiga section yang ditempel, padahal isinya hanya satu kalimat. Satu blok utuh lebih jujur pada isinya |
+| Tentang rata tengah dan setinggi satu layar | Section ini hanya punya satu objek, jadi menaruhnya di tengah memberi jarak dari section lain dan membuatnya terbaca sebagai pernyataan, bukan paragraf yang perlu dipindai |
+| Batas tiga sampai lima baris untuk teks rata tengah | Rata tengah memaksa mata mencari awal tiap baris; lebih dari lima baris membuatnya sulit dibaca, jadi teksnya dipendekkan dan ukurannya dibatasi |
+| Tidak ada foto di Tentang | Frame penuh sudah jadi pembuka di hero; mengulang potret di bawah melemahkan hero, dan foto kedua hanya mengisi ruang yang seharusnya dibiarkan kosong |

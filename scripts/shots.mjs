@@ -45,7 +45,7 @@ await new Promise((r) => setTimeout(r, 2600));
 await page.screenshot({ path: `${OUT}\\contact-desktop.png` });
 console.log('contact-desktop.png');
 
-// About section: tagline, bio, and the three plates that close it.
+// About section: one centred statement, no image and nothing else.
 for (const vp of [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'tablet', width: 768, height: 900 },
@@ -54,13 +54,17 @@ for (const vp of [
   await page.setViewport({ width: vp.width, height: vp.height });
   await page.goto(url, { waitUntil: 'load' });
   await new Promise((r) => setTimeout(r, 700));
+  // Before it is scrolled to, the block must sit entirely below its clip edge.
+  const preTrigger = await page.evaluate(() => {
+    const text = document.querySelector('[data-about-text]');
+    const mask = text?.parentElement;
+    if (!text || !mask) return 'missing';
+    return text.getBoundingClientRect().top >= mask.getBoundingClientRect().bottom - 1 ? 'hidden' : 'peeking';
+  });
+  console.log(`about pre-trigger (${vp.name}): ${preTrigger}`);
   await page.evaluate(() => {
     document.documentElement.style.scrollBehavior = 'auto';
-    // Scroll to the strip, not the section top: the plates only animate in when
-    // they enter the viewport, and a section screenshot would capture them at
-    // opacity 0 on tall mobile layouts. The fixed nav is hidden so it does not
-    // sit over the middle of the stitched capture.
-    document.querySelector('[data-about-strip]')?.scrollIntoView({ block: 'center' });
+    document.getElementById('about')?.scrollIntoView();
     document.getElementById('site-nav')?.style.setProperty('display', 'none');
   });
   await new Promise((r) => setTimeout(r, 2400));
@@ -183,13 +187,13 @@ await new Promise((r) => setTimeout(r, 1600));
 await page.screenshot({ path: `${OUT}\\journey-tablet.png` });
 console.log('journey-tablet.png');
 
-// Reduced motion: the about plates are simply there, no transform and no hover.
+// Reduced motion: the statement is simply there, with no transform at all.
 await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
 await page.setViewport({ width: 1280, height: 900 });
 await page.goto(url, { waitUntil: 'load' });
 await page.evaluate(() => {
   document.documentElement.style.scrollBehavior = 'auto';
-  document.querySelector('[data-about-strip]')?.scrollIntoView({ block: 'center' });
+  document.getElementById('about')?.scrollIntoView();
   document.getElementById('site-nav')?.style.setProperty('display', 'none');
 });
 await new Promise((r) => setTimeout(r, 900));

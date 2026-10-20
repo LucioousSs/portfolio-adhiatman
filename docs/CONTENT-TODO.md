@@ -9,7 +9,7 @@ Diperbarui: 20 Oktober 2026, setelah jawabanmu untuk K1 sampai K9 dan setelah de
 | # | Item | Status |
 |---|------|--------|
 | K1 | Tangkapan layar project | Ditunda sampai tampilan project-nya selesai kamu ubah |
-| K7 | Bio, tagline, dan Perjalanan | Desain section Tentang sudah selesai, jadi tinggal konfirmasi teksnya |
+| K7 | Entri Perjalanan | Menunggu konfirmasi isi dan periodenya |
 
 ### K1. Tangkapan layar project
 
@@ -31,15 +31,11 @@ Langkahnya:
 
 Tidak perlu semua sekaligus. Satu project yang sudah punya gambar langsung tampil lengkap, sisanya tetap memakai placeholder.
 
-### K7. Bio, tagline, dan Perjalanan
+### K7. Entri Perjalanan
 
-Desain section Tentang sudah diubah: di bawah bio sekarang ada tiga plat penutup (potongan potret 4:5, plat tipografi peran, dan plat tekstur dengan lokasi). Yang belum saya sentuh justru teksnya, karena itu wilayahmu. Isinya sekarang:
+Teks section Tentang sudah final dan tidak perlu dikonfirmasi lagi: satu blok pendek, "Merancang antarmuka yang enak dipakai, lalu membangunnya sendiri. Mahasiswa Teknologi Informasi di ITB STIKOM Bali.", disimpan di `src/components/About.js`.
 
-**Bio** (`src/components/About.js`, objek `BIO`) menyebut kamu mahasiswa Teknologi Informasi di ITB STIKOM Bali, biasa menyusun mockup di Figma lalu membangun antarmukanya, serta aktif di organisasi kampus.
-
-**Tagline** (`src/data/profile.js`): "Merancang antarmuka yang enak dipakai, lalu membangunnya sendiri."
-
-**Perjalanan** (`src/data/journey.js`):
+Yang belum saya sentuh justru isi Perjalanan (`src/data/journey.js`), karena itu wilayahmu:
 
 | Kategori | Entri | Periode sekarang |
 |----------|-------|------------------|
@@ -66,8 +62,8 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 - **K6, base Vite:** repo ini project site, jadi `base` sudah diset `/portfolio-adhiatman/`. Kalau nanti repo di-rename menjadi `<username>.github.io`, nilai itu harus kembali ke `/`.
 - **K8, daftar teknologi dan alat:** kamu bilang aman, jadi `src/data/skills.js` tidak diubah.
 - **K9, ikon dari CDN:** kamu pilih tetap seperti sekarang, jadi ikon masih diunduh dari `cdn.jsdelivr.net` dan `cdn.simpleicons.org`. Satu-satunya konsekuensi: tanpa koneksi, ikonnya kosong sementara namanya tetap terbaca.
-- **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero dan sebagai plat tipografi di section Tentang, jadi identitasnya tidak hilang.
-- **Desain section Tentang:** sudah diubah menjadi tiga plat penutup di bawah bio. Potretnya dipotong 4:5 supaya frame penuh tetap eksklusif di hero, satu plat menampilkan peran sebagai tipografi, dan satu plat memakai tekstur beton CC0 dengan lokasi sebagai teks. Asal teksturnya dicatat di `docs/CREDITS.md`. Ngobrol soal desain ini memakan waktu paling lama, jadi hasilnya saya pisah ke satu commit sendiri: kalau kamu tidak suka, commit itu bisa dibatalkan tanpa menyentuh yang lain. Chip soft skill sekarang diam, tidak lagi mengikuti kursor.
+- **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero dan di pernyataan section Tentang, jadi identitasnya tidak hilang.
+- **Section Tentang:** sekarang satu blok pernyataan rata tengah, setinggi satu layar, tanpa foto, chip, atau tautan keluar. Tagline dan kalimat bio digabung karena dipisah keduanya terbaca sebagai dua suara. Blok itu naik dari balik garis rambutnya sekali saat masuk viewport, dan tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
 
 ## Cara memeriksa setelah ada perubahan
 
