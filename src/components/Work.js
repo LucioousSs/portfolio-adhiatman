@@ -1,5 +1,5 @@
 import { t, text } from '../lib/i18n.js';
-import { projects } from '../data/projects.js';
+import { projects, designProjects } from '../data/projects.js';
 import { icons } from '../lib/icons.js';
 import { projectMedia } from '../lib/media.js';
 import { projectModal } from './ProjectModal.js';
@@ -45,6 +45,58 @@ export class Work {
       })
       .join('');
 
+    // Design work gets its own block, not three more rows: a row promises a
+    // repository and a screenshot, and most of these have neither. The covers
+    // keep their colour on purpose; they are the only colour on the page.
+    const cards = designProjects
+      .map((project, i) => {
+        return `
+          <li>
+            <button
+              type="button"
+              class="group block w-full text-left"
+              data-design-index="${i}"
+              aria-haspopup="dialog"
+              aria-label="${t('work.open')}: ${project.title}"
+            >
+              <span class="block aspect-[16/10] overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 transition-colors group-hover:border-zinc-600" data-design-cover>
+                <span class="block h-full w-full motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.02]">
+                  ${projectMedia(project, {
+                    className: 'h-full w-full object-cover',
+                    pendingLabel: t('work.imagePending'),
+                  })}
+                </span>
+              </span>
+
+              <span class="mt-4 block">
+                <span class="type-display block text-xl uppercase text-zinc-200 transition-colors group-hover:text-white sm:text-2xl">
+                  ${project.title}
+                </span>
+                <span class="mt-1 block text-sm text-zinc-400">
+                  ${text(project.summary)}${project.year ? ` &middot; ${project.year}` : ''}
+                </span>
+                <span class="mt-3 flex flex-wrap gap-2">
+                  ${project.stack
+                    .map(
+                      (tech) =>
+                        `<span class="rounded-full border border-zinc-800 px-3 py-1 text-xs text-zinc-400">${tech}</span>`
+                    )
+                    .join('')}
+                </span>
+              </span>
+            </button>
+          </li>`;
+      })
+      .join('');
+
+    const design =
+      designProjects.length > 0
+        ? `<div class="mt-16 border-t border-zinc-800 pt-10" data-design-block>
+             <h3 class="type-display mb-6 text-xl uppercase sm:text-2xl">${t('work.design')}</h3>
+             <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">${cards}</ul>
+           </div>`
+        : '';
+
     const list =
       projects.length > 0
         ? `<p class="mb-5 text-xs text-zinc-400">${t('work.hint')}</p>
@@ -69,6 +121,7 @@ export class Work {
           </div>
 
           ${list}
+          ${design}
         </div>
 
         <div class="work-preview" id="work-preview" aria-hidden="true">
@@ -80,6 +133,17 @@ export class Work {
   }
 
   init() {
+    const cards = Array.from(document.querySelectorAll('[data-design-index]'));
+
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const project = designProjects[Number(card.dataset.designIndex)];
+        if (project) projectModal.open(project, card);
+      });
+    });
+
+    if (cards.length) revealUp(cards, { y: 18 });
+
     const rows = Array.from(document.querySelectorAll('[data-work-index]'));
     if (!rows.length) return;
 

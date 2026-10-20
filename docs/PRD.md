@@ -87,12 +87,18 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 - Tagline pindah ke Tentang. Lokasi dan tombol "Unduh CV" pindah ke Kontak.
 
 ### 7.3 Karya pilihan
-- Daftar baris, bukan kartu. Setiap baris memuat nomor, judul, ringkasan, tahun, dan chip teknologi.
+- Tiga proyek kode tampil sebagai daftar baris, bukan kartu. Setiap baris memuat nomor, judul, ringkasan, tahun, dan chip teknologi.
 - Tiga proyek yang dipajang: UD. Kariasa, KopiKhe, dan Todo List Life Dashboard. Tiga repo lain (API tahap awal, utility form kontak, dataset resep) tidak dipajang sebagai karya unggulan, cukup diarahkan lewat satu tautan ke profil GitHub.
 - Hover: baris terangkat dan menampilkan preview gambar yang mengikuti kursor, baris lain meredup. Fokus keyboard memberi perilaku yang sama.
 - Klik atau Enter membuka modal detail.
-- Modal memuat summary, tahun, peran, stack, deskripsi, galeri, dan tautan demo/repo. Tombol yang tidak punya URL tidak dirender.
-- Modal bisa ditutup dengan Escape, fokus terkunci di dalamnya, dan fokus kembali ke baris pemicu.
+- Modal memuat summary, tahun, peran, stack, deskripsi, galeri, dan tautan. Tombol yang tidak punya URL tidak dirender; kalau tidak ada satu pun tautan, bar tautannya disembunyikan seluruhnya.
+- Modal bisa ditutup dengan Escape, fokus terkunci di dalamnya, dan fokus kembali ke elemen pemicu.
+- Rancangan desain mendapat blok sendiri di bawah tautan GitHub, bukan tiga baris tambahan: baris kode menjanjikan repo dan tangkapan layar, sementara rancangan tidak punya keduanya.
+- Tiga kartu: BantuSesama (aplikasi donasi untuk layar HP), JelajahNusantara (situs travel desktop), dan Adidas Samba (konsep pribadi situs sepatu desktop, bukan resmi). Grid tiga kolom di desktop, dua di tablet, satu di HP.
+- Sampul kartu tampil berwarna apa adanya. Ini satu-satunya warna di halaman dan disengaja: yang berwarna adalah hasil desainnya, bukan bingkainya.
+- Klik kartu membuka modal yang sama. Prototipe hanya ditautkan kalau URL publiknya ada; entri tanpa prototipe tidak mendapat tombol, dan tidak ada area tautan kosong yang ditinggalkan.
+- Tahun yang belum dikonfirmasi disembunyikan, tidak ditebak.
+- Selama gambar belum ada, kartu memakai placeholder "Gambar menyusul", bukan tangkapan layar palsu.
 
 ### 7.4 Tentang
 - Satu blok pernyataan, bukan bio dua paragraf lalu potongan-potongan terpisah. Tagline dan satu kalimat bio digabung, karena dipisah keduanya terbaca sebagai dua suara yang berbeda.
@@ -136,7 +142,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 |---------|--------|--------|
 | Navbar | Progress bar, navbar memadat, penanda section aktif | Orientasi pada halaman panjang |
 | Hero | Reveal huruf, foto naik, marquee latar, sparkle, parallax, drift mengikuti pointer | Momen pembuka, menegaskan identitas tipografi |
-| Karya | Baris terangkat, preview mengikuti kursor, baris lain meredup, morph ke modal | Interaksi tanda tangan, memberi konteks visual tanpa klik |
+| Karya | Baris terangkat, preview mengikuti kursor, baris lain meredup, morph ke modal, kartu desain naik saat masuk | Interaksi tanda tangan, memberi konteks visual tanpa klik; kartu desain cukup satu gerakan masuk karena sampulnya sudah berwarna |
 | Tentang | Satu blok naik dari balik garis rambutnya, sekali | Section ini hanya satu pernyataan; satu gerakan yang sama dengan isinya, bukan tiga gerakan yang bersaing |
 | Perjalanan | Garis progres scrub, baris menyala saat dilewati garis, wipe angka tahun | Menghubungkan posisi baca dengan urutan waktu |
 | Teknologi | Marquee konten | Menunjukkan luas stack |
@@ -187,7 +193,7 @@ src/
   styles/main.css
   lib/{i18n,motion,icons,media}.js
   i18n/{id,en}.js
-  data/{profile,projects,skills,journey}.js
+  data/{profile,projects,skills,journey}.js   konten, termasuk entri desain
   components/{Navbar,Hero,Work,ProjectModal,About,Journey,TechStack,Contact,Footer}.js
 scripts/{smoke,shots}.mjs
 .github/workflows/deploy.yml
@@ -198,7 +204,7 @@ docs/CONTENT-TODO.md
 - Tanpa service layer dan tanpa API. Komponen merender HTML, lalu `init()` memasang perilaku.
 - Modal dipasang sekali di luar `#app` supaya tidak ikut ter-render ulang saat ganti bahasa.
 - Tidak ada aset dekoratif dari luar. Foto yang dipakai adalah milik pemilik, dan tidak ada foto stok yang menggambarkan orang, ruang kerja, atau kehidupan pemilik.
-- Bentuk keluaran build: CSS sekitar 10,2 kB gzip, JS sekitar 60,4 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 269 kB woff2 untuk subset Latin, Latin-ext, dan Vietnamese.
+- Bentuk keluaran build: CSS sekitar 10,3 kB gzip, JS sekitar 61,3 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 269 kB woff2 untuk subset Latin, Latin-ext, dan Vietnamese.
 
 ## 11. Deployment
 
@@ -243,6 +249,9 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Build produksi berhasil | PASS |
 | Hero merender nama dan konten Indonesia sebagai default | PASS |
 | Karya menampilkan tiga project dan tautan ke sisanya di GitHub | PASS |
+| Blok rancangan desain tampil di bawah tautan GitHub dengan tiga sampul berwarna | PASS |
+| Kartu desain membuka modal tanpa tautan atau tahun karangan | PASS |
+| Menutup kartu desain mengembalikan fokus ke kartu pemicu | PASS |
 | Tentang mengisi satu viewport dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
 | Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
 | Klik baris karya membuka modal dengan project yang benar | PASS |
@@ -265,7 +274,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
 | Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform | PASS |
 
-Ringkasan: 31 dari 31 pemeriksaan lolos.
+Ringkasan: 34 dari 34 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -277,6 +286,7 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 |---|------|--------|--------|
 | T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` | Ditunda sampai tampilan project diubah |
 | T7 | Konfirmasi entri Perjalanan | `src/data/journey.js` | Menunggu konfirmasi pemilik |
+| T10 | Sampul dan galeri tiga rancangan desain, URL prototipe BantuSesama, dan tahun tiap rancangan | `public/images/design/`, `src/data/projects.js` | Menunggu aset dan konfirmasi pemilik |
 
 Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, T9 (ikon CDN) diputuskan tetap seperti sekarang, dan teks Tentang dikonfirmasi memakai versi pendek satu blok. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
 
@@ -302,3 +312,7 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Tentang rata tengah dan setinggi satu layar | Section ini hanya punya satu objek, jadi menaruhnya di tengah memberi jarak dari section lain dan membuatnya terbaca sebagai pernyataan, bukan paragraf yang perlu dipindai |
 | Batas tiga sampai lima baris untuk teks rata tengah | Rata tengah memaksa mata mencari awal tiap baris; lebih dari lima baris membuatnya sulit dibaca, jadi teksnya dipendekkan dan ukurannya dibatasi |
 | Tidak ada foto di Tentang | Frame penuh sudah jadi pembuka di hero; mengulang potret di bawah melemahkan hero, dan foto kedua hanya mengisi ruang yang seharusnya dibiarkan kosong |
+| Sampul rancangan desain berwarna, satu-satunya warna di halaman | Yang berwarna adalah hasil desainnya; membuatnya hitam putih akan menyembunyikan bagian yang paling ingin ditunjukkan |
+| Rancangan desain di blok sendiri, bukan baris keempat sampai keenam | Baris kode menjanjikan repo dan tangkapan layar. Rancangan tidak punya keduanya, dan mencampurnya membuat daftar karya berbohong soal apa yang bisa diklik |
+| Entri desain tanpa URL prototipe tidak diberi tombol | Tombol mati lebih buruk daripada tidak ada tombol; lebih baik ruangnya kosong sampai URL publiknya ada |
+| Tahun yang belum dikonfirmasi disembunyikan | Menebak tahun adalah klaim palsu kecil yang tidak perlu, dan field kosong terbaca seperti bug |

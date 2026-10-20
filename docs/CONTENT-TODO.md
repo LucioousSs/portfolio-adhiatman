@@ -2,14 +2,15 @@
 
 Situsnya sudah selesai dan berjalan tanpa backend. Yang tersisa adalah data nyata yang hanya kamu yang punya. Item di bawah ini sengaja tidak saya karang, karena mengarang data akan merusak satu hal yang paling dijaga di situs ini: kejujuran isinya.
 
-Diperbarui: 20 Oktober 2026, setelah jawabanmu untuk K1 sampai K9 dan setelah desain section Tentang diubah. Daftar yang sama juga dicatat sebagai item terbuka di `docs/PRD.md` bagian 15.
+Diperbarui: 20 Oktober 2026, setelah section Tentang disederhanakan dan blok rancangan desain ditambahkan. Daftar yang sama juga dicatat sebagai item terbuka di `docs/PRD.md` bagian 15.
 
 ## Masih terbuka
 
 | # | Item | Status |
 |---|------|--------|
-| K1 | Tangkapan layar project | Ditunda sampai tampilan project-nya selesai kamu ubah |
+| K1 | Tangkapan layar project kode | Ditunda sampai tampilan project-nya selesai kamu ubah |
 | K7 | Entri Perjalanan | Menunggu konfirmasi isi dan periodenya |
+| K10 | Aset dan data rancangan desain | Menunggu gambar, URL prototipe, dan tahun |
 
 ### K1. Tangkapan layar project
 
@@ -51,6 +52,24 @@ Babak tahun di section Perjalanan (2024, 2025, 2026) dihitung otomatis dari tahu
 
 Kalau ada entri yang perlu ditambah atau dibuang (misalnya magang, sertifikasi, atau lomba), kirim daftarnya.
 
+### K10. Aset dan data rancangan desain
+
+Blok "Rancangan desain" sudah jalan dengan tiga entri: BantuSesama, JelajahNusantara, dan Adidas Samba. Yang belum ada hanya aset dan tiga detail data. Sampai itu datang, kartunya memakai placeholder "Gambar menyusul", dan modalnya tidak menampilkan tautan apa pun.
+
+| Slug | Berkas sampul yang diharapkan |
+|------|-------------------------------|
+| `bantusesama-app` | `public/images/design/bantusesama-app.webp` |
+| `jelajah-nusantara` | `public/images/design/jelajah-nusantara.webp` |
+| `adidas-samba-concept` | `public/images/design/adidas-samba-concept.webp` |
+
+1. **Sampul:** lembar komposisi Figma dengan lebar 1600 sampai 1920 px, rasio 16:10. Simpan sebagai WebP sekitar 150 sampai 250 kB, lalu isi `image: '/images/design/<slug>.webp'` di `src/data/projects.js`. Sampul ini tampil berwarna, tanpa filter.
+2. **Galeri:** frame individual masuk ke `gallery: ['/images/design/<slug>-1.webp']`. Semuanya tampil di modal, dan panah muncul otomatis kalau lebih dari satu gambar.
+3. **Prototipe:** BantuSesama punya prototipe publik, tapi URL-nya belum ada di tangan saya. Isi `prototype: 'https://www.figma.com/proto/...'` pada entri itu, dan tombol "Buka prototipe" langsung muncul di modal. Entri tanpa URL tetap tanpa tombol, bukan tombol mati.
+4. **Tahun:** `year` sengaja `null` karena belum kamu sebutkan. Isi `year: '2026'` (atau tahun yang benar) supaya tahun muncul di kartu dan modal. Yang kosong disembunyikan, tidak ditebak.
+5. **Deskripsi:** sekarang hanya memakai fakta yang sudah kamu sampaikan. Kalau mau menambah satu kalimat soal isi rancangannya, misalnya layar atau alur apa saja yang ada di dalamnya, kirim teksnya dan saya masukkan.
+
+Catatan Adidas: entri itu sudah diberi label "konsep pribadi, bukan resmi" dan deskripsinya menyebut tidak berafiliasi dengan Adidas. Label itu jangan dihapus selama gambarnya memakai nama Adidas.
+
 ## Sudah beres
 
 Semua ini sudah masuk ke kode dan diverifikasi.
@@ -64,13 +83,14 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 - **K9, ikon dari CDN:** kamu pilih tetap seperti sekarang, jadi ikon masih diunduh dari `cdn.jsdelivr.net` dan `cdn.simpleicons.org`. Satu-satunya konsekuensi: tanpa koneksi, ikonnya kosong sementara namanya tetap terbaca.
 - **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero dan di pernyataan section Tentang, jadi identitasnya tidak hilang.
 - **Section Tentang:** sekarang satu blok pernyataan rata tengah, setinggi satu layar, tanpa foto, chip, atau tautan keluar. Tagline dan kalimat bio digabung karena dipisah keduanya terbaca sebagai dua suara. Blok itu naik dari balik garis rambutnya sekali saat masuk viewport, dan tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
+- **Blok rancangan desain:** tiga kartu di bawah tautan GitHub, membuka modal yang sama dengan baris kode. Sampulnya berwarna dan menjadi satu-satunya warna di halaman. Tidak ada baris keempat sampai keenam, karena baris kode menjanjikan repo dan tangkapan layar yang tidak dimiliki rancangan.
 
 ## Cara memeriksa setelah ada perubahan
 
 ```bash
 npm run build
 npm run preview    # http://localhost:4173/portfolio-adhiatman/
-npm run smoke      # 31 dari 31 harus lolos
+npm run smoke      # 34 dari 34 harus lolos
 ```
 
 `npm run shots` menyimpan tangkapan layar hero, Karya, Kontak, Tentang, dan Perjalanan ke folder sementara. Saya bisa bantu memperbarui `README.md` dan `docs/PRD.md` kalau ada yang berubah.

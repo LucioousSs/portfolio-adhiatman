@@ -69,6 +69,64 @@ pass('Escape closes the modal', modalClosed);
 const focused = await page.evaluate(() => document.activeElement?.getAttribute('data-work-index'));
 pass('Focus returns to the triggering row', focused === '0', String(focused));
 
+// 3a. Design work has its own block below the code list, with no link of its own.
+const design = await page.evaluate(() => {
+  const cards = [...document.querySelectorAll('[data-design-index]')];
+  const link = document.querySelector('#work a[href*="tab=repositories"]');
+  const first = cards[0];
+  return {
+    cards: cards.length,
+    block: Boolean(document.querySelector('[data-design-block]')),
+    belowLink: Boolean(link && first && link.compareDocumentPosition(first) & 4),
+    covers: cards.filter((card) => card.querySelector('[data-design-cover]')).length,
+    filters: cards.map((card) => {
+      const media = card.querySelector('[data-design-cover] > span > *');
+      return media ? getComputedStyle(media).filter : 'missing';
+    }),
+    links: cards.reduce((n, card) => n + card.querySelectorAll('a').length, 0),
+  };
+});
+pass(
+  'Design block sits below the GitHub link with three colour covers',
+  design.cards === 3 &&
+    design.block &&
+    design.belowLink &&
+    design.covers === 3 &&
+    design.links === 0 &&
+    design.filters.every((filter) => filter === 'none'),
+  `${design.cards} cards, belowLink=${design.belowLink}, filters=${design.filters.join('/')}`
+);
+
+// 3b. A design card opens the same modal. With no prototype URL yet, the modal
+// must not show an empty link bar or an invented year.
+await page.click('[data-design-index="0"]');
+await new Promise((r) => setTimeout(r, 900));
+const designModal = await page.evaluate(() => {
+  const root = document.getElementById('project-modal');
+  const bar = root.querySelector('[data-pm-links]');
+  return {
+    open: !root.classList.contains('hidden'),
+    title: root.querySelector('#pm-title').textContent.trim(),
+    yearHidden: root.querySelector('[data-pm-year-wrap]')?.classList.contains('hidden'),
+    barHidden: bar.classList.contains('hidden'),
+    links: bar.querySelectorAll('a').length,
+  };
+});
+pass(
+  'Design card opens the modal without a dead link',
+  designModal.open &&
+    designModal.title === 'BantuSesama' &&
+    designModal.yearHidden &&
+    designModal.barHidden &&
+    designModal.links === 0,
+  `${designModal.title}, links=${designModal.links}, barHidden=${designModal.barHidden}, yearHidden=${designModal.yearHidden}`
+);
+
+await page.keyboard.press('Escape');
+await new Promise((r) => setTimeout(r, 500));
+const designFocus = await page.evaluate(() => document.activeElement?.getAttribute('data-design-index'));
+pass('Closing a design card returns focus to it', designFocus === '0', String(designFocus));
+
 // 3b. About is one centred statement: no image, no controls, no side content.
 const about = await page.evaluate(() => {
   const section = document.getElementById('about');

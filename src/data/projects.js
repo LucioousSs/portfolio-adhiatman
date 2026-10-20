@@ -72,3 +72,62 @@ export const projects = [
     gallery: [],
   },
 ];
+
+/**
+ * Design work. These sit in their own block below the code list: there is no
+ * repository, and only the first has a prototype the owner can point at.
+ *
+ * `year` stays null until the owner confirms it, and the UI hides the field
+ * rather than guessing. `prototype` is a public Figma link; an entry without one
+ * renders no button at all, never a dead one.
+ */
+export const designProjects = [
+  {
+    kind: 'design',
+    slug: 'bantusesama-app',
+    title: 'BantuSesama',
+    summary: { id: 'Aplikasi donasi untuk layar HP', en: 'Donation app for phone screens' },
+    year: null,
+    role: { id: 'Desain UI/UX', en: 'UI/UX design' },
+    stack: ['Figma'],
+    description: {
+      id: 'Rancangan aplikasi donasi untuk layar HP, dikerjakan seluruhnya di Figma.',
+      en: 'A donation app design for phone screens, designed entirely in Figma.',
+    },
+    prototype: null,
+    image: null,
+    gallery: [],
+  },
+  {
+    kind: 'design',
+    slug: 'jelajah-nusantara',
+    title: 'JelajahNusantara',
+    summary: { id: 'Rancangan situs travel untuk desktop', en: 'Desktop travel site design' },
+    year: null,
+    role: { id: 'Desain UI/UX', en: 'UI/UX design' },
+    stack: ['Figma'],
+    description: {
+      id: 'Rancangan situs travel untuk layar desktop, dikerjakan di Figma.',
+      en: 'A travel site design for desktop screens, designed in Figma.',
+    },
+    prototype: null,
+    image: null,
+    gallery: [],
+  },
+  {
+    kind: 'design',
+    slug: 'adidas-samba-concept',
+    title: 'Adidas Samba',
+    summary: { id: 'Konsep situs sepatu, bukan resmi', en: 'Shoe site concept, unofficial' },
+    year: null,
+    role: { id: 'Desain UI/UX', en: 'UI/UX design' },
+    stack: ['Figma'],
+    description: {
+      id: 'Konsep pribadi untuk situs sepatu Adidas Samba di layar desktop, dikerjakan di Figma. Tidak berafiliasi dengan Adidas dan tidak disetujui Adidas.',
+      en: 'A personal concept for an Adidas Samba shoe site on desktop, designed in Figma. Not affiliated with or endorsed by Adidas.',
+    },
+    prototype: null,
+    image: null,
+    gallery: [],
+  },
+];

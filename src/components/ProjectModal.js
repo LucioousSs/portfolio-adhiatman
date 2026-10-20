@@ -46,7 +46,7 @@ class ProjectModal {
               <div class="mb-6" data-pm-media></div>
 
               <dl class="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                <div>
+                <div data-pm-year-wrap>
                   <dt class="label mb-1">${t('work.year')}</dt>
                   <dd class="text-sm text-zinc-200" data-pm-year></dd>
                 </div>
@@ -117,7 +117,9 @@ class ProjectModal {
 
     root.querySelector('[data-pm-summary]').textContent = text(project.summary);
     root.querySelector('#pm-title').textContent = project.title;
-    root.querySelector('[data-pm-year]').textContent = project.year;
+    // The year is hidden, not guessed, when the owner has not confirmed it.
+    root.querySelector('[data-pm-year]').textContent = project.year || '';
+    root.querySelector('[data-pm-year-wrap]').classList.toggle('hidden', !project.year);
     root.querySelector('[data-pm-role]').textContent = text(project.role);
     root.querySelector('[data-pm-stack]').textContent = project.stack.join(', ');
     root.querySelector('[data-pm-desc]').textContent = text(project.description);
@@ -139,6 +141,13 @@ class ProjectModal {
           <span class="block h-4 w-4">${icons.github}</span>${t('work.repo')}
         </a>`);
     }
+    if (project.prototype) {
+      links.push(`
+        <a href="${project.prototype}" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 rounded-full border border-zinc-700 px-5 py-2.5 text-sm font-bold text-zinc-200 transition-colors hover:border-zinc-500 hover:text-white">
+          ${t('work.prototype')}<span class="block h-4 w-4">${icons.arrowUpRight}</span>
+        </a>`);
+    }
 
     const linksBar = root.querySelector('[data-pm-links]');
     linksBar.innerHTML = links.join('');
@@ -151,7 +160,7 @@ class ProjectModal {
     if (this.images.length === 0) {
       media.innerHTML = projectMedia(this.project, {
         className: 'h-52 w-full rounded-xl border border-zinc-800 sm:h-72',
-        pendingLabel: t('work.shotPending'),
+        pendingLabel: t(this.project.kind === 'design' ? 'work.imagePending' : 'work.shotPending'),
       });
       return;
     }

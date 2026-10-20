@@ -9,6 +9,8 @@ export function asset(path) {
 /** Two letters taken from the project title, used for the honest screenshot placeholder. */
 export function initials(title) {
   return title
+    // CamelCase titles read as two words: BantuSesama becomes "BS".
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
     .replace(/[^a-zA-Z0-9 ]/g, ' ')
     .split(/\s+/)
     .filter(Boolean)

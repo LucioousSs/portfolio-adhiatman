@@ -73,7 +73,9 @@ for (const vp of [
   console.log(`about-${vp.name}.png`);
 }
 
-// Work section: three featured projects and the quiet GitHub link.
+// Work section: three featured projects, the quiet GitHub link, and the design
+// block. Scroll to the design block first, or its cards would be captured mid
+// reveal (hidden by opacity 0) on a section taller than the viewport.
 for (const vp of [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 360, height: 740 },
@@ -83,7 +85,8 @@ for (const vp of [
   await new Promise((r) => setTimeout(r, 700));
   await page.evaluate(() => {
     document.documentElement.style.scrollBehavior = 'auto';
-    document.getElementById('work')?.scrollIntoView();
+    document.querySelector('[data-design-block]')?.scrollIntoView({ block: 'center' });
+    document.getElementById('site-nav')?.style.setProperty('display', 'none');
   });
   await new Promise((r) => setTimeout(r, 2200));
   const section = await page.$('#work');
