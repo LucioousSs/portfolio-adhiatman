@@ -16,7 +16,7 @@ PRD ini mengubah portfolio menjadi **satu landing page statis tanpa backend**. S
 
 | # | Tujuan | Kriteria terukur |
 |---|--------|------------------|
-| G1 | Pengunjung paham siapa pemiliknya dalam sekali layar | Hero memuat nama, peran, dan satu kalimat posisi |
+| G1 | Pengunjung paham siapa pemiliknya dalam sekali layar | Hero memuat nama, foto, dan satu CTA; peran terbaca di bio Tentang |
 | G2 | Karya bisa dilihat tanpa hambatan teknis | Tidak ada request ke API, halaman tetap utuh tanpa server |
 | G3 | Pengunjung bisa menghubungi dalam maksimal dua klik | Email dan WhatsApp tersedia di section kontak dan footer navigasi |
 | G4 | Situs terasa cepat dan rapi di semua ukuran layar | Skor Lighthouse mobile Performance >= 90, tidak ada overflow horizontal 320px sampai 1440px |
@@ -54,7 +54,7 @@ Prinsip yang mengikat semua keputusan:
 | Urutan | Section | Anchors |
 |--------|---------|---------|
 | 1 | Navbar (tautan, toggle bahasa, progress bar) | `#home` |
-| 2 | Hero (nama, foto, peran, CTA) | `#home` |
+| 2 | Hero (nama, foto, CTA) | `#home` |
 | 3 | Karya pilihan (daftar project) | `#work` |
 | 4 | Tentang (bio dan soft skills) | `#about` |
 | 5 | Perjalanan (kronologi per tahun: pendidikan, organisasi, acara) | `#journey` |
@@ -74,12 +74,12 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 - Menu mobile dengan `aria-expanded`, ikon berganti antara menu dan close.
 
 ### 7.2 Hero
-- Satu layar penuh dengan komposisi poster: nama, foto, peran, satu CTA.
+- Satu layar penuh dengan komposisi poster: nama, foto, satu CTA.
 - Nama "ADHIATMAN" satu baris dengan reveal per huruf. Lebar huruf mengikuti ukuran layar, dari 100 persen di mobile sampai 125 persen di desktop, supaya sembilan huruf tetap utuh di satu baris tanpa patah atau meluber.
 - Foto profil menjadi lapisan depan: badannya menimpa nama sehingga tipografi lewat di belakang potret. Timpaan ditentukan oleh geometri berkasnya sendiri (408x612, 22,2 persen atas transparan), jadi kepala selalu mendarat di garis kapital nama pada setiap ukuran layar. Kepala yang lebih lebar hanya mungkin kalau nama juga lebih besar, jadi lebar foto dan kedalaman timpaan dinaikkan bersama.
 - Lebar foto punya batas `vh` sebagai pengaman: di jendela pendek foto mengecil, bukan mendorong CTA ke bawah lipatan.
 - Glow tipis, mask yang memudar di dasar, parallax scroll, dan respons pointer (desktop saja).
-- Baris peran kecil di bawah foto: "UI/UX Designer & Frontend Developer".
+- Tidak ada baris peran di bawah foto. Peran tetap muncul sebagai tekstur marquee dan diuraikan di bio Tentang, jadi informasinya tidak hilang, hanya tidak diulang di hero.
 - Marquee latar berisi peran sebagai tekstur, opacity rendah dan `aria-hidden`. Berjalan terus dan berhenti saat reduced motion.
 - Sparkle mengambang sebagai tekstur latar, `aria-hidden`, mati saat reduced motion.
 - Satu CTA "Lihat karya" menuju `#work`: tengah di mobile, kanan di desktop.
@@ -118,7 +118,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 ### 7.7 Kontak
 - Toggle Email dan WhatsApp.
 - Submit membuka mailto atau WhatsApp dengan pesan terisi. Tidak ada request ke server.
-- Tautan langsung ke email, WhatsApp, dan sosial. LinkedIn tidak dirender karena URL aslinya belum ada.
+- Tautan langsung ke email, WhatsApp, dan sosial: GitHub, LinkedIn, Instagram.
 - Tombol "Unduh CV" dan lokasi (Denpasar, Bali) di kolom kontak langsung.
 - Field wajib divalidasi browser sebelum submit.
 
@@ -261,18 +261,12 @@ Selesai: discovery, keputusan produk, scaffold Vite + Tailwind, implementasi 8 s
 
 Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks dan keputusan teknis, ada di `docs/CONTENT-TODO.md`:
 
-| # | Item | Lokasi |
-|---|------|--------|
-| T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` |
-| T2 | Deskripsi project versi Inggris (kalau ingin diperbaiki) | `src/data/projects.js` |
-| T3 | URL profil LinkedIn asli | `src/data/profile.js` dan `src/lib/icons.js` |
-| T4 | Konfirmasi email dan WhatsApp | `src/data/profile.js` |
-| T5 | File CV PDF | `public/cv/putu-adhiatman-cv.pdf` |
-| T7 | Konfirmasi bio, tagline, dan entri Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` |
-| T8 | Konfirmasi daftar teknologi dan alat | `src/data/skills.js` |
-| T9 | Keputusan soal ikon yang diunduh dari CDN | `src/data/skills.js` |
+| # | Item | Lokasi | Status |
+|---|------|--------|--------|
+| T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` | Ditunda sampai tampilan project diubah |
+| T7 | Konfirmasi bio, tagline, dan entri Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` | Ditunda sampai desain Tentang diubah |
 
-T6 sudah diputuskan: repo ini adalah project site, jadi `base` diset `/portfolio-adhiatman/` (lihat bagian 11).
+Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, dan T9 (ikon CDN) diputuskan tetap seperti sekarang. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
 
 ## 16. Lampiran: keputusan dan alasan
 
@@ -283,6 +277,7 @@ T6 sudah diputuskan: repo ini adalah project site, jadi `base` diset `/portfolio
 | Tanpa kartu statistik atau testimoni | Tidak ada data nyata untuk ditampilkan |
 | Loop hanya pada marquee teknologi dan tekstur hero | Marquee teknologi membawa konten; marquee latar dan sparkle hero adalah tekstur poster yang dimatikan saat reduced motion; blob pulse dan blob float tetap dibuang |
 | Foto sebagai lapisan depan nama | Tipografi lewat di belakang potret, komposisi poster yang khas, bukan sekadar foto di samping teks |
+| Baris peran di bawah foto dihapus | Pemilik ingin hero lebih bersih; peran tetap terbaca sebagai marquee dan di bio Tentang, jadi tidak ada informasi yang hilang |
 | Panah pada baris karya | Satu isyarat arah untuk "membuka detail", bukan hiasan di setiap tombol |
 | Placeholder "Tangkapan layar menyusul" | Jujur menandai aset yang belum ada, bukan menyamarkan sebagai screenshot |
 | Perjalanan satu kolom kronologis, bukan grid kartu | Grid kartu lama menetapkan tinggi tetap sementara kedua sisinya `absolute`, jadi deskripsi terpanjang meluber sekitar 50px; panel sebaris yang tumbuh mengikuti isi menghilangkan masalah itu secara struktural |

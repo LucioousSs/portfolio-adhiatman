@@ -22,7 +22,6 @@ export default {
   },
 
   hero: {
-    role: 'UI/UX Designer & Frontend Developer',
     ctaWork: 'Lihat karya',
     photoAlt: 'Foto I Putu Adhiatman',
   },

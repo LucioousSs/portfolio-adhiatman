@@ -80,14 +80,10 @@ export class Hero {
               />
             </div>
           </div>
-
-          <p class="relative z-10 mt-8 text-center text-sm text-zinc-400 sm:text-base" data-hero-role>
-            ${role}
-          </p>
         </div>
 
         <div
-          class="relative z-30 mx-auto mt-6 flex w-full max-w-5xl items-center justify-center md:justify-end"
+          class="relative z-30 mx-auto mt-10 flex w-full max-w-5xl items-center justify-center md:justify-end"
         >
           <a
             href="#work"
@@ -101,7 +97,6 @@ export class Hero {
   init() {
     const letters = document.querySelectorAll('[data-hero-letter]');
     const inner = document.querySelector('[data-hero-photo-inner]');
-    const role = document.querySelector('[data-hero-role]');
     const cta = document.querySelector('[data-hero-cta]');
     const photo = document.querySelector('[data-hero-photo]');
 
@@ -132,7 +127,6 @@ export class Hero {
 
     if (letters.length) tl.from(letters, { yPercent: 70, opacity: 0, duration: 0.85, stagger: 0.035 }, 0.05);
     if (inner) tl.from(inner, { y: 56, opacity: 0, duration: 1 }, 0.3);
-    if (role) tl.from(role, { y: 14, opacity: 0, duration: 0.6 }, 0.55);
     if (cta) tl.from(cta, { y: 14, opacity: 0, duration: 0.6 }, 0.62);
   }
 }

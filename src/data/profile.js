@@ -2,10 +2,6 @@ import { asset } from '../lib/media.js';
 
 /**
  * Profile content.
- *
- * TODO(verify): the LinkedIn profile URL was still a placeholder in the old code
- * (`https://linkedin.com`), so it is intentionally omitted rather than shipped as
- * a dead link. Add it back to `socials` once the real URL is known.
  */
 export const profile = {
   name: 'Adhiatman',
@@ -26,10 +22,10 @@ export const profile = {
   whatsapp: '6289635263050',
   whatsappDisplay: '+62 896-3526-3050',
   photo: asset('/images/profile.png'),
-  // TODO(verify): drop the CV PDF at public/cv/putu-adhiatman-cv.pdf.
   cv: asset('/cv/putu-adhiatman-cv.pdf'),
   socials: [
     { key: 'github', label: 'GitHub', url: 'https://github.com/LucioousSs' },
+    { key: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/adhiatman' },
     { key: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/adhiatmn/' },
   ],
 };

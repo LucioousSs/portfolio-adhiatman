@@ -22,7 +22,6 @@ export default {
   },
 
   hero: {
-    role: 'UI/UX Designer & Frontend Developer',
     ctaWork: 'See the work',
     photoAlt: 'Portrait of I Putu Adhiatman',
   },
