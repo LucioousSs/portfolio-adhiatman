@@ -23,7 +23,7 @@ export class Work {
 
               <span class="min-w-0 flex-1">
                 <span
-                  class="type-display block truncate text-2xl uppercase text-zinc-200 transition-colors group-hover:text-white sm:text-4xl lg:text-5xl"
+                  class="type-display block text-balance text-2xl uppercase text-zinc-200 transition-colors group-hover:text-white sm:text-4xl lg:text-5xl"
                 >${project.title}</span>
                 <span class="mt-1.5 block text-sm text-zinc-400">${text(project.summary)} &middot; ${project.year}</span>
               </span>
@@ -48,7 +48,16 @@ export class Work {
     const list =
       projects.length > 0
         ? `<p class="mb-5 text-xs text-zinc-400">${t('work.hint')}</p>
-           <ul class="border-b border-zinc-800">${rows}</ul>`
+           <ul class="border-b border-zinc-800">${rows}</ul>
+           <a
+             href="https://github.com/LucioousSs?tab=repositories"
+             target="_blank"
+             rel="noreferrer"
+             class="mt-6 inline-flex items-center gap-2 py-2 text-sm text-zinc-400 transition-colors hover:text-white"
+           >
+             ${t('work.all')}
+             <span class="block h-3.5 w-3.5">${icons.arrowUpRight}</span>
+           </a>`
         : `<p class="rounded-xl border border-dashed border-zinc-800 px-6 py-10 text-center text-zinc-400">${t('work.empty')}</p>`;
 
     return `

@@ -29,8 +29,9 @@ export default {
 
   work: {
     title: 'Karya',
-    subtitle: 'Enam proyek yang paling saya banggakan, dari landing page sampai REST API.',
+    subtitle: 'Tiga proyek yang paling mewakili cara saya bekerja.',
     hint: 'Sorot untuk pratinjau, klik untuk detail',
+    all: 'Semua proyek di GitHub',
     role: 'Peran',
     stack: 'Teknologi',
     year: 'Tahun',

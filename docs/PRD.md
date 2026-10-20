@@ -88,6 +88,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 
 ### 7.3 Karya pilihan
 - Daftar baris, bukan kartu. Setiap baris memuat nomor, judul, ringkasan, tahun, dan chip teknologi.
+- Tiga proyek yang dipajang: UD. Kariasa, KopiKhe, dan Todo List Life Dashboard. Tiga repo lain (API tahap awal, utility form kontak, dataset resep) tidak dipajang sebagai karya unggulan, cukup diarahkan lewat satu tautan ke profil GitHub.
 - Hover: baris terangkat dan menampilkan preview gambar yang mengikuti kursor, baris lain meredup. Fokus keyboard memberi perilaku yang sama.
 - Klik atau Enter membuka modal detail.
 - Modal memuat summary, tahun, peran, stack, deskripsi, galeri, dan tautan demo/repo. Tombol yang tidak punya URL tidak dirender.
@@ -190,14 +191,15 @@ docs/PRD.md
 
 - Tanpa service layer dan tanpa API. Komponen merender HTML, lalu `init()` memasang perilaku.
 - Modal dipasang sekali di luar `#app` supaya tidak ikut ter-render ulang saat ganti bahasa.
-- Bentuk keluaran build: CSS sekitar 10,2 kB gzip, JS sekitar 61,2 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 225 kB woff2 untuk subset Latin dan Latin-ext.
+- Bentuk keluaran build: CSS sekitar 10,2 kB gzip, JS sekitar 60,8 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 225 kB woff2 untuk subset Latin dan Latin-ext.
 
 ## 11. Deployment
 
-- Target: GitHub Pages tipe **user site** (`<username>.github.io`), sehingga `base` di Vite tetap `/`.
+- Target: GitHub Pages tipe **project site**, karena repositori bernama `portfolio-adhiatman`. Situsnya hidup di `https://lucioousss.github.io/portfolio-adhiatman/`.
+- `base` di `vite.config.js` diset `/portfolio-adhiatman/`. Satu nilai itu dipakai dev, preview, build, dan smoke, jadi tidak ada URL yang bisa berbeda diam-diam.
 - Alur: `.github/workflows/deploy.yml` menjalankan `npm ci`, `npm run build`, lalu mengunggah `dist/`.
 - `public/.nojekyll` mencegah pemrosesan Jekyll.
-- Perhatian: user site hanya berlaku kalau repositori bernama `<username>.github.io`. Kalau repositori tetap `portfolio-adhiatman`, ini menjadi project site dan `base` harus diubah ke `/portfolio-adhiatman/`.
+- Kalau nanti repo di-rename menjadi `<username>.github.io` (user site), `base` kembali ke `/` dan URL di `scripts/smoke.mjs` serta `README.md` ikut disesuaikan.
 - Di GitHub, set Pages source ke "GitHub Actions".
 
 ## 12. Non-fungsional
@@ -231,6 +233,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 |----------|-------|
 | Build produksi berhasil | PASS |
 | Hero merender nama dan konten Indonesia sebagai default | PASS |
+| Karya menampilkan tiga project dan tautan ke sisanya di GitHub | PASS |
 | Klik baris karya membuka modal dengan project yang benar | PASS |
 | Escape menutup modal dan fokus kembali ke baris pemicu | PASS |
 | Toggle bahasa mengubah seluruh string, tersimpan, dan `lang` ikut berubah | PASS |
@@ -250,7 +253,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion menyisakan konten hero | PASS |
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
 
-Ringkasan: 27 dari 27 pemeriksaan lolos.
+Ringkasan: 28 dari 28 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -265,10 +268,11 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 | T3 | URL profil LinkedIn asli | `src/data/profile.js` dan `src/lib/icons.js` |
 | T4 | Konfirmasi email dan WhatsApp | `src/data/profile.js` |
 | T5 | File CV PDF | `public/cv/putu-adhiatman-cv.pdf` |
-| T6 | Keputusan nama repositori (user site atau project site) | `vite.config.js` |
 | T7 | Konfirmasi bio, tagline, dan entri Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` |
 | T8 | Konfirmasi daftar teknologi dan alat | `src/data/skills.js` |
 | T9 | Keputusan soal ikon yang diunduh dari CDN | `src/data/skills.js` |
+
+T6 sudah diputuskan: repo ini adalah project site, jadi `base` diset `/portfolio-adhiatman/` (lihat bagian 11).
 
 ## 16. Lampiran: keputusan dan alasan
 
@@ -286,3 +290,4 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 | Detail acara dibuka sebaris, bukan flip 3D | Flip menyembunyikan separuh konten di balik rotasi dan mengunci tinggi kartu; panel sebaris menjaga kronologi tetap utuh dan teksnya tetap terbaca |
 | Kecepatan marquee diukur, bukan ditetapkan | Dua durasi tetap membuat baris teknologi (sekitar 31 px per detik) dan alat (sekitar 15 px per detik) tampak berlomba; satu konstanta 60 px per detik menyamakan keduanya tanpa perlu disetel ulang saat konten berubah |
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
+| Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |

@@ -17,7 +17,7 @@ const browser = await puppeteer.launch({
 });
 
 const page = await browser.newPage();
-const url = process.env.SMOKE_URL ?? 'http://localhost:4173/';
+const url = process.env.SMOKE_URL ?? 'http://localhost:4173/portfolio-adhiatman/';
 
 const viewports = [
   { name: 'desktop-1440x900', width: 1440, height: 900 },
@@ -50,6 +50,24 @@ await page.evaluate(() => document.getElementById('about')?.scrollIntoView());
 await new Promise((r) => setTimeout(r, 2600));
 await page.screenshot({ path: `${OUT}\\about-desktop.png` });
 console.log('about-desktop.png');
+
+// Work section: three featured projects and the quiet GitHub link.
+for (const vp of [
+  { name: 'desktop', width: 1440, height: 1000 },
+  { name: 'mobile', width: 360, height: 740 },
+]) {
+  await page.setViewport({ width: vp.width, height: vp.height });
+  await page.goto(url, { waitUntil: 'load' });
+  await new Promise((r) => setTimeout(r, 700));
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    document.getElementById('work')?.scrollIntoView();
+  });
+  await new Promise((r) => setTimeout(r, 2200));
+  const section = await page.$('#work');
+  await section.screenshot({ path: `${OUT}\\work-${vp.name}.png` });
+  console.log(`work-${vp.name}.png`);
+}
 
 // Journey section: the chronological rework, plus proof the year index sticks.
 await page.setViewport({ width: 1440, height: 1000 });

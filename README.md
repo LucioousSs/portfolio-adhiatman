@@ -15,7 +15,7 @@ Landing page statis untuk personal branding I Putu Adhiatman, UI/UX Designer dan
 ## Fitur
 
 - Hero satu layar penuh: nama raksasa satu baris dengan reveal per huruf, foto yang menimpa nama sebagai lapisan depan, marquee latar sebagai tekstur, dan parallax foto.
-- Karya pilihan berupa daftar baris: hover menampilkan preview yang mengikuti kursor, klik membuka modal detail dengan galeri dan tautan.
+- Karya pilihan berupa daftar baris (tiga project): hover menampilkan preview yang mengikuti kursor, klik membuka modal detail dengan galeri dan tautan, plus satu tautan ke seluruh repo di GitHub.
 - Bio dengan reveal per kata dan badge soft skill magnetik.
 - Perjalanan satu kolom kronologis: babak tahun dengan indeks lengket, garis yang tergambar saat scroll, baris yang menyala saat dilewati, dan detail acara yang dibuka sebaris.
 - Marquee teknologi dan alat dengan satu kecepatan terukur (60 px per detik) untuk kedua baris, berhenti saat hover.
@@ -47,22 +47,22 @@ docs/CONTENT-TODO.md    daftar konten yang masih dibutuhkan
 
 ```bash
 npm install
-npm run dev        # server pengembangan
+npm run dev        # http://localhost:5173/portfolio-adhiatman/
 npm run build      # build ke dist/
-npm run preview    # pratinjau hasil build di port 4173
+npm run preview    # http://localhost:4173/portfolio-adhiatman/
 ```
 
 ## Verifikasi
 
 ```bash
 npm run build
-npm run preview    # di terminal lain
+npm run preview    # di terminal lain, buka http://localhost:4173/portfolio-adhiatman/
 npm run smoke
 ```
 
-`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
+`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
 
-`npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Kontak, Tentang, dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
+`npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Karya, Kontak, Tentang, dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
 
 ## Mengubah Konten
 
@@ -93,8 +93,8 @@ Daftar lengkap konten yang masih dibutuhkan, beserta langkah pengisiannya, ada d
 Workflow di `.github/workflows/deploy.yml` membangun dan mengunggah `dist/` setiap push ke `main`.
 
 1. Di GitHub, buka Settings, lalu Pages, dan set Source ke "GitHub Actions".
-2. Untuk user site, repositori harus bernama `<username>.github.io` dan `base` di `vite.config.js` tetap `/`.
-3. Kalau memakai project site (misalnya `portfolio-adhiatman`), ubah `base` menjadi `/portfolio-adhiatman/`.
+2. `vite.config.js` memakai `base: '/portfolio-adhiatman/'` karena repo ini adalah project site. Situsnya akan hidup di `https://lucioousss.github.io/portfolio-adhiatman/`.
+3. Kalau nanti repo ini di-rename menjadi `<username>.github.io` (user site), ubah `base` kembali ke `/` dan sesuaikan URL di `scripts/smoke.mjs` serta README ini.
 
 ## Keputusan Desain
 
@@ -102,6 +102,7 @@ Workflow di `.github/workflows/deploy.yml` membangun dan mengunggah `dist/` seti
 - Setiap animasi punya alasan. Loop abadi hanya pada marquee teknologi dan tekstur hero; keduanya mati saat reduced motion.
 - Perjalanan dibaca dari yang paling lama dan babak tahunnya diturunkan dari data, jadi label tahun tidak bisa berbeda dari isinya.
 - Kecepatan marquee dihitung dari lebar konten yang diukur, bukan dari durasi tetap, supaya kedua baris selalu sama cepat.
+- Tiga karya yang dipajang, sisanya lewat tautan ke GitHub, supaya yang lemah tidak menenggelamkan yang kuat.
 - Tidak ada angka, testimoni, atau klaim tanpa bukti. Aset yang belum ada ditandai apa adanya.
 - Tema gelap tetap, dengan alasan identitas visual, bukan karena sekadar terlihat teknologi.
 

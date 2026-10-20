@@ -29,8 +29,9 @@ export default {
 
   work: {
     title: 'Work',
-    subtitle: 'Six projects I am proudest of, from landing pages to a REST API.',
+    subtitle: 'Three projects that best represent how I work.',
     hint: 'Hover to preview, click for detail',
+    all: 'All projects on GitHub',
     role: 'Role',
     stack: 'Stack',
     year: 'Year',

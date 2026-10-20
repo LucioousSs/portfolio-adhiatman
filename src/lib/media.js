@@ -1,3 +1,11 @@
+/**
+ * Prefixes a `public/` path with the deploy base. GitHub Pages serves this repo
+ * from `/portfolio-adhiatman/`, so a bare `/images/foo.png` would 404 there.
+ */
+export function asset(path) {
+  return `${import.meta.env.BASE_URL}${String(path).replace(/^\/+/, '')}`;
+}
+
 /** Two letters taken from the project title, used for the honest screenshot placeholder. */
 export function initials(title) {
   return title
@@ -16,7 +24,7 @@ export function initials(title) {
  */
 export function projectMedia(project, { className = '', alt = '', pendingLabel = 'Screenshot pending', eager = false } = {}) {
   if (project.image) {
-    return `<img src="${project.image}" alt="${alt}" loading="${eager ? 'eager' : 'lazy'}" class="${className}" />`;
+    return `<img src="${asset(project.image)}" alt="${alt}" loading="${eager ? 'eager' : 'lazy'}" class="${className}" />`;
   }
 
   return `<div class="${className} flex flex-col items-center justify-center gap-2 bg-zinc-900 text-center">

@@ -1,3 +1,5 @@
+import { asset } from '../lib/media.js';
+
 /**
  * Profile content.
  *
@@ -23,9 +25,9 @@ export const profile = {
   email: 'putuadhi133@gmail.com',
   whatsapp: '6289635263050',
   whatsappDisplay: '+62 896-3526-3050',
-  photo: '/images/profile.png',
+  photo: asset('/images/profile.png'),
   // TODO(verify): drop the CV PDF at public/cv/putu-adhiatman-cv.pdf.
-  cv: '/cv/putu-adhiatman-cv.pdf',
+  cv: asset('/cv/putu-adhiatman-cv.pdf'),
   socials: [
     { key: 'github', label: 'GitHub', url: 'https://github.com/LucioousSs' },
     { key: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/adhiatmn/' },

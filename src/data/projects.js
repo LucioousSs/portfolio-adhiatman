@@ -1,6 +1,9 @@
 /**
- * Selected work. Every entry is a real repository from github.com/LucioousSs;
- * descriptions come from the repos' own summaries.
+ * Selected work. Three of the six repositories are featured: the client store
+ * build, the brand landing page, and the one project with a live demo. The other
+ * three (an early-stage API, a contact-form utility, and a recipe dataset) are
+ * pointed at through the GitHub profile instead of being dressed up as featured
+ * work.
  *
  * TODO(screenshots): each project has `image: null` because no screenshots exist
  * yet. Drop a file at `public/images/projects/<slug>.png` and set
@@ -65,63 +68,6 @@ export const projects = [
     },
     demo: 'https://lucioousss.github.io/CodingCamp-24August26-IPutuAdhiatman/',
     repo: 'https://github.com/LucioousSs/CodingCamp-24August26-IPutuAdhiatman',
-    image: null,
-    gallery: [],
-  },
-  {
-    slug: 'bimaone-api',
-    title: 'bimaone-api',
-    summary: {
-      id: 'REST API backend',
-      en: 'Backend REST API',
-    },
-    year: '2026',
-    role: { id: 'Backend', en: 'Backend' },
-    stack: ['Go', 'Gin', 'PostgreSQL', 'Docker'],
-    description: {
-      id: 'Backend REST API dengan Go (Gin) dan PostgreSQL. Masih tahap awal: baru endpoint health check dan koneksi database.',
-      en: 'Backend REST API in Go (Gin) with PostgreSQL. Early stage: currently the health check endpoint and the database connection.',
-    },
-    demo: null,
-    repo: 'https://github.com/LucioousSs/bimaone-api',
-    image: null,
-    gallery: [],
-  },
-  {
-    slug: 'phpmail',
-    title: 'phpMail',
-    summary: {
-      id: 'Form kontak dengan PHPMailer',
-      en: 'Contact form with PHPMailer',
-    },
-    year: '2026',
-    role: { id: 'Backend', en: 'Backend' },
-    stack: ['PHP', 'PHPMailer', 'Composer'],
-    description: {
-      id: 'Form kontak PHP yang mengirim email melalui PHPMailer, dipasang lewat Composer.',
-      en: 'PHP contact form that sends email through PHPMailer, installed via Composer.',
-    },
-    demo: null,
-    repo: 'https://github.com/LucioousSs/phpMail',
-    image: null,
-    gallery: [],
-  },
-  {
-    slug: 'data-resep-mobile',
-    title: 'Data Resep Mobile',
-    summary: {
-      id: 'Dataset resep untuk aplikasi Android',
-      en: 'Recipe dataset for an Android app',
-    },
-    year: '2026',
-    role: { id: 'Data', en: 'Data' },
-    stack: ['JSON', 'Android'],
-    description: {
-      id: 'Dataset 31 resep masakan Indonesia dalam format JSON, dipakai sebagai sumber data aplikasi Android ResepKu.',
-      en: 'A dataset of 31 Indonesian recipes in JSON, used as the data source for the ResepKu Android app.',
-    },
-    demo: null,
-    repo: 'https://github.com/LucioousSs/Data-Resep-Mobile',
     image: null,
     gallery: [],
   },

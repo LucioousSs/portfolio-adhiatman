@@ -16,7 +16,7 @@ if (!CHROME) {
   process.exit(2);
 }
 
-const URL = process.env.SMOKE_URL ?? 'http://localhost:4173/';
+const URL = process.env.SMOKE_URL ?? 'http://localhost:4173/portfolio-adhiatman/';
 
 const results = [];
 const pass = (name, ok, note = '') => results.push({ name, ok, note });
@@ -46,7 +46,14 @@ const lang = await page.$eval('html', (el) => el.lang);
 pass('Default language is Indonesian', lang === 'id', lang);
 pass('Indonesian CTA present', (await page.$eval('#home', (el) => el.textContent)).includes('Lihat karya'));
 
-// 2. Work row opens the modal with the right project.
+// 2. Work shows the three featured projects, links to the rest on GitHub, and
+// opens the modal with the right project.
+const work = await page.evaluate(() => ({
+  rows: document.querySelectorAll('[data-work-index]').length,
+  all: Boolean(document.querySelector('#work a[href="https://github.com/LucioousSs?tab=repositories"]')),
+}));
+pass('Work shows three projects and links to the rest', work.rows === 3 && work.all, `${work.rows} rows, link=${work.all}`);
+
 await page.click('[data-work-index="0"]');
 await new Promise((r) => setTimeout(r, 900));
 const modalOpen = await page.$eval('#project-modal', (el) => !el.classList.contains('hidden'));

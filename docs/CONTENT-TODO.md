@@ -2,36 +2,36 @@
 
 Situsnya sudah selesai dan berjalan tanpa backend. Yang tersisa adalah data nyata yang hanya kamu yang punya. Item di bawah ini sengaja tidak saya karang, karena mengarang data akan merusak satu hal yang paling dijaga di situs ini: kejujuran isinya.
 
-Diperbarui: 19 Oktober 2026. Daftar yang sama juga dicatat sebagai item terbuka di `docs/PRD.md` bagian 15.
+Diperbarui: 20 Oktober 2026. Daftar yang sama juga dicatat sebagai item terbuka di `docs/PRD.md` bagian 15.
 
 ## Ringkasan
 
 | # | Item | Berkas yang diubah | Kalau belum diisi |
 |---|------|--------------------|-------------------|
-| K1 | Tangkapan layar 6 project | `public/images/projects/<slug>.png`, lalu `src/data/projects.js` | Preview hover dan galeri modal menampilkan "Tangkapan layar menyusul" |
+| K1 | Tangkapan layar 3 project | `public/images/projects/<slug>.png`, lalu `src/data/projects.js` | Preview hover dan galeri modal menampilkan "Tangkapan layar menyusul" |
 | K2 | Cek deskripsi project versi Inggris | `src/data/projects.js` | Teks Inggris memakai tulisan saya, belum kamu baca |
 | K3 | URL LinkedIn asli | `src/data/profile.js` dan `src/lib/icons.js` | LinkedIn tidak dirender sama sekali |
 | K4 | Konfirmasi email dan WhatsApp | `src/data/profile.js` | Situs memakai nilai sementara |
 | K5 | File CV PDF | `public/cv/putu-adhiatman-cv.pdf` | Tombol "Unduh CV" menuju tautan kosong |
-| K6 | Nama repositori dan `base` Vite | `vite.config.js`, `README.md` | Aset berisiko 404 di GitHub Pages |
 | K7 | Konfirmasi bio, tagline, dan Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` | Teks dan tahun masih versi saya |
 | K8 | Konfirmasi daftar teknologi dan alat | `src/data/skills.js` | Bisa jadi terlalu banyak atau ada yang kurang |
 | K9 | Keputusan soal ikon dari CDN | `src/data/skills.js` | Ikon diunduh dari jsdelivr dan simpleicons setiap halaman dibuka |
+
+K6 sudah beres sebelum daftar ini sampai ke tanganmu: repo ini project site, jadi `base` Vite sudah diset. Lihat bagian K6 di bawah kalau penasaran.
 
 ## Detail
 
 ### K1. Tangkapan layar project
 
-Setiap project masih `image: null`, jadi yang tampil adalah placeholder jujur "Tangkapan layar menyusul". Enam project dan nama berkas yang diharapkan:
+Setiap project masih `image: null`, jadi yang tampil adalah placeholder jujur "Tangkapan layar menyusul". Tiga project yang dipajang dan nama berkas yang diharapkan:
 
 | Slug | Judul | Berkas gambar |
 |------|-------|---------------|
 | `ud-kariasa-web` | UD. Kariasa | `public/images/projects/ud-kariasa-web.png` |
 | `kopikhe-website` | KopiKhe | `public/images/projects/kopikhe-website.png` |
 | `todo-life-dashboard` | Todo List Life Dashboard | `public/images/projects/todo-life-dashboard.png` |
-| `bimaone-api` | bimaone-api | `public/images/projects/bimaone-api.png` |
-| `phpmail` | phpMail | `public/images/projects/phpmail.png` |
-| `data-resep-mobile` | Data Resep Mobile | `public/images/projects/data-resep-mobile.png` |
+
+Tiga repo lain (bimaone-api, phpMail, Data Resep Mobile) sengaja tidak dipajang sebagai karya unggulan. Semuanya tetap bisa dijangkau lewat tautan "Semua proyek di GitHub" di bawah daftar, jadi tidak ada yang hilang dari pengunjung, dan tidak ada yang dipaksa tampil seolah setara.
 
 Langkahnya:
 
@@ -40,8 +40,6 @@ Langkahnya:
 3. Opsional, kalau mau galeri: `gallery: ['/images/projects/ud-kariasa-web-2.png']`.
 
 Tidak perlu semua sekaligus. Satu project yang sudah punya gambar langsung tampil lengkap, sisanya tetap memakai placeholder.
-
-Untuk `bimaone-api` yang masih tahap awal, tangkapan layar terminal atau respons endpoint juga sah. Lebih baik apa adanya daripada tidak ada.
 
 ### K2. Deskripsi project versi Inggris
 
@@ -78,20 +76,11 @@ public/cv/putu-adhiatman-cv.pdf
 
 Nama berkas harus persis itu, atau ubah nilai `cv` di `src/data/profile.js` menyesuaikan nama filemu. Sebelum file ada, tombol "Unduh CV" di section Kontak mengarah ke tautan kosong.
 
-### K6. Nama repositori dan `base` Vite
+### K6. Nama repositori dan `base` Vite (sudah beres)
 
-Remote repo sekarang: `https://github.com/LucioousSs/portfolio-adhiatman.git`. Namanya bukan `<username>.github.io`, jadi kalau repo ini yang kamu push ke GitHub Pages, situsnya menjadi **project site** dan `base: '/'` di `vite.config.js` membuat semua aset 404. Ada dua jalan keluar:
+Remote repo adalah `https://github.com/LucioousSs/portfolio-adhiatman.git`, jadi situs ini adalah **project site**, bukan user site. `vite.config.js` sudah diset `base: '/portfolio-adhiatman/'`, dan URL dev, preview, build, serta smoke semuanya mengikuti nilai itu. Tidak ada yang perlu kamu lakukan.
 
-1. **Biarkan repo seperti sekarang**, lalu ubah `vite.config.js`:
-
-   ```js
-   base: '/portfolio-adhiatman/',
-   ```
-
-   Efek samping yang perlu ikut diubah: `npm run preview` melayani situs di `http://localhost:4173/portfolio-adhiatman/`, bukan di akar, jadi `SMOKE_URL` dan petunjuk di `README.md` perlu menyesuaikan.
-2. **Buat repo baru bernama `lucioousss.github.io`** (atau rename repo ini kalau memang mau dipakai sebagai situs utama akun). Dengan begitu `base: '/'` sudah benar dan tidak ada yang perlu diubah.
-
-Sebutkan pilihanmu, karena saya yang akan menyesuaikan `vite.config.js`, `README.md`, dan perintah verifikasinya sekaligus.
+Satu hal yang perlu diingat: kalau nanti repo ini di-rename menjadi `<username>.github.io`, `base` harus kembali ke `/`, dan URL di `scripts/smoke.mjs` serta `README.md` ikut disesuaikan. Kabari saja kalau itu terjadi.
 
 ### K7. Konfirmasi bio, tagline, dan entri Perjalanan
 
