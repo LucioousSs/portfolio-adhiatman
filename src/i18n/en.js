@@ -47,6 +47,8 @@ export default {
   about: {
     title: 'About',
     soft: 'Soft skills',
+    altTorso: 'Portrait of I Putu Adhiatman, cropped from the chest to the waist',
+    focus: 'Focus',
   },
 
   journey: {

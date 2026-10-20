@@ -1,5 +1,6 @@
 import { t, text } from '../lib/i18n.js';
 import { profile } from '../data/profile.js';
+import { asset } from '../lib/media.js';
 import { skills } from '../data/skills.js';
 import { gsap, isDesktop, reducedMotion } from '../lib/motion.js';
 
@@ -29,9 +30,16 @@ export class About {
       .join('');
 
     const badges = (skills.soft[document.documentElement.lang] ?? skills.soft.id)
-      .map((skill) => `<span class="magnetic-badge" data-magnetic>${skill}</span>`)
+      .map((skill) => `<span class="about-badge">${skill}</span>`)
       .join('');
 
+    // The role as a type plate, one word per line. This is where the profession
+    // lives now that the hero only carries the name.
+    const roleWords = text(profile.role).split(/\s*&\s*|\s+/).filter(Boolean);
+
+    // Three plates close the section: one crop of the portrait (the full frame
+    // stays exclusive to the hero), one CC0 texture with the location set in HTML
+    // on top, and one type plate for the role.
     return `
       <section id="about" class="relative overflow-hidden px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
         <svg class="grain-overlay" aria-hidden="true">
@@ -58,11 +66,49 @@ export class About {
               <div class="flex flex-wrap gap-3">${badges}</div>
             </div>
           </div>
+
+          <div class="about-strip" data-about-strip>
+            <figure class="about-panel about-panel--torso" data-about-panel>
+              <img
+                src="${asset('/images/about/portrait-torso.webp')}"
+                alt="${t('about.altTorso')}"
+                width="408"
+                height="510"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <figure class="about-panel about-panel--texture" data-about-panel>
+              <img
+                src="${asset('/images/about/texture-concrete.webp')}"
+                alt=""
+                aria-hidden="true"
+                width="960"
+                height="1440"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="about-panel-caption">${text(profile.location)}</figcaption>
+            </figure>
+
+            <figure class="about-panel about-panel--type" data-about-panel>
+              <div class="about-type">
+                <span class="label">${t('about.focus')}</span>
+                <p class="about-type-lines">
+                  ${roleWords.map((word) => `<span class="type-display">${word}</span>`).join(' ')}
+                </p>
+              </div>
+            </figure>
+          </div>
         </div>
       </section>`;
   }
 
   init() {
+    const panels = document.querySelectorAll('[data-about-panel]');
+    const strip = document.querySelector('[data-about-strip]');
+
     if (!reducedMotion()) {
       // Word-by-word reveal: sets the reading rhythm of the bio.
       gsap.from('[data-bio-lead], [data-bio-word]', {
@@ -72,21 +118,30 @@ export class About {
         stagger: 0.012,
         scrollTrigger: { trigger: '#about', start: 'top 72%', once: true },
       });
+
+      // The plates arrive in reading order, like prints laid down one by one.
+      // clearProps hands the transform back to the hover style once it settles.
+      if (panels.length) {
+        gsap.from(panels, {
+          y: 28,
+          opacity: 0,
+          duration: 0.7,
+          stagger: 0.09,
+          ease: 'power3.out',
+          clearProps: 'transform',
+          scrollTrigger: { trigger: strip, start: 'top 84%', once: true },
+        });
+      }
     }
 
-    if (!isDesktop() || reducedMotion()) return;
+    if (!isDesktop() || reducedMotion() || !strip) return;
 
-    // Magnetic badges: playful pointer response, desktop only.
-    document.querySelectorAll('[data-magnetic]').forEach((badge) => {
-      badge.addEventListener('mousemove', (event) => {
-        const rect = badge.getBoundingClientRect();
-        const x = event.clientX - rect.left - rect.width / 2;
-        const y = event.clientY - rect.top - rect.height / 2;
-        gsap.to(badge, { x: x * 0.28, y: y * 0.34, duration: 0.3, ease: 'power2.out' });
-      });
-      badge.addEventListener('mouseleave', () => {
-        gsap.to(badge, { x: 0, y: 0, duration: 0.4, ease: 'power3.out' });
-      });
+    // A short lateral drift, tied to scroll progress. It hints that the row is
+    // wider than the screen without turning it into a third marquee.
+    gsap.to(strip, {
+      x: -28,
+      ease: 'none',
+      scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: true },
     });
   }
 }

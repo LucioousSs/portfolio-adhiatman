@@ -2,14 +2,14 @@
 
 Situsnya sudah selesai dan berjalan tanpa backend. Yang tersisa adalah data nyata yang hanya kamu yang punya. Item di bawah ini sengaja tidak saya karang, karena mengarang data akan merusak satu hal yang paling dijaga di situs ini: kejujuran isinya.
 
-Diperbarui: 20 Oktober 2026, setelah jawabanmu untuk K1 sampai K9. Daftar yang sama juga dicatat sebagai item terbuka di `docs/PRD.md` bagian 15.
+Diperbarui: 20 Oktober 2026, setelah jawabanmu untuk K1 sampai K9 dan setelah desain section Tentang diubah. Daftar yang sama juga dicatat sebagai item terbuka di `docs/PRD.md` bagian 15.
 
 ## Masih terbuka
 
 | # | Item | Status |
 |---|------|--------|
 | K1 | Tangkapan layar project | Ditunda sampai tampilan project-nya selesai kamu ubah |
-| K7 | Bio, tagline, dan Perjalanan | Ditunda sampai desain section Tentang selesai kamu ubah |
+| K7 | Bio, tagline, dan Perjalanan | Desain section Tentang sudah selesai, jadi tinggal konfirmasi teksnya |
 
 ### K1. Tangkapan layar project
 
@@ -33,7 +33,7 @@ Tidak perlu semua sekaligus. Satu project yang sudah punya gambar langsung tampi
 
 ### K7. Bio, tagline, dan Perjalanan
 
-Kamu bilang mau mengubah desain section Tentang dulu, jadi teks dan datanya saya biarkan apa adanya sampai itu selesai. Isinya sekarang:
+Desain section Tentang sudah diubah: di bawah bio sekarang ada tiga plat penutup (potongan potret 4:5, plat tipografi peran, dan plat tekstur dengan lokasi). Yang belum saya sentuh justru teksnya, karena itu wilayahmu. Isinya sekarang:
 
 **Bio** (`src/components/About.js`, objek `BIO`) menyebut kamu mahasiswa Teknologi Informasi di ITB STIKOM Bali, biasa menyusun mockup di Figma lalu membangun antarmukanya, serta aktif di organisasi kampus.
 
@@ -53,7 +53,7 @@ Kamu bilang mau mengubah desain section Tentang dulu, jadi teks dan datanya saya
 
 Babak tahun di section Perjalanan (2024, 2025, 2026) dihitung otomatis dari tahun mulai tiap entri, jadi tahunnya tidak perlu diketik dua kali. Rentang 2026 sampai 2027 tetap dibaca sebagai satu entri di babak 2026, bukan babak 2027.
 
-Kalau nanti desainnya berubah dan ada entri yang perlu ditambah atau dibuang (misalnya magang, sertifikasi, atau lomba), kirim daftarnya.
+Kalau ada entri yang perlu ditambah atau dibuang (misalnya magang, sertifikasi, atau lomba), kirim daftarnya.
 
 ## Sudah beres
 
@@ -66,14 +66,15 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 - **K6, base Vite:** repo ini project site, jadi `base` sudah diset `/portfolio-adhiatman/`. Kalau nanti repo di-rename menjadi `<username>.github.io`, nilai itu harus kembali ke `/`.
 - **K8, daftar teknologi dan alat:** kamu bilang aman, jadi `src/data/skills.js` tidak diubah.
 - **K9, ikon dari CDN:** kamu pilih tetap seperti sekarang, jadi ikon masih diunduh dari `cdn.jsdelivr.net` dan `cdn.simpleicons.org`. Satu-satunya konsekuensi: tanpa koneksi, ikonnya kosong sementara namanya tetap terbaca.
-- **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero, jadi identitasnya tidak hilang.
+- **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero dan sebagai plat tipografi di section Tentang, jadi identitasnya tidak hilang.
+- **Desain section Tentang:** sudah diubah menjadi tiga plat penutup di bawah bio. Potretnya dipotong 4:5 supaya frame penuh tetap eksklusif di hero, satu plat menampilkan peran sebagai tipografi, dan satu plat memakai tekstur beton CC0 dengan lokasi sebagai teks. Asal teksturnya dicatat di `docs/CREDITS.md`. Ngobrol soal desain ini memakan waktu paling lama, jadi hasilnya saya pisah ke satu commit sendiri: kalau kamu tidak suka, commit itu bisa dibatalkan tanpa menyentuh yang lain. Chip soft skill sekarang diam, tidak lagi mengikuti kursor.
 
 ## Cara memeriksa setelah ada perubahan
 
 ```bash
 npm run build
 npm run preview    # http://localhost:4173/portfolio-adhiatman/
-npm run smoke      # 28 dari 28 harus lolos
+npm run smoke      # 31 dari 31 harus lolos
 ```
 
 `npm run shots` menyimpan tangkapan layar hero, Karya, Kontak, Tentang, dan Perjalanan ke folder sementara. Saya bisa bantu memperbarui `README.md` dan `docs/PRD.md` kalau ada yang berubah.

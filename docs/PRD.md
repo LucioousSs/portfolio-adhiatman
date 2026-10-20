@@ -97,8 +97,16 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 ### 7.4 Tentang
 - Tagline sebagai kalimat pembuka di atas bio.
 - Bio dua paragraf dengan reveal per kata saat masuk viewport.
-- Soft skills sebagai badge magnetik (desktop).
+- Soft skills sebagai chip statis.
 - Grain halus sebagai tekstur identitas poster.
+- Tiga plat penutup di bawah bio, tinggi dan posisi vertikalnya sengaja tidak rata:
+  1. Potongan potret 4:5 (`public/images/about/portrait-torso.webp`), bukan potret penuh, supaya frame penuh tetap milik hero.
+  2. Plat tekstur beton CC0 terbalik dan hitam putih, dengan lokasi "Denpasar, Bali, Indonesia" sebagai teks HTML di bar ink, bukan dibakar ke gambar.
+  3. Plat tipografi berisi peran, satu kata besar per baris, jadi profesi tetap terbaca setelah baris peran di hero dihapus.
+- Plat potret dan plat tipografi punya padanan teks: `alt` untuk gambar, teks asli untuk plat tipografi. Plat tekstur `alt=""` dan `aria-hidden`, murni dekoratif.
+- Motion: tiap plat naik 28px dan memudar dengan jeda 90ms saat masuk viewport; strip bergeser mendatar paling jauh 28px mengikuti scroll; hover mengangkat plat 6px di perangkat berpointer.
+- Reduced motion: strip tampil statis, tanpa transform dan tanpa hover.
+- Mobile (di bawah 640px): strip menjadi baris yang bisa digeser mendatar dengan snap, lebar plat 82 persen, tanpa JavaScript tambahan.
 
 ### 7.5 Perjalanan
 - Satu kolom kronologis, bukan grid kartu: babak 2024, 2025, dan 2026 berurutan dari yang paling lama.
@@ -132,7 +140,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Work, About, Journey, Cont
 | Navbar | Progress bar, navbar memadat, penanda section aktif | Orientasi pada halaman panjang |
 | Hero | Reveal huruf, foto naik, marquee latar, sparkle, parallax, drift mengikuti pointer | Momen pembuka, menegaskan identitas tipografi |
 | Karya | Baris terangkat, preview mengikuti kursor, baris lain meredup, morph ke modal | Interaksi tanda tangan, memberi konteks visual tanpa klik |
-| Tentang | Reveal per kata, badge magnetik | Ritme baca dan respons ringan |
+| Tentang | Reveal per kata, tiga plat naik berurutan, strip bergeser mendatar mengikuti scroll, hover mengangkat plat | Ritme baca pada bio, lalu strip menutup section sebagai deretan cetakan; pergeseran mendatar menandakan barisnya lebih lebar dari layar tanpa jadi marquee kedua |
 | Perjalanan | Garis progres scrub, baris menyala saat dilewati garis, wipe angka tahun | Menghubungkan posisi baca dengan urutan waktu |
 | Teknologi | Marquee konten | Menunjukkan luas stack |
 | Kontak | Focus ring, transition tombol | Umpan balik aksi |
@@ -176,6 +184,7 @@ public/
   robots.txt
   .nojekyll
   images/profile.png
+  images/about/           (potret 4:5 dan tekstur CC0 untuk section Tentang)
   cv/                     (letakkan PDF CV di sini)
 src/
   main.js
@@ -184,14 +193,17 @@ src/
   i18n/{id,en}.js
   data/{profile,projects,skills,journey}.js
   components/{Navbar,Hero,Work,ProjectModal,About,Journey,TechStack,Contact,Footer}.js
-scripts/smoke.mjs
+scripts/{smoke,shots}.mjs
 .github/workflows/deploy.yml
 docs/PRD.md
+docs/CONTENT-TODO.md
+docs/CREDITS.md
 ```
 
 - Tanpa service layer dan tanpa API. Komponen merender HTML, lalu `init()` memasang perilaku.
 - Modal dipasang sekali di luar `#app` supaya tidak ikut ter-render ulang saat ganti bahasa.
-- Bentuk keluaran build: CSS sekitar 10,2 kB gzip, JS sekitar 60,8 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 225 kB woff2 untuk subset Latin dan Latin-ext.
+- Aset dekoratif dari luar hanya boleh tekstur, dan asalnya dicatat di `docs/CREDITS.md`. Tidak ada foto stok yang menggambarkan orang, ruang kerja, atau kehidupan pemilik.
+- Bentuk keluaran build: CSS sekitar 10,5 kB gzip, JS sekitar 61,4 kB gzip (termasuk GSAP dan ScrollTrigger), font sekitar 269 kB woff2 untuk subset Latin, Latin-ext, dan Vietnamese. Dua plat Tentang menambah 15 kB dan 82 kB WebP, dimuat malas.
 
 ## 11. Deployment
 
@@ -201,12 +213,14 @@ docs/PRD.md
 - `public/.nojekyll` mencegah pemrosesan Jekyll.
 - Kalau nanti repo di-rename menjadi `<username>.github.io` (user site), `base` kembali ke `/` dan URL di `scripts/smoke.mjs` serta `README.md` ikut disesuaikan.
 - Di GitHub, set Pages source ke "GitHub Actions".
+- Langkah sekali di sisi pemilik repo: Settings, lalu Pages, lalu Source ke "GitHub Actions". Tanpa itu `actions/configure-pages` gagal, karena token workflow tidak boleh membuat situs Pages sendiri, dan alamatnya masih 404.
 
 ## 12. Non-fungsional
 
 - **Responsive:** diuji tanpa overflow horizontal pada 360px. Rentang target 320px sampai 1440px.
 - **Aksesibilitas:** focus indicator terlihat, skip link, dialog dengan Escape dan focus trap, toggle memakai `aria-pressed`, detail Perjalanan memakai `aria-expanded` dan `aria-controls`, indeks tahun punya `aria-label`, status bahasa diumumkan lewat atribut `lang`, reduced motion dihormati, dan kontras teks diperiksa otomatis terhadap ambang WCAG AA.
 - **Target sentuh:** semua tautan dan tombol minimal 24px, aksi utama lebih besar.
+- **Aset gambar:** dua potret punya `alt` yang menyebut namanya, plat tekstur `alt=""` plus `aria-hidden`, dan semua gambar section Tentang dimuat malas.
 - **SEO:** title, description, canonical, Open Graph, Twitter card, dan JSON-LD Person.
 - **Kejujuran konten:** tidak ada angka, testimoni, atau klaim yang dibuat-buat. Placeholder ditulis apa adanya sebagai "Tangkapan layar menyusul".
 
@@ -234,6 +248,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Build produksi berhasil | PASS |
 | Hero merender nama dan konten Indonesia sebagai default | PASS |
 | Karya menampilkan tiga project dan tautan ke sisanya di GitHub | PASS |
+| Tentang menampilkan tiga plat, masing-masing punya teks atau ditandai dekoratif | PASS |
 | Klik baris karya membuka modal dengan project yang benar | PASS |
 | Escape menutup modal dan fokus kembali ke baris pemicu | PASS |
 | Toggle bahasa mengubah seluruh string, tersimpan, dan `lang` ikut berubah | PASS |
@@ -252,8 +267,10 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion mematikan loop hero | PASS |
 | Reduced motion menyisakan konten hero | PASS |
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
+| Reduced motion menyisakan tiga plat Tentang terlihat tanpa transform | PASS |
+| Plat tipografi Tentang tidak memotong kata terpanjangnya di 360px | PASS |
 
-Ringkasan: 28 dari 28 pemeriksaan lolos.
+Ringkasan: 31 dari 31 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -264,7 +281,7 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 | # | Item | Lokasi | Status |
 |---|------|--------|--------|
 | T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` | Ditunda sampai tampilan project diubah |
-| T7 | Konfirmasi bio, tagline, dan entri Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` | Ditunda sampai desain Tentang diubah |
+| T7 | Konfirmasi bio, tagline, dan entri Perjalanan | `src/components/About.js`, `src/data/profile.js`, `src/data/journey.js` | Desain Tentang sudah diubah; tinggal konfirmasi teksnya |
 
 Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, dan T9 (ikon CDN) diputuskan tetap seperti sekarang. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
 
@@ -286,3 +303,10 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Kecepatan marquee diukur, bukan ditetapkan | Dua durasi tetap membuat baris teknologi (sekitar 31 px per detik) dan alat (sekitar 15 px per detik) tampak berlomba; satu konstanta 60 px per detik menyamakan keduanya tanpa perlu disetel ulang saat konten berubah |
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
 | Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |
+| Plat Tentang memakai potret yang sudah dipotong 4:5, bukan potret penuh | Frame penuh sudah jadi pembuka di hero; mengulanginya di bawah melemahkan hero dan mengulang informasi yang sama |
+| Plat kedua berbentuk tekstur, plat ketiga tipografi peran, bukan dua crop potret | Sumber potretnya 408 piksel, jadi crop ketat akan pecah saat diperbesar; tipografi mengembalikan peran yang hilang dari hero tanpa menambah baris kecil. Tipografi ditaruh paling kanan karena di karusel mobile panel berikutnya terlihat separuh, dan potongan tekstur terbaca sebagai tekstur sementara potongan huruf terbaca sebagai rusak |
+| Tekstur beton CC0 dari StockSnap, bukan foto stok orang atau ruang kerja | Tekstur abstrak tidak mengklaim apa pun. Foto stok yang terlihat seperti kehidupan pemilik adalah karangan, dan itu dilarang |
+| Tekstur ditampilkan terbalik dan hitam putih | Section-nya gelap; tekstur aslinya didominasi putih dan akan jadi bidang paling terang di halaman |
+| Lokasi jadi teks HTML di atas bar ink, bukan dibakar ke gambar | Teks tetap bisa dibaca mesin, ikut berganti bahasa, dan kontrasnya tetap aman apa pun isi teksturnya |
+| Chip soft skill tidak lagi magnetik | Motion section dipusatkan pada plat; chip yang bergerak mengikuti kursor bersaing dengan gerak strip dan tidak membawa informasi |
+| Strip Tentang tidak disamakan tingginya | Cetakan yang ditata di meja memang tidak rata; kesamaan tinggi akan membuatnya terbaca sebagai kartu fitur |

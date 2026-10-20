@@ -16,7 +16,7 @@ Landing page statis untuk personal branding I Putu Adhiatman, UI/UX Designer dan
 
 - Hero satu layar penuh: nama raksasa satu baris dengan reveal per huruf, foto yang menimpa nama sebagai lapisan depan, marquee latar sebagai tekstur, dan parallax foto.
 - Karya pilihan berupa daftar baris (tiga project): hover menampilkan preview yang mengikuti kursor, klik membuka modal detail dengan galeri dan tautan, plus satu tautan ke seluruh repo di GitHub.
-- Bio dengan reveal per kata dan badge soft skill magnetik.
+- Bio dengan reveal per kata, chip soft skill statis, lalu tiga plat penutup: potongan potret 4:5, plat tekstur beton CC0 yang membawa lokasi sebagai teks, dan plat tipografi peran.
 - Perjalanan satu kolom kronologis: babak tahun dengan indeks lengket, garis yang tergambar saat scroll, baris yang menyala saat dilewati, dan detail acara yang dibuka sebaris.
 - Marquee teknologi dan alat dengan satu kecepatan terukur (60 px per detik) untuk kedua baris, berhenti saat hover.
 - Kontak memakai mailto dan WhatsApp, tanpa server.
@@ -41,6 +41,7 @@ scripts/shots.mjs       tangkapan layar hero dan section untuk review visual
 .github/workflows/      deploy ke GitHub Pages
 docs/PRD.md             dokumen produk
 docs/CONTENT-TODO.md    daftar konten yang masih dibutuhkan
+docs/CREDITS.md         asal aset pihak ketiga (tekstur CC0)
 ```
 
 ## Menjalankan
@@ -60,9 +61,9 @@ npm run preview    # di terminal lain, buka http://localhost:4173/portfolio-adhi
 npm run smoke
 ```
 
-`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
+`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, tiga plat Tentang, menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
 
-`npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Karya, Kontak, Tentang, dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
+`npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Karya, Kontak, Tentang (platnya jadi satu tangkapan per lebar layar), dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
 
 ## Mengubah Konten
 
@@ -104,6 +105,7 @@ Workflow di `.github/workflows/deploy.yml` membangun dan mengunggah `dist/` seti
 - Kecepatan marquee dihitung dari lebar konten yang diukur, bukan dari durasi tetap, supaya kedua baris selalu sama cepat.
 - Tiga karya yang dipajang, sisanya lewat tautan ke GitHub, supaya yang lemah tidak menenggelamkan yang kuat.
 - Tidak ada angka, testimoni, atau klaim tanpa bukti. Aset yang belum ada ditandai apa adanya.
+- Aset dari luar hanya dipakai untuk tekstur, dan asalnya dicatat di `docs/CREDITS.md`. Foto stok yang menggambarkan orang atau ruang kerja orang lain tidak dipakai, karena itu akan terbaca sebagai cerita pemilik yang sebenarnya tidak terjadi.
 - Tema gelap tetap, dengan alasan identitas visual, bukan karena sekadar terlihat teknologi.
 
 Detail lengkap ada di `docs/PRD.md`.

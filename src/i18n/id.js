@@ -47,6 +47,8 @@ export default {
   about: {
     title: 'Tentang',
     soft: 'Soft skills',
+    altTorso: 'Potret I Putu Adhiatman, potongan dari dada sampai pinggang',
+    focus: 'Fokus',
   },
 
   journey: {

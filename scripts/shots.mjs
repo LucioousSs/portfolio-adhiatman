@@ -45,11 +45,29 @@ await new Promise((r) => setTimeout(r, 2600));
 await page.screenshot({ path: `${OUT}\\contact-desktop.png` });
 console.log('contact-desktop.png');
 
-// About section: tagline lead line.
-await page.evaluate(() => document.getElementById('about')?.scrollIntoView());
-await new Promise((r) => setTimeout(r, 2600));
-await page.screenshot({ path: `${OUT}\\about-desktop.png` });
-console.log('about-desktop.png');
+// About section: tagline, bio, and the three plates that close it.
+for (const vp of [
+  { name: 'desktop', width: 1440, height: 1000 },
+  { name: 'tablet', width: 768, height: 900 },
+  { name: 'mobile', width: 360, height: 740 },
+]) {
+  await page.setViewport({ width: vp.width, height: vp.height });
+  await page.goto(url, { waitUntil: 'load' });
+  await new Promise((r) => setTimeout(r, 700));
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    // Scroll to the strip, not the section top: the plates only animate in when
+    // they enter the viewport, and a section screenshot would capture them at
+    // opacity 0 on tall mobile layouts. The fixed nav is hidden so it does not
+    // sit over the middle of the stitched capture.
+    document.querySelector('[data-about-strip]')?.scrollIntoView({ block: 'center' });
+    document.getElementById('site-nav')?.style.setProperty('display', 'none');
+  });
+  await new Promise((r) => setTimeout(r, 2400));
+  const section = await page.$('#about');
+  await section.screenshot({ path: `${OUT}\\about-${vp.name}.png` });
+  console.log(`about-${vp.name}.png`);
+}
 
 // Work section: three featured projects and the quiet GitHub link.
 for (const vp of [
@@ -164,6 +182,20 @@ await page.evaluate(() => {
 await new Promise((r) => setTimeout(r, 1600));
 await page.screenshot({ path: `${OUT}\\journey-tablet.png` });
 console.log('journey-tablet.png');
+
+// Reduced motion: the about plates are simply there, no transform and no hover.
+await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+await page.setViewport({ width: 1280, height: 900 });
+await page.goto(url, { waitUntil: 'load' });
+await page.evaluate(() => {
+  document.documentElement.style.scrollBehavior = 'auto';
+  document.querySelector('[data-about-strip]')?.scrollIntoView({ block: 'center' });
+  document.getElementById('site-nav')?.style.setProperty('display', 'none');
+});
+await new Promise((r) => setTimeout(r, 900));
+const aboutSectionReduced = await page.$('#about');
+await aboutSectionReduced.screenshot({ path: `${OUT}\\about-reduced.png` });
+console.log('about-reduced.png');
 
 // Reduced motion: no scripted state at all, and the section must still read complete.
 await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);

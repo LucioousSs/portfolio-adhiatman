@@ -69,6 +69,24 @@ pass('Escape closes the modal', modalClosed);
 const focused = await page.evaluate(() => document.activeElement?.getAttribute('data-work-index'));
 pass('Focus returns to the triggering row', focused === '0', String(focused));
 
+const aboutPlates = await page.evaluate(() => {
+  const panels = [...document.querySelectorAll('#about [data-about-panel]')];
+  return {
+    count: panels.length,
+    described: panels.every((panel) => {
+      const img = panel.querySelector('img');
+      // The type plate has no image; it carries real text instead.
+      if (!img) return panel.textContent.trim().length > 0;
+      return Boolean(img.getAttribute('alt')?.trim()) || img.getAttribute('aria-hidden') === 'true';
+    }),
+  };
+});
+pass(
+  'About shows three plates, each described or decorative',
+  aboutPlates.count === 3 && aboutPlates.described,
+  `${aboutPlates.count} plates`
+);
+
 // 4. Language toggle switches every string and persists.
 await page.click('[data-lang="en"]');
 await new Promise((r) => setTimeout(r, 900));
@@ -264,6 +282,22 @@ await new Promise((r) => setTimeout(r, 200));
 const menuClosed = await page.$eval('#nav-menu', (el) => el.classList.contains('hidden'));
 pass('Mobile menu opens and closes', menuHiddenStart && menuOpen && menuClosed);
 
+// 9b. The type plate has no wrap point, so its longest word must fit at 360px.
+const typeFit = await page.evaluate(() => {
+  const lines = [...document.querySelectorAll('.about-type-lines span')];
+  const panel = document.querySelector('.about-panel--type');
+  return {
+    lines: lines.length,
+    overflow: lines.length ? Math.max(...lines.map((line) => line.scrollWidth - line.clientWidth)) : -1,
+    panelWidth: panel ? panel.clientWidth : 0,
+  };
+});
+pass(
+  'Type plate fits its words at 360px',
+  typeFit.lines === 4 && typeFit.overflow <= 1,
+  `${typeFit.lines} lines, overflow=${typeFit.overflow}px in ${typeFit.panelWidth}px plate`
+);
+
 pass('No uncaught page errors', pageErrors.length === 0, pageErrors.join(' | '));
 pass('No console errors', consoleErrors.length === 0, consoleErrors.slice(0, 3).join(' | '));
 
@@ -322,6 +356,21 @@ pass(
     journeyStatic.years.every((year) => /^\d{4}$/.test(year)) &&
     journeyStatic.chapters[0] === '2024',
   `rows=${journeyStatic.rows} opacities=${journeyStatic.bodyOpacity}/${journeyStatic.nodeOpacity}/${journeyStatic.yearOpacity} years=${journeyStatic.years.join(',')}`
+);
+
+// 12. Reduced motion keeps the about plates in place, fully visible.
+const aboutStatic = await page.evaluate(() => {
+  const panels = [...document.querySelectorAll('[data-about-panel]')];
+  return {
+    count: panels.length,
+    visible: panels.every((panel) => getComputedStyle(panel).opacity === '1'),
+    transforms: panels.map((panel) => getComputedStyle(panel).transform),
+  };
+});
+pass(
+  'Reduced motion keeps the about plates visible',
+  aboutStatic.count === 3 && aboutStatic.visible,
+  `${aboutStatic.count} plates, transform=${aboutStatic.transforms[0]}`
 );
 
 await browser.close();
