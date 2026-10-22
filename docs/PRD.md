@@ -141,7 +141,11 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Field wajib divalidasi browser sebelum submit.
 
 ### 7.8 Footer
-- Hak cipta dengan tahun dinamis dan tautan kembali ke atas.
+- Tiga kolom di md ke atas, dipisah garis rambut 1px: brand (nama, peran, tautan "Ke atas"), "Halaman" (empat tautan section), dan "Kontak" (email, WhatsApp, CV). Di bawah md kolomnya bertumpuk, tanpa garis pemisah.
+- Bar bawah: ikon sosial (GitHub, LinkedIn, Instagram) di kiri, lokasi di tengah, hak cipta dengan tahun dinamis di kanan. Di layar sempit ketiganya bertumpuk rata kiri.
+- Semua tujuan nyata: empat anchor section yang memang ada, email, WhatsApp, CV, dan tiga profil. Tidak ada `href="#"`, tidak ada kredit "Designed by" karangan, dan tidak ada tautan ke halaman yang tidak ada.
+- Ilustrasi penutup: satu gambar 16:9 selebar kolom di bawah bar bawah, dibingkai 1px, rata dengan tepi bawah halaman. Dekoratif (`alt=""`, `aria-hidden`), `loading="lazy"`, WebP sekitar 303 kB dari master 1376x768. Tanpa parallax.
+- Ilustrasi hanya muncul sekali, di footer. Hero tetap milik potret, dan tidak ada gambar dekoratif lain di halaman.
 
 ### 7.9 Spesifikasi motion
 
@@ -266,6 +270,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Cahaya Tentang mengikuti pointer halus dan tidak menangkap klik | PASS |
 | Urutan section dan urutan tautan navbar sama: Tentang lebih dulu, lalu Karya | PASS |
 | Navbar mengambang sebagai rel di luar alur, dan hero tetap setinggi satu layar | PASS |
+| Tautan section melompat tanpa meninggalkan hash di address bar | PASS |
 | Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
 | Klik baris karya membuka modal dengan project yang benar | PASS |
 | Escape menutup modal dan fokus kembali ke baris pemicu | PASS |
@@ -285,9 +290,11 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion mematikan loop hero | PASS |
 | Reduced motion menyisakan konten hero | PASS |
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
+| Footer hanya menautkan tujuan nyata: empat anchor, email, WhatsApp, CV, tiga sosial | PASS |
+| Footer diakhiri ilustrasi dekoratif yang lazy, dan tahun hak cipta berjalan | PASS |
 | Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform, garis penuh, dan semua frasa putih | PASS |
 
-Ringkasan: 39 dari 39 pemeriksaan lolos.
+Ringkasan: 43 dari 43 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -300,6 +307,7 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 | T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` | Ditunda sampai tampilan project diubah |
 | T7 | Konfirmasi entri Perjalanan | `src/data/journey.js` | Menunggu konfirmasi pemilik |
 | T10 | Sampul dan galeri tiga rancangan desain, URL prototipe BantuSesama, dan tahun tiap rancangan | `public/images/design/`, `src/data/projects.js` | Menunggu aset dan konfirmasi pemilik |
+| T11 | Asal dan lisensi ilustrasi footer | `public/images/footer-art.webp` | Menunggu konfirmasi sumber |
 
 Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, T9 (ikon CDN) diputuskan tetap seperti sekarang, dan teks Tentang dikonfirmasi memakai versi pendek satu blok. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
 
@@ -334,4 +342,7 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Sampul rancangan desain berwarna, satu-satunya warna di halaman | Yang berwarna adalah hasil desainnya; membuatnya hitam putih akan menyembunyikan bagian yang paling ingin ditunjukkan |
 | Rancangan desain di blok sendiri, bukan baris keempat sampai keenam | Baris kode menjanjikan repo dan tangkapan layar. Rancangan tidak punya keduanya, dan mencampurnya membuat daftar karya berbohong soal apa yang bisa diklik |
 | Entri desain tanpa URL prototipe tidak diberi tombol | Tombol mati lebih buruk daripada tidak ada tombol; lebih baik ruangnya kosong sampai URL publiknya ada |
+| Footer berupa peta halaman tiga kolom, bukan satu baris hak cipta | Halaman ini panjang, jadi footer yang berguna adalah daftar tujuan: section, kontak, dan profil. Satu baris hak cipta hanya mengulang informasi yang sudah ada di atas |
+| Ilustrasi penutup di footer, bukan di section lain | Ia menutup halaman tanpa menambah klaim apa pun; karena dekoratif, `alt`-nya kosong dan pembaca layar melewatinya. Satu gambar saja, supaya potret di hero tetap yang pertama dan paling penting |
+| Tautan section tidak meninggalkan hash di address bar | Situs satu halaman tidak punya alamat per section untuk dibagikan; hash yang tertinggal setelah klik membuat alamat terlihat seperti rute yang rusak. Lompatannya tetap lompatan anchor biasa, hanya fragmennya yang dibuang |
 | Tahun yang belum dikonfirmasi disembunyikan | Menebak tahun adalah klaim palsu kecil yang tidak perlu, dan field kosong terbaca seperti bug |

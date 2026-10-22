@@ -16,12 +16,14 @@ Landing page statis untuk personal branding I Putu Adhiatman, UI/UX Designer dan
 
 - Rel navigasi mengambang di atas konten: tautan section dengan penanda aktif, toggle bahasa, dan progress bar. Memadat saat scroll tanpa menggeser halaman.
 - Hero satu layar penuh: nama raksasa satu baris dengan reveal per huruf, foto yang menimpa nama sebagai lapisan depan, marquee latar sebagai tekstur, dan parallax foto.
-- Tentang berupa satu pernyataan rata tengah setinggi 70 persen layar, langsung setelah hero, dengan judul bergaya sama seperti section lain di kiri: tagline dan satu kalimat bio dalam satu blok, tanpa foto, chip, atau tautan keluar.
+- Tentang berupa satu pernyataan rata tengah setinggi 70 persen layar, langsung setelah hero, dengan judul bergaya sama seperti section lain di kiri: tagline dan satu kalimat bio dalam satu blok, tanpa foto, chip, atau tautan keluar. Garis di bawah judul tergambar, tiga frasa menyala berurutan, dan cahaya halus mengikuti kursor di perangkat berpointer halus.
 - Karya pilihan berupa daftar baris (tiga project kode): hover menampilkan preview yang mengikuti kursor, klik membuka modal detail dengan galeri dan tautan, plus satu tautan ke sisa repo di GitHub.
 - Rancangan desain di blok sendiri di bawah daftar kode: tiga kartu bersampul berwarna yang membuka modal yang sama, tanpa baris tambahan dan tanpa tombol untuk tautan yang belum ada.
 - Perjalanan satu kolom kronologis: babak tahun dengan indeks lengket, garis yang tergambar saat scroll, baris yang menyala saat dilewati, dan detail acara yang dibuka sebaris.
 - Marquee teknologi dan alat dengan satu kecepatan terukur (60 px per detik) untuk kedua baris, berhenti saat hover.
 - Kontak memakai mailto dan WhatsApp, tanpa server.
+- Footer tiga kolom (brand, Halaman, Kontak) dengan garis rambut, bar bawah berisi sosial, lokasi, dan hak cipta bertahun dinamis, ditutup ilustrasi 16:9 yang dekoratif dan lazy. Semua tautannya tujuan nyata; tidak ada `href="#"`.
+- Tautan section melompat tanpa meninggalkan hash di address bar.
 - Bilingual Indonesia dan Inggris dengan toggle di navbar, pilihan tersimpan di `localStorage`.
 - Menghormati `prefers-reduced-motion`.
 
@@ -62,9 +64,9 @@ npm run preview    # di terminal lain, buka http://localhost:4173/portfolio-adhi
 npm run smoke
 ```
 
-`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, blok rancangan desain dan kartunya, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, pernyataan Tentang (termasuk tinggi section, jumlah barisnya di 360px, garis yang selesai tergambar, ketiga frasa yang sudah putih, serta cahaya yang mengikuti pointer), menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
+`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, blok rancangan desain dan kartunya, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, pernyataan Tentang (termasuk tinggi section, jumlah barisnya di 360px, garis yang selesai tergambar, ketiga frasa yang sudah putih, serta cahaya yang mengikuti pointer), footer (tujuan tautan, ilustrasi dekoratif, tahun berjalan), lompatan section tanpa hash, menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
 
-`npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Karya (tiga baris kode dan tiga kartu desain), Kontak, Tentang (satu tangkapan per lebar layar), dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Skrip itu juga mencatat apakah blok Tentang benar-benar masih tersembunyi di balik klipnya sebelum section-nya digulir. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
+`npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Karya (tiga baris kode dan tiga kartu desain), Kontak, Footer (tiga kolom, bar bawah, dan ilustrasi penutup), Tentang (satu tangkapan per lebar layar), dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Skrip itu juga mencatat apakah blok Tentang benar-benar masih tersembunyi di balik klipnya sebelum section-nya digulir. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
 
 ## Mengubah Konten
 
@@ -76,6 +78,7 @@ npm run smoke
 | Teknologi dan alat | `src/data/skills.js` |
 | Pendidikan, organisasi, acara (periode ditulis sebagai angka `start` dan `end`) | `src/data/journey.js` |
 | Teks antarmuka | `src/i18n/id.js`, `src/i18n/en.js` |
+| Ilustrasi penutup footer (16:9) | `public/images/footer-art.webp` |
 
 ### Tangkapan layar project
 

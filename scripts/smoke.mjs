@@ -265,6 +265,19 @@ pass(
     : 'missing'
 );
 
+// 3e. A section link jumps, and the address bar keeps no hash behind.
+await page.click('[data-nav-link="work"]');
+await new Promise((r) => setTimeout(r, 1500));
+const anchorJump = await page.evaluate(() => ({
+  hash: window.location.hash,
+  top: Math.round(document.getElementById('work').getBoundingClientRect().top),
+}));
+pass(
+  'Section links jump without leaving a hash in the address bar',
+  anchorJump.hash === '' && Math.abs(anchorJump.top - 88) <= 12,
+  `hash="${anchorJump.hash}" work-top=${anchorJump.top}px`
+);
+
 // 4. Language toggle switches every string and persists.
 await page.click('[data-lang="en"]');
 await new Promise((r) => setTimeout(r, 900));
@@ -474,6 +487,61 @@ pass(
   'Statement stays within five lines at 360px',
   statementMobile.lines > 0 && statementMobile.lines <= 5,
   `${statementMobile.lines} lines in ${statementMobile.width}px`
+);
+
+// 9b. Footer: real destinations only, a decorative closing illustration, current year.
+const footerInfo = await page.evaluate(async () => {
+  const el = document.querySelector('footer');
+  el.scrollIntoView();
+  const img = el.querySelector('img');
+  await img?.decode().catch(() => {});
+  const links = [...el.querySelectorAll('a')];
+  return {
+    links: links.length,
+    dead: links.filter((a) => {
+      const href = a.getAttribute('href') ?? '';
+      if (!href || href === '#') return true;
+      if (href.startsWith('#') && !document.querySelector(href)) return true;
+      return false;
+    }).length,
+    anchors: links
+      .filter((a) => a.getAttribute('href').startsWith('#'))
+      .map((a) => a.getAttribute('href')),
+    mail: links.filter((a) => a.href.startsWith('mailto:')).length,
+    whatsapp: links.filter((a) => a.href.startsWith('https://wa.me/')).length,
+    cv: links.filter((a) => a.hasAttribute('download')).length,
+    socials: links.filter((a) => a.target === '_blank' && a.getAttribute('aria-label')).length,
+    alt: img?.getAttribute('alt'),
+    hidden: img?.getAttribute('aria-hidden'),
+    loading: img?.getAttribute('loading'),
+    artWidth: img?.naturalWidth ?? 0,
+    year: el.querySelectorAll('p')[el.querySelectorAll('p').length - 1]?.textContent.trim(),
+    currentYear: new Date().getFullYear(),
+  };
+});
+pass(
+  'Footer links only to real destinations',
+  footerInfo.links === 11 &&
+    footerInfo.dead === 0 &&
+    footerInfo.anchors.join() === '#home,#about,#work,#journey,#contact' &&
+    footerInfo.mail === 1 &&
+    footerInfo.whatsapp === 1 &&
+    footerInfo.cv === 1 &&
+    footerInfo.socials === 3,
+  `links=${footerInfo.links} dead=${footerInfo.dead} anchors=${footerInfo.anchors.join(' ')} mail=${footerInfo.mail} wa=${footerInfo.whatsapp} cv=${footerInfo.cv} social=${footerInfo.socials}`
+);
+pass(
+  'Footer ends with a decorative, lazy illustration',
+  footerInfo.alt === '' &&
+    footerInfo.hidden === 'true' &&
+    footerInfo.loading === 'lazy' &&
+    footerInfo.artWidth > 1000,
+  `alt="${footerInfo.alt}" hidden=${footerInfo.hidden} loading=${footerInfo.loading} art=${footerInfo.artWidth}px`
+);
+pass(
+  'Footer copyright carries the current year',
+  footerInfo.year?.includes(String(footerInfo.currentYear)),
+  footerInfo.year
 );
 
 pass('No uncaught page errors', pageErrors.length === 0, pageErrors.join(' | '));

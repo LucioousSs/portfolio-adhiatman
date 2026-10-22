@@ -87,5 +87,7 @@ export default {
   footer: {
     rights: '© {year} I Putu Adhiatman.',
     top: 'Back to top',
+    pages: 'Pages',
+    contact: 'Contact',
   },
 };

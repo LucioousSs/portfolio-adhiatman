@@ -4,6 +4,7 @@ import '@fontsource-variable/archivo/wdth.css';
 
 import { applyDocumentMeta, onLangChange } from './lib/i18n.js';
 import { resetMotion, refreshMotion } from './lib/motion.js';
+import { initCleanAnchors } from './lib/anchors.js';
 import { projectModal } from './components/ProjectModal.js';
 import { Navbar } from './components/Navbar.js';
 import { Hero } from './components/Hero.js';
@@ -41,6 +42,7 @@ function start() {
 
   projectModal.mount();
   applyDocumentMeta();
+  initCleanAnchors();
   app.mount();
 
   onLangChange(() => {

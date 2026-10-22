@@ -45,6 +45,27 @@ await new Promise((r) => setTimeout(r, 2600));
 await page.screenshot({ path: `${OUT}\\contact-desktop.png` });
 console.log('contact-desktop.png');
 
+// Footer: three columns, bottom bar, and the closing illustration.
+for (const vp of [
+  { name: 'desktop', width: 1440, height: 900 },
+  { name: 'tablet', width: 768, height: 1024 },
+  { name: 'mobile', width: 360, height: 740 },
+]) {
+  await page.setViewport(vp);
+  await page.goto(url, { waitUntil: 'load' });
+  await new Promise((r) => setTimeout(r, 700));
+  await page.evaluate(async () => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    document.getElementById('site-nav')?.style.setProperty('display', 'none');
+    window.scrollTo(0, document.body.scrollHeight);
+    await document.querySelector('footer img')?.decode().catch(() => {});
+  });
+  await new Promise((r) => setTimeout(r, 500));
+  const footerEl = await page.$('footer');
+  await footerEl.screenshot({ path: `${OUT}\\footer-${vp.name}.png` });
+  console.log(`footer-${vp.name}.png`);
+}
+
 // About section: one centred statement, no image and nothing else.
 for (const vp of [
   { name: 'desktop', width: 1440, height: 1000 },
