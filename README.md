@@ -62,7 +62,7 @@ npm run preview    # di terminal lain, buka http://localhost:4173/portfolio-adhi
 npm run smoke
 ```
 
-`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, blok rancangan desain dan kartunya, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, pernyataan Tentang (termasuk tinggi section dan jumlah barisnya di 360px), menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
+`npm run smoke` membuka halaman dengan Chrome headless dan memeriksa render hero, tiga baris karya beserta tautan ke GitHub, blok rancangan desain dan kartunya, buka/tutup modal, toggle bahasa, toggle kontak, detail Perjalanan lewat keyboard, kecepatan kedua baris marquee, pernyataan Tentang (termasuk tinggi section, jumlah barisnya di 360px, garis yang selesai tergambar, ketiga frasa yang sudah putih, serta cahaya yang mengikuti pointer), menu mobile, kontras teks WCAG AA, overflow pada 360px, ukuran target sentuh, reduced motion, serta error console. Atur `CHROME_PATH` kalau Chrome tidak ada di lokasi umum.
 
 `npm run shots` menyimpan tangkapan layar hero pada 1440, 768, dan 360 piksel plus section Karya (tiga baris kode dan tiga kartu desain), Kontak, Tentang (satu tangkapan per lebar layar), dan Perjalanan (lengkap dengan pemeriksaan indeks lengket dan tinggi panel detail), lalu melaporkan overflow dan lebar nama di beberapa lebar layar. Skrip itu juga mencatat apakah blok Tentang benar-benar masih tersembunyi di balik klipnya sebelum section-nya digulir. Berguna saat menyetel komposisi hero. Hasilnya masuk ke folder sementara; atur `SHOT_DIR` untuk memilih folder lain.
 
@@ -110,6 +110,7 @@ Workflow di `.github/workflows/deploy.yml` membangun dan mengunggah `dist/` seti
 - Aset dari luar tidak dipakai untuk dekorasi. Foto yang tampil adalah milik pemilik; foto stok yang menggambarkan orang atau ruang kerja orang lain tidak dipakai, karena itu akan terbaca sebagai cerita pemilik yang sebenarnya tidak terjadi.
 - Section Tentang sengaja hanya berisi teks: satu pernyataan rata tengah, setinggi 70 persen layar, tanpa foto dan tanpa tautan keluar.
 - Judul Tentang memakai tipografi judul yang sama dengan Karya dan Kontak, tapi pernyataannya tetap di tengah: judul berperan sebagai penanda section, kalimatnya sebagai satu objek.
+- Tentang bergerak dengan tipografinya sendiri: blok naik, garis di bawah judul tergambar dari kiri, lalu tiga frasa menyala berurutan. Cahaya 7 persen mengikuti pointer hanya di perangkat dengan kursor halus. Tanpa JavaScript atau dengan reduced motion, garisnya sudah penuh dan semua frasa sudah putih.
 - Rancangan desain ditampilkan berwarna. Itu satu-satunya warna di halaman, dan disengaja: yang berwarna adalah hasil desainnya, bukan bingkainya.
 - Tentang ditaruh setelah hero, bukan di antara Karya dan Perjalanan: satu kalimat itu menerangkan nama di atas, lalu karya jadi buktinya.
 - Navbar berupa rel mengambang dengan radius kecil dan border rambut, bukan pil kaca. Relnya di luar alur, jadi hero memakai layar penuh dan memadatnya navbar tidak menggeser konten.

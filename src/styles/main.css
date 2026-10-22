@@ -218,9 +218,46 @@
 
 /* About: the heading is the same display type as the other sections and sits on
    their axis. The statement keeps the centred, poster-like placement below it. */
+.about-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* The still mark that holds the empty field together. GSAP only scales it in;
+   without the script it is already full width. */
+.about-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #3f3f46;
+  transform-origin: left center;
+}
+
 .about-block {
   display: flex;
   justify-content: center;
+}
+
+/* Cursor spotlight. One composited layer, moved by transform, so the statement
+   never repaints while the pointer moves. Sits under the text, over the grain. */
+.about-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 36rem;
+  height: 36rem;
+  margin: -18rem 0 0 -18rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.035) 40%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* The clip edge the block rises from. The padding sits on the text itself, with

@@ -111,8 +111,11 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Judulnya tetap `h2` supaya struktur dokumen tidak berubah.
 - Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Batas itu tidak dilanggar.
 - Grain halus tetap dipakai sebagai tekstur identitas poster.
-- Motion: blok naik 100 persen dari balik wadah `overflow: hidden`, sekali, saat section masuk viewport. Nilai awal hanya dipasang oleh GSAP dan tidak pernah di CSS, jadi tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh.
-- Reduced motion: tanpa transform sama sekali.
+- Tiga ketukan, sekali, saat section masuk: blok naik 100 persen dari balik wadah `overflow: hidden`, garis selebar kolom di bawah judul tumbuh dari kiri (`scaleX` 0 ke 1, 0,7 detik), lalu tiga frasa menyala berurutan dari `zinc-500` ke putih dengan jeda 0,15 detik. Frasa ditulis eksplisit per bahasa, bukan dipecah dengan regex, karena koma dan titiknya yang memberi ketukan itu.
+- Garis di bawah judul satu-satunya penanda diam di section ini: ia menahan ruang kosong supaya pernyataan tidak mengambang. Tanpa animasi pun garisnya sudah tergambar penuh.
+- Cahaya lembut 7 persen putih mengikuti kursor di belakang teks. Ia lapisan sendiri yang digeser dengan transform, jadi paragraf tidak pernah repaint; hanya untuk pointer halus, dan tidak ada sama sekali di layar sentuh atau saat reduced motion.
+- Nilai awal hanya dipasang oleh GSAP dan tidak pernah di CSS, jadi tanpa JavaScript atau dengan reduced motion teksnya langsung terbaca utuh, garisnya penuh, dan semua frasa sudah putih.
+- Reduced motion: tanpa transform, tanpa cahaya kursor.
 - Tidak ada potret di section ini. Frame penuh tetap eksklusif di hero.
 
 ### 7.5 Perjalanan
@@ -147,7 +150,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 | Navbar | Progress bar, navbar memadat, penanda section aktif | Orientasi pada halaman panjang |
 | Hero | Reveal huruf, foto naik, marquee latar, sparkle, parallax, drift mengikuti pointer | Momen pembuka, menegaskan identitas tipografi |
 | Karya | Baris terangkat, preview mengikuti kursor, baris lain meredup, morph ke modal, kartu desain naik saat masuk | Interaksi tanda tangan, memberi konteks visual tanpa klik; kartu desain cukup satu gerakan masuk karena sampulnya sudah berwarna |
-| Tentang | Satu blok naik dari balik wadahnya, sekali | Section ini hanya satu pernyataan; satu gerakan yang sama dengan isinya, bukan tiga gerakan yang bersaing |
+| Tentang | Blok naik dari balik wadahnya, garis tumbuh dari kiri, tiga frasa menyala berurutan, cahaya mengikuti kursor (pointer halus saja) | Section ini hanya satu pernyataan; gerakannya satu arah baca, bukan tiga gerakan yang bersaing, dan cahaya hanya menambah kedalaman di belakang teks |
 | Perjalanan | Garis progres scrub, baris menyala saat dilewati garis, wipe angka tahun | Menghubungkan posisi baca dengan urutan waktu |
 | Teknologi | Marquee konten | Menunjukkan luas stack |
 | Kontak | Focus ring, transition tombol | Umpan balik aksi |
@@ -259,6 +262,8 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Menutup kartu desain mengembalikan fokus ke kartu pemicu | PASS |
 | Tentang mengisi jeda ringkas (65 sampai 95 persen viewport) dengan satu pernyataan rata tengah, tanpa gambar atau kontrol | PASS |
 | Judul Tentang memakai tipografi yang sama dengan section lain dan duduk di sumbu judul Karya, pernyataannya tetap di tengah | PASS |
+| Animasi Tentang selesai: garis tergambar penuh dan ketiga frasa sudah putih | PASS |
+| Cahaya Tentang mengikuti pointer halus dan tidak menangkap klik | PASS |
 | Urutan section dan urutan tautan navbar sama: Tentang lebih dulu, lalu Karya | PASS |
 | Navbar mengambang sebagai rel di luar alur, dan hero tetap setinggi satu layar | PASS |
 | Pernyataan Tentang tidak lebih dari lima baris di 360px | PASS |
@@ -280,9 +285,9 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Reduced motion mematikan loop hero | PASS |
 | Reduced motion menyisakan konten hero | PASS |
 | Reduced motion menyisakan halaman Perjalanan utuh dan terbaca | PASS |
-| Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform | PASS |
+| Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform, garis penuh, dan semua frasa putih | PASS |
 
-Ringkasan: 37 dari 37 pemeriksaan lolos.
+Ringkasan: 39 dari 39 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 
@@ -317,7 +322,9 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Entri berjalan ditandai "sekarang" tanpa denyut | Kata dan garis yang memudar sudah cukup menandai sesuatu yang belum selesai; denyut tidak menambah informasi |
 | Tiga karya dipajang, tiga lain lewat tautan GitHub | Tiga repo sisanya lebih lemah sebagai karya unggulan (API tahap awal, utility form kontak, dataset resep); memajang semuanya membuat yang kuat tenggelam |
 | Tentang satu blok pernyataan, bukan bio lalu chip dan plat | Potongan-potongan itu terbaca sebagai tiga section yang ditempel, padahal isinya hanya satu kalimat. Satu blok utuh lebih jujur pada isinya |
-| Judul Tentang memakai tipografi judul yang sama dengan section lain, pernyataan tetap di tengah | Judul adalah penanda section, jadi ia harus terbaca dengan bobot yang sama seperti "Karya" dan "Kontak"; pernyataannya dibiarkan di tengah supaya tetap terasa sebagai satu objek, bukan paragraf. Garis rambut kecil di bawahnya dihapus karena tidak ada section lain yang memakainya |
+| Judul Tentang memakai tipografi judul yang sama dengan section lain, pernyataan tetap di tengah | Judul adalah penanda section, jadi ia harus terbaca dengan bobot yang sama seperti "Karya" dan "Kontak"; pernyataannya dibiarkan di tengah supaya tetap terasa sebagai satu objek, bukan paragraf. Garis tipis selebar kolom di bawah judul adalah penanda diam yang menahan ruang kosong antara judul kiri dan pernyataan tengah |
+| Tentang bergerak lewat tiga ketukan tipografi, bukan efek teks | Naik, garis tergambar, lalu tinta masuk berurutan semuanya bekerja pada satu kalimat yang sama. Scramble, ghost word, atau parallax akan menambah objek yang bersaing dengan kalimat, padahal kalimat itu satu-satunya isi section |
+| Cahaya Tentang hanya untuk pointer halus | Ia menambah kedalaman di belakang teks tanpa mengubah konten. Di layar sentuh tidak ada kursor untuk diikuti, dan saat reduced motion section itu sudah lengkap tanpa gerakan apa pun |
 | Batas tiga sampai lima baris untuk pernyataan | Lebih dari lima baris sudah jadi paragraf yang harus dipindai, bukan satu tarikan mata. Batas itu menjaga section tetap terbaca sekali lihat |
 | Tidak ada foto di Tentang | Frame penuh sudah jadi pembuka di hero; mengulang potret di bawah melemahkan hero, dan foto kedua hanya mengisi ruang yang seharusnya dibiarkan kosong |
 | Tentang ditaruh setelah hero | Satu kalimat itu menerangkan nama di hero; di antara Karya dan Perjalanan ia terbaca sebagai jeda, bukan pembuka |

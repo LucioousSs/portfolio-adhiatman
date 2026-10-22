@@ -189,18 +189,19 @@ pass(
 
 const axes = await page.evaluate(() => {
   const section = document.getElementById('about');
+  section.scrollIntoView({ block: 'center' });
   const sectionRect = section.getBoundingClientRect();
-  const heading = section.querySelector('h2').getBoundingClientRect();
+  const head = section.querySelector('.about-head').getBoundingClientRect();
   const mask = section.querySelector('.about-mask').getBoundingClientRect();
   const work = document.querySelector('#work h2').getBoundingClientRect();
   const padBottom = parseFloat(getComputedStyle(section).paddingBottom);
   return {
-    heading: Math.round(heading.left),
+    heading: Math.round(head.left),
     work: Math.round(work.left),
     textCenter: Math.round(mask.left + mask.width / 2),
     viewportCenter: Math.round(window.innerWidth / 2),
     textMiddle: Math.round(mask.top + mask.height / 2),
-    bodyMiddle: Math.round((heading.bottom + (sectionRect.bottom - padBottom)) / 2),
+    bodyMiddle: Math.round((head.bottom + (sectionRect.bottom - padBottom)) / 2),
   };
 });
 pass(
@@ -209,6 +210,59 @@ pass(
     Math.abs(axes.textCenter - axes.viewportCenter) <= 1 &&
     Math.abs(axes.textMiddle - axes.bodyMiddle) <= 2,
   `heading=${axes.heading} work=${axes.work} text=${axes.textCenter}/${axes.viewportCenter} middle=${axes.textMiddle}/${axes.bodyMiddle}`
+);
+
+// 3c. The reveal has to finish, not just start: rule drawn, every phrase inked in.
+const revealEnd = await page.evaluate(async () => {
+  const section = document.getElementById('about');
+  section.scrollIntoView({ block: 'center' });
+  await new Promise((resolve) => setTimeout(resolve, 1900));
+  const rule = section.querySelector('[data-about-rule]');
+  const phrases = Array.from(section.querySelectorAll('[data-about-phrase]'));
+  const raw = getComputedStyle(rule).transform;
+  return {
+    scale: raw === 'none' ? 1 : Math.round(new DOMMatrixReadOnly(raw).a * 100) / 100,
+    count: phrases.length,
+    colors: Array.from(new Set(phrases.map((phrase) => getComputedStyle(phrase).color))),
+  };
+});
+pass(
+  'About ends with the rule drawn and every phrase inked in',
+  revealEnd.scale === 1 && revealEnd.count === 3 && revealEnd.colors.join() === 'rgb(255, 255, 255)',
+  `scale=${revealEnd.scale} phrases=${revealEnd.count} colors=${revealEnd.colors.join('|')}`
+);
+
+// 3d. The spotlight is decorative, follows a fine pointer, and never blocks clicks.
+const spotlightBox = await page.$eval('#about', (el) => {
+  const r = el.getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width, h: r.height };
+});
+await page.mouse.move(spotlightBox.x, spotlightBox.y);
+await new Promise((r) => setTimeout(r, 700));
+const spotlight = await page.evaluate(() => {
+  const el = document.querySelector('[data-about-glow]');
+  if (!el) return null;
+  const style = getComputedStyle(el);
+  const matrix = new DOMMatrixReadOnly(style.transform);
+  return {
+    hidden: el.getAttribute('aria-hidden'),
+    pointer: style.pointerEvents,
+    opacity: Number(style.opacity),
+    x: Math.round(matrix.e),
+    y: Math.round(matrix.f),
+  };
+});
+pass(
+  'About spotlight follows the pointer and stays out of the way',
+  Boolean(spotlight) &&
+    spotlight.hidden === 'true' &&
+    spotlight.pointer === 'none' &&
+    spotlight.opacity > 0.8 &&
+    Math.abs(spotlight.x - spotlightBox.w / 2) <= 12 &&
+    Math.abs(spotlight.y - spotlightBox.h / 2) <= 12,
+  spotlight
+    ? `x=${spotlight.x}/${Math.round(spotlightBox.w / 2)} y=${spotlight.y}/${Math.round(spotlightBox.h / 2)} opacity=${spotlight.opacity} pointer=${spotlight.pointer}`
+    : 'missing'
 );
 
 // 4. Language toggle switches every string and persists.
@@ -482,21 +536,41 @@ pass(
   `rows=${journeyStatic.rows} opacities=${journeyStatic.bodyOpacity}/${journeyStatic.nodeOpacity}/${journeyStatic.yearOpacity} years=${journeyStatic.years.join(',')}`
 );
 
-// 12. Reduced motion leaves the statement at rest and readable.
+// 12. Reduced motion leaves the statement at rest and readable, with the rule
+// already drawn and every phrase already white.
 const aboutStatic = await page.evaluate(() => {
-  const statement = document.querySelector('[data-about-text]');
-  if (!statement) return { text: 0, opacity: 'missing', transform: 'missing' };
+  const section = document.getElementById('about');
+  const statement = section?.querySelector('[data-about-text]');
+  const rule = section?.querySelector('[data-about-rule]');
+  const glow = section?.querySelector('[data-about-glow]');
+  if (!statement || !rule) return { text: 0 };
   const style = getComputedStyle(statement);
+  const raw = getComputedStyle(rule).transform;
+  const colors = Array.from(
+    new Set(
+      Array.from(section.querySelectorAll('[data-about-phrase]')).map(
+        (phrase) => getComputedStyle(phrase).color
+      )
+    )
+  );
   return {
     text: statement.textContent.trim().length,
     opacity: style.opacity,
     transform: style.transform,
+    ruleScale: raw === 'none' ? 1 : Math.round(new DOMMatrixReadOnly(raw).a * 100) / 100,
+    colors: colors.join('|'),
+    glow: glow ? Number(getComputedStyle(glow).opacity) : -1,
   };
 });
 pass(
-  'Reduced motion leaves the statement visible and untransformed',
-  aboutStatic.text > 60 && aboutStatic.opacity === '1' && aboutStatic.transform === 'none',
-  `${aboutStatic.text} chars, opacity=${aboutStatic.opacity}, transform=${aboutStatic.transform}`
+  'Reduced motion leaves the statement at rest, the rule drawn, every phrase white',
+  aboutStatic.text > 60 &&
+    aboutStatic.opacity === '1' &&
+    aboutStatic.transform === 'none' &&
+    aboutStatic.ruleScale === 1 &&
+    aboutStatic.colors === 'rgb(255, 255, 255)' &&
+    aboutStatic.glow === 0,
+  `${aboutStatic.text} chars, opacity=${aboutStatic.opacity}, transform=${aboutStatic.transform}, rule=${aboutStatic.ruleScale}, colors=${aboutStatic.colors}, glow=${aboutStatic.glow}`
 );
 
 await browser.close();
