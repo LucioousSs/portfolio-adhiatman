@@ -94,7 +94,7 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 ```bash
 npm run build
 npm run preview    # http://localhost:4173/portfolio-adhiatman/
-npm run smoke      # 43 dari 43 harus lolos
+npm run smoke      # 45 dari 45 harus lolos
 ```
 
 `npm run shots` menyimpan tangkapan layar hero, Karya, Kontak, Footer, Tentang, dan Perjalanan ke folder sementara. Saya bisa bantu memperbarui `README.md` dan `docs/PRD.md` kalau ada yang berubah.

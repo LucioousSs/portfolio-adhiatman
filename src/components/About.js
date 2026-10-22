@@ -43,7 +43,7 @@ export class About {
 
         <div class="about-glow" data-about-glow aria-hidden="true"></div>
 
-        <div class="relative z-10 mx-auto grid w-full max-w-6xl grid-rows-[auto_1fr]">
+        <div class="relative z-10 mx-auto grid w-full max-w-7xl grid-rows-[auto_1fr]">
           <div class="about-head col-start-1 row-start-1">
             <h2 class="type-display text-4xl uppercase sm:text-5xl">${t('about.title')}</h2>
             <span class="about-rule" data-about-rule aria-hidden="true"></span>

@@ -22,8 +22,10 @@ export class TechStack {
 
     return `
       <div class="mb-8">
-        <div class="mx-auto mb-3 max-w-6xl px-4 sm:px-6 lg:px-8">
-          <p class="label">${label}</p>
+        <div class="px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto mb-3 max-w-7xl">
+            <p class="label">${label}</p>
+          </div>
         </div>
         <div class="marquee border-y border-zinc-800 bg-panel/40 py-4">
           <div class="marquee-track ${reverse ? 'is-reverse' : ''}" data-marquee-track>${group}${group}</div>
@@ -34,8 +36,10 @@ export class TechStack {
   render() {
     return `
       <section id="tech" class="py-16 sm:py-20">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8" data-tech-head>
-          <h2 class="type-display text-4xl uppercase sm:text-5xl">${t('tech.title')}</h2>
+        <div class="px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto max-w-7xl" data-tech-head>
+            <h2 class="type-display text-4xl uppercase sm:text-5xl">${t('tech.title')}</h2>
+          </div>
         </div>
         <div class="mt-8">
           ${this.row({

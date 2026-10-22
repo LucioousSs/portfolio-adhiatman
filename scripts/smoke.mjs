@@ -42,6 +42,28 @@ await new Promise((r) => setTimeout(r, 2000));
 // 1. Hero renders with the default Indonesian content.
 const h1 = await page.$eval('h1', (el) => el.textContent.replace(/\s+/g, ''));
 pass('Hero name renders', h1 === 'ADHIATMAN', h1);
+const heroGap = await page.evaluate(() => {
+  const nav = document.querySelector('#site-nav').getBoundingClientRect();
+  const title = document.querySelector('.hero-title').getBoundingClientRect();
+  return Math.round(title.top - nav.bottom);
+});
+pass('Hero clears the floating navbar', heroGap >= 56, `${heroGap}px`);
+
+// 1b. One grid: every section heading and the footer sit on the same left edge.
+const gridEdges = await page.evaluate(() => {
+  const left = (sel) => Math.round(document.querySelector(sel).getBoundingClientRect().left);
+  return {
+    heads: ['#about h2', '#work h2', '#journey h2', '#tech h2', '#contact h2'].map(left),
+    footer: left('footer p.type-display'),
+    nav: left('#site-nav > div'),
+  };
+});
+const edges = [...gridEdges.heads, gridEdges.footer, gridEdges.nav];
+pass(
+  'Sections, navbar, and footer share one grid edge',
+  new Set(edges).size === 1,
+  edges.join(' / ')
+);
 const lang = await page.$eval('html', (el) => el.lang);
 pass('Default language is Indonesian', lang === 'id', lang);
 pass('Indonesian CTA present', (await page.$eval('#home', (el) => el.textContent)).includes('Lihat karya'));

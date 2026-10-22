@@ -16,7 +16,7 @@ export class Contact {
 
     return `
       <section id="contact" class="px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-        <div class="mx-auto max-w-6xl">
+        <div class="mx-auto max-w-7xl">
           <h2 class="type-display mb-4 text-4xl uppercase sm:text-5xl">${t('contact.title')}</h2>
           <p class="mb-10 max-w-xl text-zinc-400">${t('contact.subtitle')}</p>
 

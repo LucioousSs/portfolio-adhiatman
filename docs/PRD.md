@@ -67,7 +67,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 ## 7. Spesifikasi per section
 
 ### 7.1 Navbar
-- Rel mengambang: header `fixed` dengan jarak 16px dari atas, selebar grid konten (`max-w-6xl`), border 1px, radius 12px, latar ink 85 persen dengan blur tipis.
+- Rel mengambang: header `fixed` dengan jarak 16px dari atas, selebar grid konten (`max-w-7xl`), border 1px, radius 12px, latar ink 85 persen dengan blur tipis.
 - Karena berada di luar alur, hero memakai tinggi layar penuh dan nama besar berjalan di bawah rel tanpa terdorong.
 - Tautan section dengan penanda section aktif (`aria-current`), urutannya mengikuti urutan baca: Tentang, Karya, Perjalanan, Kontak.
 - Toggle bahasa ID dan EN, memakai `aria-pressed`.
@@ -78,6 +78,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 
 ### 7.2 Hero
 - Satu layar penuh dengan komposisi poster: nama, foto, satu CTA.
+- Rel navbar mengambang, jadi hero tidak didorong olehnya: komposisi tetap di tengah, tetapi `padding-top` di sm ke atas ditambah (7rem) supaya nama tidak menempel ke rel di jendela pendek. Jarak rel ke nama minimal sekitar 49px di 1280x720.
 - Nama "ADHIATMAN" satu baris dengan reveal per huruf. Lebar huruf mengikuti ukuran layar, dari 100 persen di mobile sampai 125 persen di desktop, supaya sembilan huruf tetap utuh di satu baris tanpa patah atau meluber.
 - Foto profil menjadi lapisan depan: badannya menimpa nama sehingga tipografi lewat di belakang potret. Timpaan ditentukan oleh geometri berkasnya sendiri (408x612, 22,2 persen atas transparan), jadi kepala selalu mendarat di garis kapital nama pada setiap ukuran layar. Kepala yang lebih lebar hanya mungkin kalau nama juga lebih besar, jadi lebar foto dan kedalaman timpaan dinaikkan bersama.
 - Lebar foto punya batas `vh` sebagai pengaman: di jendela pendek foto mengecil, bukan mendorong CTA ke bawah lipatan.
@@ -141,6 +142,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Field wajib divalidasi browser sebelum submit.
 
 ### 7.8 Footer
+- Footer memakai grid yang sama dengan section lain (`max-w-7xl` di dalam padding yang sama), jadi tepi kiri teksnya sejajar dengan judul section di atasnya, dan bar bawah serta band ilustrasi tetap selebar layar.
 - Tiga kolom di md ke atas, dipisah garis rambut 1px: brand (nama, peran, tautan "Ke atas"), "Halaman" (empat tautan section), dan "Kontak" (email, WhatsApp, CV). Di bawah md kolomnya bertumpuk, tanpa garis pemisah.
 - Bar bawah: ikon sosial (GitHub, LinkedIn, Instagram) di kiri, lokasi di tengah, hak cipta dengan tahun dinamis di kanan. Di layar sempit ketiganya bertumpuk rata kiri.
 - Semua tujuan nyata: empat anchor section yang memang ada, email, WhatsApp, CV, dan tiga profil. Tidak ada `href="#"`, tidak ada kredit "Designed by" karangan, dan tidak ada tautan ke halaman yang tidak ada.
@@ -260,6 +262,8 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 |----------|-------|
 | Build produksi berhasil | PASS |
 | Hero merender nama dan konten Indonesia sebagai default | PASS |
+| Hero memberi jarak ke rel navbar (minimal 56px) | PASS |
+| Semua section, navbar, dan footer berbagi tepi kiri yang sama (satu grid) | PASS |
 | Karya menampilkan tiga project dan tautan ke sisanya di GitHub | PASS |
 | Blok rancangan desain tampil di bawah tautan GitHub dengan tiga sampul berwarna | PASS |
 | Kartu desain membuka modal tanpa tautan atau tahun karangan | PASS |
@@ -294,7 +298,7 @@ Diperiksa dengan `npm run smoke` (Chrome headless, viewport desktop dan 360px) s
 | Footer diakhiri ilustrasi dekoratif yang lazy, dan tahun hak cipta berjalan | PASS |
 | Reduced motion menyisakan pernyataan Tentang terlihat tanpa transform, garis penuh, dan semua frasa putih | PASS |
 
-Ringkasan: 43 dari 43 pemeriksaan lolos.
+Ringkasan: 45 dari 45 pemeriksaan lolos.
 
 ## 15. Milestone dan item terbuka
 

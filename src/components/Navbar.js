@@ -43,7 +43,7 @@ export class Navbar {
 
     return `
       <header id="site-nav" class="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
-        <div class="nav-rail relative mx-auto max-w-6xl overflow-hidden rounded-xl border border-zinc-800 bg-ink/85 backdrop-blur">
+        <div class="nav-rail relative mx-auto max-w-7xl overflow-hidden rounded-xl border border-zinc-800 bg-ink/85 backdrop-blur">
           <div
             id="scroll-progress"
             class="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-zinc-100"
@@ -85,7 +85,7 @@ export class Navbar {
           </nav>
 
           <div id="nav-menu" class="hidden border-t border-zinc-800 bg-ink md:hidden">
-            <ul class="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-5">${mobileLinks}</ul>
+            <ul class="mx-auto flex max-w-7xl flex-col px-4 py-2 sm:px-5">${mobileLinks}</ul>
           </div>
         </div>
       </header>`;

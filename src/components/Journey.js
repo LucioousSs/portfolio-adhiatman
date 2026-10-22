@@ -139,7 +139,7 @@ export class Journey {
 
     return `
       <section id="journey" class="px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-        <div class="mx-auto max-w-6xl">
+        <div class="mx-auto max-w-7xl">
           <h2 class="type-display mb-12 text-4xl uppercase sm:text-5xl" data-journey-head>${t('journey.title')}</h2>
 
           <div class="grid gap-10 lg:grid-cols-12">
