@@ -11,7 +11,6 @@ Diperbarui: 22 Oktober 2026, setelah footer dirombak dan ilustrasi penutup ditam
 | K1 | Tangkapan layar project kode | Ditunda sampai tampilan project-nya selesai kamu ubah |
 | K7 | Entri Perjalanan | Menunggu konfirmasi isi dan periodenya |
 | K10 | Aset dan data rancangan desain | Menunggu gambar, URL prototipe, dan tahun |
-| K11 | Asal dan lisensi ilustrasi footer | Menunggu konfirmasi sumber |
 
 ### K1. Tangkapan layar project
 
@@ -71,14 +70,6 @@ Blok "Rancangan desain" sudah jalan dengan tiga entri: BantuSesama, JelajahNusan
 
 Catatan Adidas: entri itu sudah diberi label "konsep pribadi, bukan resmi" dan deskripsinya menyebut tidak berafiliasi dengan Adidas. Label itu jangan dihapus selama gambarnya memakai nama Adidas.
 
-### K11. Asal dan lisensi ilustrasi footer
-
-Ilustrasi penutup di footer (`public/images/footer-art.webp`) memakai gambar yang kamu kirim. Saya belum tahu dari mana asalnya, dan itu satu-satunya hal yang belum jelas dari aset ini.
-
-Kalau gambar itu kamu buat sendiri, atau dibeli/diizinkan untuk dipakai, cukup bilang begitu dan item ini ditutup. Kalau ternyata milik orang lain atau hasil alat yang membatasi pemakaian komersial, ganti berkasnya dengan nama yang sama (16:9, sisi terpanjang sekitar 1400 px) supaya tidak ada yang perlu diubah di kode.
-
-Yang sudah dipastikan: gambar itu dekoratif (`alt=""`, `aria-hidden`), dimuat `lazy`, dan tidak dipakai di tempat lain di halaman.
-
 ## Sudah beres
 
 Semua ini sudah masuk ke kode dan diverifikasi.
@@ -92,7 +83,8 @@ Semua ini sudah masuk ke kode dan diverifikasi.
 - **K9, ikon dari CDN:** kamu pilih tetap seperti sekarang, jadi ikon masih diunduh dari `cdn.jsdelivr.net` dan `cdn.simpleicons.org`. Satu-satunya konsekuensi: tanpa koneksi, ikonnya kosong sementara namanya tetap terbaca.
 - **Teks di bawah foto hero:** baris peran "UI/UX Designer & Frontend Developer" di bawah foto sudah dihapus. Peran yang sama masih muncul sebagai marquee di latar hero dan di pernyataan section Tentang, jadi identitasnya tidak hilang.
 - **Section Tentang:** satu blok pernyataan rata tengah, setinggi 70 persen layar, langsung setelah hero, dengan judul bergaya sama seperti section lain di kiri, tanpa foto, chip, atau tautan keluar. Tagline dan kalimat bio digabung karena dipisah keduanya terbaca sebagai dua suara. Blok itu naik dari balik wadahnya, garis di bawah judul tergambar dari kiri, lalu tiga frasa menyala berurutan; cahaya 7 persen mengikuti kursor hanya di pointer halus. Tanpa JavaScript atau dengan reduced motion, garisnya sudah penuh dan semua frasa sudah putih.
-- **Footer:** peta halaman tiga kolom (brand, Halaman, Kontak) dengan garis rambut, bar bawah berisi sosial, lokasi, dan hak cipta bertahun dinamis, lalu ilustrasi penutup 16:9 yang dekoratif dan lazy. Semua tautannya tujuan nyata.
+- **Footer:** peta halaman tiga kolom (brand, Halaman, Kontak) dengan garis rambut, bar bawah berisi sosial, lokasi, dan hak cipta bertahun dinamis, lalu band ilustrasi full-bleed yang dekoratif dan lazy. Semua tautannya tujuan nyata.
+- **K11, ilustrasi footer:** dibuat dengan AI atas permintaanmu, jadi tidak ada karya pihak ketiga yang perlu dilisensikan. Berkasnya `public/images/footer-art.webp` (WebP 303 kB dari master 1376x768).
 - **Tautan section:** klik tautan navbar tidak lagi meninggalkan `#work` dan sejenisnya di address bar. Lompatannya tetap anchor biasa; fragmennya dibuang setelah lompatan.
 - **Navbar:** sekarang rel mengambang di atas konten, bukan bar penuh selebar layar. Urutan tautannya mengikuti urutan baca: Tentang, Karya, Perjalanan, Kontak. Karena relnya di luar alur, hero memakai layar penuh dan nama besar berjalan di bawahnya; memadatnya rel juga tidak lagi menggeser halaman.
 - **Blok rancangan desain:** tiga kartu di bawah tautan GitHub, membuka modal yang sama dengan baris kode. Sampulnya berwarna dan menjadi satu-satunya warna di halaman. Tidak ada baris keempat sampai keenam, karena baris kode menjanjikan repo dan tangkapan layar yang tidak dimiliki rancangan.

@@ -22,7 +22,7 @@ Landing page statis untuk personal branding I Putu Adhiatman, UI/UX Designer dan
 - Perjalanan satu kolom kronologis: babak tahun dengan indeks lengket, garis yang tergambar saat scroll, baris yang menyala saat dilewati, dan detail acara yang dibuka sebaris.
 - Marquee teknologi dan alat dengan satu kecepatan terukur (60 px per detik) untuk kedua baris, berhenti saat hover.
 - Kontak memakai mailto dan WhatsApp, tanpa server.
-- Footer tiga kolom (brand, Halaman, Kontak) dengan garis rambut, bar bawah berisi sosial, lokasi, dan hak cipta bertahun dinamis, ditutup ilustrasi 16:9 yang dekoratif dan lazy. Semua tautannya tujuan nyata; tidak ada `href="#"`.
+- Footer tiga kolom (brand, Halaman, Kontak) dengan garis rambut, bar bawah berisi sosial, lokasi, dan hak cipta bertahun dinamis, ditutup band ilustrasi full-bleed yang dekoratif dan lazy. Semua tautannya tujuan nyata; tidak ada `href="#"`.
 - Tautan section melompat tanpa meninggalkan hash di address bar.
 - Bilingual Indonesia dan Inggris dengan toggle di navbar, pilihan tersimpan di `localStorage`.
 - Menghormati `prefers-reduced-motion`.

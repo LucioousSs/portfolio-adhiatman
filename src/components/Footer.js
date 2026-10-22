@@ -87,7 +87,7 @@ export class Footer {
           </div>
         </div>
 
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="relative h-[240px] w-full overflow-hidden sm:h-[300px] lg:h-[380px]">
           <img
             src="${asset('/images/footer-art.webp')}"
             alt=""
@@ -96,7 +96,7 @@ export class Footer {
             height="768"
             loading="lazy"
             decoding="async"
-            class="block w-full border border-zinc-800"
+            class="h-full w-full object-cover object-[50%_30%]"
           />
         </div>
       </footer>`;

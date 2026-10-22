@@ -144,7 +144,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Tiga kolom di md ke atas, dipisah garis rambut 1px: brand (nama, peran, tautan "Ke atas"), "Halaman" (empat tautan section), dan "Kontak" (email, WhatsApp, CV). Di bawah md kolomnya bertumpuk, tanpa garis pemisah.
 - Bar bawah: ikon sosial (GitHub, LinkedIn, Instagram) di kiri, lokasi di tengah, hak cipta dengan tahun dinamis di kanan. Di layar sempit ketiganya bertumpuk rata kiri.
 - Semua tujuan nyata: empat anchor section yang memang ada, email, WhatsApp, CV, dan tiga profil. Tidak ada `href="#"`, tidak ada kredit "Designed by" karangan, dan tidak ada tautan ke halaman yang tidak ada.
-- Ilustrasi penutup: satu gambar 16:9 selebar kolom di bawah bar bawah, dibingkai 1px, rata dengan tepi bawah halaman. Dekoratif (`alt=""`, `aria-hidden`), `loading="lazy"`, WebP sekitar 303 kB dari master 1376x768. Tanpa parallax.
+- Ilustrasi penutup: band full-bleed selebar layar di bawah bar bawah, tinggi 240px di ponsel, 300px di tablet, dan 380px di desktop, memakai `object-cover` dengan posisi `50% 30%` supaya bulan, air terjun, dan kepala dragon tetap utuh. Dekoratif (`alt=""`, `aria-hidden`), `loading="lazy"`, WebP sekitar 303 kB dari master 1376x768. Tanpa parallax.
 - Ilustrasi hanya muncul sekali, di footer. Hero tetap milik potret, dan tidak ada gambar dekoratif lain di halaman.
 
 ### 7.9 Spesifikasi motion
@@ -307,9 +307,8 @@ Item terbuka (perlu data dari pemilik). Daftar lengkap, termasuk konfirmasi teks
 | T1 | Tangkapan layar tiap project | `public/images/projects/<slug>.png`, lalu isi `image` di `src/data/projects.js` | Ditunda sampai tampilan project diubah |
 | T7 | Konfirmasi entri Perjalanan | `src/data/journey.js` | Menunggu konfirmasi pemilik |
 | T10 | Sampul dan galeri tiga rancangan desain, URL prototipe BantuSesama, dan tahun tiap rancangan | `public/images/design/`, `src/data/projects.js` | Menunggu aset dan konfirmasi pemilik |
-| T11 | Asal dan lisensi ilustrasi footer | `public/images/footer-art.webp` | Menunggu konfirmasi sumber |
 
-Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, T9 (ikon CDN) diputuskan tetap seperti sekarang, dan teks Tentang dikonfirmasi memakai versi pendek satu blok. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2).
+Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daftar teknologi) dikonfirmasi pemilik, T3 (LinkedIn) diisi `linkedin.com/in/adhiatman`, T4 (email dan WhatsApp) dikonfirmasi, T5 (CV) memakai berkas asli di `public/cv/putu-adhiatman-cv.pdf`, T6 (base) diset untuk project site, T9 (ikon CDN) diputuskan tetap seperti sekarang, dan teks Tentang dikonfirmasi memakai versi pendek satu blok. Baris peran di bawah foto hero juga dihapus atas permintaan pemilik (lihat 7.2). T11 (asal ilustrasi footer) ditutup pada 22 Oktober 2026: gambar dibuat dengan AI atas permintaan pemilik, jadi tidak ada karya pihak ketiga yang perlu dilisensikan.
 
 ## 16. Lampiran: keputusan dan alasan
 
@@ -344,5 +343,6 @@ Item lain sudah ditutup pada 20 Oktober 2026: T2 (deskripsi Inggris) dan T8 (daf
 | Entri desain tanpa URL prototipe tidak diberi tombol | Tombol mati lebih buruk daripada tidak ada tombol; lebih baik ruangnya kosong sampai URL publiknya ada |
 | Footer berupa peta halaman tiga kolom, bukan satu baris hak cipta | Halaman ini panjang, jadi footer yang berguna adalah daftar tujuan: section, kontak, dan profil. Satu baris hak cipta hanya mengulang informasi yang sudah ada di atas |
 | Ilustrasi penutup di footer, bukan di section lain | Ia menutup halaman tanpa menambah klaim apa pun; karena dekoratif, `alt`-nya kosong dan pembaca layar melewatinya. Satu gambar saja, supaya potret di hero tetap yang pertama dan paling penting |
+| Ilustrasi footer berupa band full-bleed yang pendek, bukan plate 16:9 penuh | Band memberi penutup yang tenang tanpa memakan satu layar penuh; crop `object-cover` pada posisi `50% 30%` menjaga bulan, air terjun, dan kepala dragon tetap terbaca |
 | Tautan section tidak meninggalkan hash di address bar | Situs satu halaman tidak punya alamat per section untuk dibagikan; hash yang tertinggal setelah klik membuat alamat terlihat seperti rute yang rusak. Lompatannya tetap lompatan anchor biasa, hanya fragmennya yang dibuang |
 | Tahun yang belum dikonfirmasi disembunyikan | Menebak tahun adalah klaim palsu kecil yang tidak perlu, dan field kosong terbaca seperti bug |

@@ -515,6 +515,8 @@ const footerInfo = await page.evaluate(async () => {
     hidden: img?.getAttribute('aria-hidden'),
     loading: img?.getAttribute('loading'),
     artWidth: img?.naturalWidth ?? 0,
+    band: img ? [Math.round(img.getBoundingClientRect().width), Math.round(img.getBoundingClientRect().height)] : [0, 0],
+    viewport: window.innerWidth,
     year: el.querySelectorAll('p')[el.querySelectorAll('p').length - 1]?.textContent.trim(),
     currentYear: new Date().getFullYear(),
   };
@@ -531,12 +533,15 @@ pass(
   `links=${footerInfo.links} dead=${footerInfo.dead} anchors=${footerInfo.anchors.join(' ')} mail=${footerInfo.mail} wa=${footerInfo.whatsapp} cv=${footerInfo.cv} social=${footerInfo.socials}`
 );
 pass(
-  'Footer ends with a decorative, lazy illustration',
+  'Footer ends with a decorative, lazy, full-bleed illustration',
   footerInfo.alt === '' &&
     footerInfo.hidden === 'true' &&
     footerInfo.loading === 'lazy' &&
-    footerInfo.artWidth > 1000,
-  `alt="${footerInfo.alt}" hidden=${footerInfo.hidden} loading=${footerInfo.loading} art=${footerInfo.artWidth}px`
+    footerInfo.artWidth > 1000 &&
+    footerInfo.band[0] === footerInfo.viewport &&
+    footerInfo.band[1] >= 200 &&
+    footerInfo.band[1] <= 400,
+  `alt="${footerInfo.alt}" hidden=${footerInfo.hidden} loading=${footerInfo.loading} art=${footerInfo.artWidth}px band=${footerInfo.band.join('x')} vw=${footerInfo.viewport}`
 );
 pass(
   'Footer copyright carries the current year',
