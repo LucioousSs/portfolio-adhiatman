@@ -96,7 +96,7 @@ export class Footer {
             height="768"
             loading="lazy"
             decoding="async"
-            class="h-full w-full object-cover object-[50%_30%]"
+            class="h-full w-full object-cover object-[50%_30%] [mask-image:linear-gradient(to_bottom,transparent,#000_32%)]"
           />
         </div>
       </footer>`;
