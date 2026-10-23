@@ -115,10 +115,7 @@ export class Work {
     return `
       <section id="work" class="relative px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
         <div class="mx-auto max-w-7xl">
-          <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
-            <h2 class="type-display text-4xl uppercase sm:text-5xl">${t('work.title')}</h2>
-            <p class="max-w-sm text-sm text-zinc-400">${t('work.subtitle')}</p>
-          </div>
+          <h2 class="type-display mb-10 text-4xl uppercase sm:text-5xl">${t('work.title')}</h2>
 
           ${list}
           ${design}

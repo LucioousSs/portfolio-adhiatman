@@ -28,7 +28,6 @@ export default {
 
   work: {
     title: 'Work',
-    subtitle: 'Code projects and design work, chosen because they best represent how I work.',
     hint: 'Hover to preview, click for detail',
     all: 'More code projects on GitHub',
     design: 'Design work',

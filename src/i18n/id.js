@@ -28,7 +28,6 @@ export default {
 
   work: {
     title: 'Karya',
-    subtitle: 'Proyek kode dan rancangan desain, dipilih karena paling mewakili cara saya bekerja.',
     hint: 'Sorot untuk pratinjau, klik untuk detail',
     all: 'Sisa proyek kode di GitHub',
     design: 'Rancangan desain',

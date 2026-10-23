@@ -185,7 +185,9 @@
   }
 }
 
-/* Grain: subtle film texture. Reason: supports the brutalist print-poster identity. */
+/* Grain: subtle film texture. Reason: supports the brutalist print-poster identity.
+   The mask fades both ends out, so the section does not start or stop on a visible
+   texture line where the neighbouring sections sit on plain ink. */
 .grain-overlay {
   position: absolute;
   inset: 0;
@@ -194,6 +196,8 @@
   pointer-events: none;
   opacity: 0.035;
   z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
 }
 
 /* Work rows */

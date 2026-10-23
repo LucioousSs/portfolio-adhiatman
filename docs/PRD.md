@@ -91,6 +91,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Tagline pindah ke Tentang. Lokasi dan tombol "Unduh CV" pindah ke Kontak.
 
 ### 7.3 Karya pilihan
+- Kepala section hanya judul "Karya" di sumbu kiri; tidak ada paragraf deskripsi di kanan, supaya daftar proyek langsung jadi fokus pertama setelah judul.
 - Tiga proyek kode tampil sebagai daftar baris, bukan kartu. Setiap baris memuat nomor, judul, ringkasan, tahun, dan chip teknologi.
 - Tiga proyek yang dipajang: UD. Kariasa, KopiKhe, dan Todo List Life Dashboard. Tiga repo lain (API tahap awal, utility form kontak, dataset resep) tidak dipajang sebagai karya unggulan, cukup diarahkan lewat satu tautan ke profil GitHub.
 - Hover: baris terangkat dan menampilkan preview gambar yang mengikuti kursor, baris lain meredup. Fokus keyboard memberi perilaku yang sama.
@@ -111,7 +112,7 @@ Navigasi hanya memuat destinasi yang benar-benar ada: Tentang, Karya, Perjalanan
 - Dua poros, disengaja. Judul "Tentang" memakai `type-display` dengan ukuran yang sama seperti judul section lain (`text-4xl uppercase sm:text-5xl`) dan duduk di kiri, di sumbu yang sama dengan judul Karya. Pernyataannya rata tengah dan di tengah ruang di bawah judul, jadi kalimatnya tetap satu objek simetris, bukan paragraf yang perlu dipindai.
 - Judulnya tetap `h2` supaya struktur dokumen tidak berubah.
 - Lebar kolom `max-w-4xl` dengan `text-wrap: balance`: tiga baris di desktop dan paling banyak lima baris di 360px. Batas itu tidak dilanggar.
-- Grain halus tetap dipakai sebagai tekstur identitas poster.
+- Grain halus tetap dipakai sebagai tekstur identitas poster. Tepi atas dan bawahnya dimasker dengan gradien (transparan sampai 30 persen, penuh di 30 sampai 70 persen, lalu memudar lagi), jadi teksturnya menyatu ke ink hero dan Karya di atas dan di bawahnya, bukan berhenti di garis lurus yang terlihat seperti warna patah saat di-scroll.
 - Tiga ketukan, sekali, saat section masuk: blok naik 100 persen dari balik wadah `overflow: hidden`, garis selebar kolom di bawah judul tumbuh dari kiri (`scaleX` 0 ke 1, 0,7 detik), lalu tiga frasa menyala berurutan dari `zinc-500` ke putih dengan jeda 0,15 detik. Frasa ditulis eksplisit per bahasa, bukan dipecah dengan regex, karena koma dan titiknya yang memberi ketukan itu.
 - Garis di bawah judul satu-satunya penanda diam di section ini: ia menahan ruang kosong supaya pernyataan tidak mengambang. Tanpa animasi pun garisnya sudah tergambar penuh.
 - Cahaya lembut 7 persen putih mengikuti kursor di belakang teks. Ia lapisan sendiri yang digeser dengan transform, jadi paragraf tidak pernah repaint; hanya untuk pointer halus, dan tidak ada sama sekali di layar sentuh atau saat reduced motion.
